@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from '../../../store/store';
 import { getUser } from '../../../store/user/reducer';
 import { logoutUser } from '../../../store/user/actions';
 
-import { EPAGESROUTES } from '../../../shared/utils/routes';
 import { links } from '../lib/helpers';
 
 import styles from '../styles/main-menu.module.scss';
@@ -36,7 +35,7 @@ export const MainMenu: FC = () => {
 			<nav className={styles.nav}>
 				{visibleLinks.map((elem, i) => (
 					<NavLink
-						to={`${EPAGESROUTES.MAIN}/${elem.url}`}
+						to={`/${elem.url}`}
 						key={i}
 						className={({ isActive }) =>
 							`${styles.link} ${isActive ? styles.link_active : ''}`

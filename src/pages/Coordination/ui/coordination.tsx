@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from '../../../store/store';
 import { CoordinationTabs } from './coordination-tabs';
 import { CoordinationAppDetail } from './coordination-app-detail';
 import { CoordinationAppsList } from './coordination-apps-list';
+import { CoordinationAppHistory } from './coordination-app-history';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 
 import { getCoordinationAppsAction } from '../../../store/coordination/actions';
@@ -33,22 +34,22 @@ export const Coordination: FC = () => {
 	const tabs: ITab[] = [
 		{
 			label: 'На рассмотрении',
-			path: '/main/coordination/tabs/active',
+			path: '/coordination/tabs/active',
 			count: active.length,
 		},
 		{
 			label: 'Согласованные',
-			path: '/main/coordination/tabs/completed',
+			path: '/coordination/tabs/completed',
 			count: completed.length,
 		},
 		{
 			label: 'Отправлены на доработку',
-			path: '/main/coordination/tabs/returned',
+			path: '/coordination/tabs/returned',
 			count: returned.length,
 		},
 		{
 			label: 'Отклоненные',
-			path: '/main/coordination/tabs/rejected',
+			path: '/coordination/tabs/rejected',
 			count: rejected.length,
 		},
 	];
@@ -98,6 +99,7 @@ export const Coordination: FC = () => {
 			</Route>
 
 			<Route path='app/:appId' element={<CoordinationAppDetail />} />
+			<Route path='history/:appId' element={<CoordinationAppHistory />} />
 			<Route index element={<Navigate to='tabs' replace />} />
 		</Routes>
 	);

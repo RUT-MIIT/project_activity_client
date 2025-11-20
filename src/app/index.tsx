@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import { useDispatch } from '../store/store';
@@ -18,7 +18,6 @@ import { Coordination } from '../pages/Coordination/ui/coordination';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
 
-import { EPAGESROUTES, EMAINROUTES } from '../shared/utils/routes';
 import { checkUserAuth } from '../store/user/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
 
@@ -28,8 +27,6 @@ import styles from './app.module.scss';
 
 export const App = () => {
 	const dispatch = useDispatch();
-	const location = useLocation();
-	const background = location.state && location.state.background;
 
 	useEffect(() => {
 		dispatch(checkUserAuth());
@@ -38,36 +35,38 @@ export const App = () => {
 	return (
 		<ToastProvider>
 			<div className={styles.page}>
-				<Routes location={background || location}>
+				<Routes>
+					{/* ---------- Неавторизованные ---------- */}
+					<Route path='/login' element={<OnlyUnAuth component={<Login />} />} />
 					<Route
-						path={EPAGESROUTES.MAIN}
-						element={<OnlyAuth component={<MainLayout />} />}>
-						<Route path={EMAINROUTES.HOME} element={<Home />} />
-						<Route path={EMAINROUTES.NEW_APP} element={<NewApp />} />
-						<Route path={`${EMAINROUTES.MY_APPS}/*`} element={<MyApp />} />
-						<Route
-							path={`${EMAINROUTES.COORDINATION}/*`}
-							element={<Coordination />}
-						/>
-						<Route path={EMAINROUTES.STATS} element={<Stats />} />
-						<Route path={`${EMAINROUTES.CONTROL}/*`} element={<Control />} />
-						<Route path='*' element={<NotFound />} />
-					</Route>
-
-					<Route
-						path={EPAGESROUTES.LOGIN}
-						element={<OnlyUnAuth component={<Login />} />}
-					/>
-					<Route
-						path={EPAGESROUTES.REGISTRATION}
+						path='/registration'
 						element={<OnlyUnAuth component={<Registration />} />}
 					/>
 					<Route
-						path={EPAGESROUTES.FORGOT_PASSWORD}
+						path='/forgot-password'
 						element={<OnlyUnAuth component={<ForgotPassword />} />}
 					/>
+
+					{/* ---------- Авторизованный редирект для / ---------- */}
+					<Route
+						path='/'
+						element={<OnlyAuth component={<Navigate to='/home' replace />} />}
+					/>
+
+					{/* ---------- Авторизованные страницы в MainLayout ---------- */}
+					<Route element={<OnlyAuth component={<MainLayout />} />}>
+						<Route path='/home' element={<Home />} />
+						<Route path='/new-application' element={<NewApp />} />
+						<Route path='/my-applications/*' element={<MyApp />} />
+						<Route path='/coordination/*' element={<Coordination />} />
+						<Route path='/stats' element={<Stats />} />
+						<Route path='/control/*' element={<Control />} />
+					</Route>
+
+					{/* ---------- 404 ---------- */}
 					<Route path='*' element={<NotFound />} />
 				</Routes>
+
 				<div id='modal-root'></div>
 				<div id='toast-root'></div>
 			</div>

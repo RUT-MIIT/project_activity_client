@@ -3,6 +3,7 @@ import { userSlice } from './user/reducer';
 import { catalogSlice } from './catalog/reducer';
 import { applicationSlice } from './application/reducer';
 import { coordinationSlice } from './coordination/reducer';
+import { historySlice } from './history/reducer';
 import { controlApproveSlice } from './control-approve/reducer';
 
 export const rootReducer = combineSlices(
@@ -10,5 +11,6 @@ export const rootReducer = combineSlices(
 	catalogSlice,
 	applicationSlice,
 	coordinationSlice,
+	historySlice,
 	controlApproveSlice
 );

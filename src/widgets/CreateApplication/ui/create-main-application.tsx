@@ -33,7 +33,7 @@ import { createAppMainAction } from '../../../store/application/actions';
 import { getInstitutesAction } from '../../../store/catalog/actions';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 import { projectLevels } from '../../../shared/lib/lib';
-import { EPAGESROUTES, EMAINROUTES } from '../../../shared/utils/routes';
+import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/create-main-application.module.scss';
 
@@ -79,7 +79,7 @@ export const CreateMainApplication: FC = () => {
 
 			try {
 				await dispatch(createAppMainAction(appMainData)).unwrap();
-				navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.MY_APPS}`, {
+				navigate(`/${EMAINROUTES.MY_APPS}`, {
 					replace: true,
 				});
 				showToast({

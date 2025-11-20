@@ -1,11 +1,7 @@
 import type { FC, ReactElement } from 'react';
-
-import { EPAGESROUTES } from '../../utils/routes';
-
+import { Navigate } from 'react-router-dom';
 import { useSelector } from '../../../store/store';
 import { getIsAuthChecked, getUser } from '../../../store/user/reducer';
-import { Navigate, useLocation } from 'react-router-dom';
-
 import { Preloader } from '../Preloader/ui/preloader';
 
 interface IProtectedProps {
@@ -16,26 +12,17 @@ interface IProtectedProps {
 const Protected: FC<IProtectedProps> = ({ onlyUnAuth = false, component }) => {
 	const isAuthChecked = useSelector(getIsAuthChecked);
 	const user = useSelector(getUser);
-	const location = useLocation();
 
-	if (!isAuthChecked) {
-		return <Preloader />;
+	if (!isAuthChecked) return <Preloader />;
+
+	// Неавторизован → пускаем только на страницы onlyUnAuth
+	if (!user && !onlyUnAuth) {
+		return <Navigate to='/login' replace />;
 	}
 
-	if (!onlyUnAuth && !user) {
-		return <Navigate to={EPAGESROUTES.LOGIN} state={{ from: location }} />;
-	}
-
+	// Авторизован → не пускать на login/registration
 	if (onlyUnAuth && user) {
-		/* const { from } = location.state ?? { from: { pathname:  } };
-		console.log(from); */
-		return <Navigate to={EPAGESROUTES.MAIN} />;
-	}
-
-	if (user) {
-		if (location.pathname === '/') {
-			return <Navigate to={EPAGESROUTES.MAIN} />;
-		}
+		return <Navigate to='/home' replace />;
 	}
 
 	return component;
@@ -43,5 +30,5 @@ const Protected: FC<IProtectedProps> = ({ onlyUnAuth = false, component }) => {
 
 export const OnlyAuth = Protected;
 export const OnlyUnAuth = ({ component }: { component: ReactElement }) => (
-	<Protected onlyUnAuth={true} component={component} />
+	<Protected onlyUnAuth component={component} />
 );

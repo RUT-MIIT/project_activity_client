@@ -10,11 +10,6 @@ import {
 
 export const links = [
 	{
-		label: 'Забыли пароль?',
-		text: 'Восстановить',
-		url: EPAGESROUTES.REGISTRATION,
-	},
-	{
 		label: 'Новый пользователь?',
 		text: 'Регистрация',
 		url: EPAGESROUTES.REGISTRATION,

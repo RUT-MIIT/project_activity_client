@@ -14,7 +14,7 @@ import { Text } from '../../../../shared/components/Typography';
 import { AppCard } from '../../components/AppCard/ui/app-card';
 
 import { getAppsAction } from '../../../../store/application/actions';
-import { EPAGESROUTES, EMAINROUTES } from '../../../../shared/utils/routes';
+import { EMAINROUTES } from '../../../../shared/utils/routes';
 import { sortOptions, type ISortOption } from '../lib/lib';
 
 import styles from '../styles/my-app.module.scss';
@@ -29,13 +29,17 @@ export const MyAppList: FC = () => {
 	);
 
 	const createNewApp = () => {
-		navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.NEW_APP}`, {
+		navigate(`/${EMAINROUTES.NEW_APP}`, {
 			replace: true,
 		});
 	};
 
+	const showHistoryApp = (id: number) => {
+		console.log(id);
+	};
+
 	const showDetailApp = (id: number) => {
-		navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.MY_APPS}/app/${id}`);
+		navigate(`/${EMAINROUTES.MY_APPS}/app/${id}`);
 	};
 
 	const sortApps = (apps: IApplicationItem[], option: ISortOption) => {
@@ -115,6 +119,7 @@ export const MyAppList: FC = () => {
 								<AppCard
 									card={item}
 									key={item.id}
+									onShowHistory={showHistoryApp}
 									onShowDetail={showDetailApp}
 								/>
 							))}

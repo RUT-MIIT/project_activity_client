@@ -7,7 +7,7 @@ import { Button } from '../../../shared/components/Button/ui/button';
 
 import { getUser } from '../../../store/user/reducer';
 
-import { EPAGESROUTES, EMAINROUTES } from '../../../shared/utils/routes';
+import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/home.module.scss';
 
@@ -16,7 +16,7 @@ export const Home: FC = () => {
 	const user = useSelector(getUser);
 
 	const createNewApp = () => {
-		navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.NEW_APP}`, {
+		navigate(`/${EMAINROUTES.NEW_APP}`, {
 			replace: true,
 		});
 	};

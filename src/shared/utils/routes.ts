@@ -1,5 +1,4 @@
 export enum EPAGESROUTES {
-	MAIN = '/main',
 	LOGIN = '/login',
 	REGISTRATION = '/registration',
 	FORGOT_PASSWORD = '/forgot-password',

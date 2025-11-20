@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppCard } from '../../Application/components/AppCard/ui/app-card';
 import { Text } from '../../../shared/components/Typography';
 
-import { EPAGESROUTES, EMAINROUTES } from '../../../shared/utils/routes';
+import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/coordination.module.scss';
 
@@ -16,8 +16,12 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 }) => {
 	const navigate = useNavigate();
 
+	const showHistoryApp = (id: number) => {
+		navigate(`/${EMAINROUTES.COORDINATION}/history/${id}`);
+	};
+
 	const showDetailApp = (id: number) => {
-		navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.COORDINATION}/app/${id}`);
+		navigate(`/${EMAINROUTES.COORDINATION}/app/${id}`);
 	};
 
 	return (
@@ -30,6 +34,7 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 							card={app}
 							key={app.id}
 							withAuthor
+							onShowHistory={showHistoryApp}
 							onShowDetail={showDetailApp}
 						/>
 					))}

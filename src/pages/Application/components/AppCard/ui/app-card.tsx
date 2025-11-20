@@ -19,6 +19,7 @@ import styles from '../styles/app-card.module.scss';
 export const AppCard: FC<IAppCardProps> = ({
 	card,
 	withAuthor = false,
+	onShowHistory,
 	onShowDetail,
 }) => {
 	const { user } = useSelector((state) => state.user);
@@ -80,7 +81,11 @@ export const AppCard: FC<IAppCardProps> = ({
 					<span className={styles.card__help}>Нужна помощь!</span>
 				)}
 
-				<Button text='История изменения' color='cancel' />
+				<Button
+					text='История изменения'
+					color='cancel'
+					onClick={() => onShowHistory(card.id)}
+				/>
 				<Button text='Просмотр' onClick={() => onShowDetail(card.id)} />
 			</div>
 		</li>

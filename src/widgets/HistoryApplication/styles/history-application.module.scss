@@ -1,0 +1,118 @@
+.container {
+	margin: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+}
+
+.header {
+	margin: 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.main {
+	margin: 20px 0 0 0;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	min-height: 0;
+	gap: 20px;
+}
+
+.list {
+	margin: 0;
+	padding: 0 0 0 50px;
+	width: 100%;
+	box-sizing: border-box;
+	list-style-type: none;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	overflow-y: auto;
+	position: relative;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 10px;
+		width: 4px;
+		height: 100%;
+		background-color: var(--main-grey-light-color);
+	}
+}
+
+.item {
+	margin: 0 8px 0 0;
+	padding: 16px 24px;
+	box-sizing: border-box;
+	width: calc(100% - 8px);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	background-color: var(--main-white-color);
+	border: 1px solid var(--main-grey-light-color);
+	border-radius: var(--border-radius);
+	position: relative;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 16px;
+		left: -50px;
+		width: 20px;
+		height: 20px;
+		border-radius: 6px;
+		background-color: grey;
+		border: 1px solid var(--main-white-color);
+	}
+	&_red::before {
+		background-color: var(--accent-red-color);
+	}
+	&_yellow::before {
+		background-color: var(--accent-yellow-color);
+	}
+	&_green::before {
+		background-color: var(--accent-green-color);
+	}
+	&_blue::before {
+		background-color: var(--main-blue-color);
+	}
+	&_grey::before {
+		background-color: #718096;
+	}
+	&__header {
+		margin: 0;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	&__time {
+		margin: 0;
+    font-size: 14px;
+		line-height: 18px;
+		font-weight: normal;
+		font-style: normal;
+		color: var(--main-grey-color);
+	}
+	&__name  {
+		margin: 0;
+    font-size: 14px;
+		line-height: 18px;
+		font-weight: 500;
+		color: var(--main-black-color);
+	}
+	&__caption  {
+		margin: 0;
+    font-size: 14px;
+		line-height: 18px;
+		font-weight: normal;
+		font-style: normal;
+		color: var(--main-grey-color);
+	}
+}

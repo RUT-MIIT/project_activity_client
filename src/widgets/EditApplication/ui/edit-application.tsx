@@ -41,7 +41,7 @@ import {
 import { getInstitutesAction } from '../../../store/catalog/actions';
 import { setCurrentField } from '../../../store/coordination/reducer';
 import { projectLevels } from '../../../shared/lib/lib';
-import { EPAGESROUTES, EMAINROUTES } from '../../../shared/utils/routes';
+import { EMAINROUTES } from '../../../shared/utils/routes';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/edit-application.module.scss';
@@ -110,7 +110,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 					approveAppAction({ applicationId: applicationDetail.id })
 				).unwrap();
 				navigate(
-					`${EPAGESROUTES.MAIN}/${
+					`/${
 						status === 'my-app' ? EMAINROUTES.MY_APPS : EMAINROUTES.COORDINATION
 					}`
 				);
@@ -135,7 +135,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				await dispatch(
 					reworkAppAction({ applicationId: applicationDetail.id })
 				).unwrap();
-				navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.COORDINATION}`, {
+				navigate(`/${EMAINROUTES.COORDINATION}`, {
 					replace: true,
 				});
 				showToast({
@@ -162,7 +162,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 						reason: reason,
 					})
 				).unwrap();
-				navigate(`${EPAGESROUTES.MAIN}/${EMAINROUTES.COORDINATION}`, {
+				navigate(`/${EMAINROUTES.COORDINATION}`, {
 					replace: true,
 				});
 				showToast({
