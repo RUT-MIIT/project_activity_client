@@ -91,3 +91,16 @@
 	font-size: 14px;
 	line-height: 18px;
 }
+
+.error {
+  margin: 0;
+  color: var(--accent-red-color);
+  font-size: 14px;
+  height: 14px;
+  display: block;
+  opacity: 0;
+
+  &_status_show {
+    opacity: 1;
+  }
+}
