@@ -1,16 +1,16 @@
 import type { FC } from 'react';
 
-import { useDispatch, useSelector } from '../../../store/store';
+import { useDispatch, useSelector } from '../../../../store/store';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Section } from '../../../shared/components/Section';
-import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
-import { HistoryApplication } from '../../../widgets/HistoryApplication/ui/history-application';
+import { Section } from '../../../../shared/components/Section';
+import { Preloader } from '../../../../shared/components/Preloader/ui/preloader';
+import { HistoryApplication } from '../../../../widgets/HistoryApplication/ui/history-application';
 
-import { getAppHistoryAction } from '../../../store/history/actions';
+import { getAppHistoryAction } from '../../../../store/history/actions';
 
-export const CoordinationAppHistory: FC = () => {
+export const MyAppHistory: FC = () => {
 	const dispatch = useDispatch();
 	const { isLoadingLogs } = useSelector((state) => state.history);
 

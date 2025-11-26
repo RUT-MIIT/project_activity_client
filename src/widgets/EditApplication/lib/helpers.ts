@@ -33,6 +33,7 @@ export const initialAppValues: IEditAppForm = {
 	recommended_tools: '',
 	stakeholders: '',
 	experts: '',
+	tags: { id: 0, name: 'Выберите направление..' },
 	additional_materials: '',
 };
 

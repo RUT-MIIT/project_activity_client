@@ -1,3 +1,5 @@
+import type { ITag } from '../catalog/types';
+
 export interface IApplicationStore {
 	application: IApplication | null;
 	applications: IApplicationItem[];
@@ -30,6 +32,7 @@ export interface ICreateAppMain {
 	stakeholders: string;
 	recommended_tools: string;
 	experts: string;
+	tags: number[];
 	additional_materials: string;
 	needs_consultation: boolean;
 }
@@ -117,6 +120,7 @@ export interface IApplicationItem {
 }
 
 export interface IApplicationDetail extends IApplication {
+	[x: string]: any;
 	involved_users: {
 		id: number;
 		user: { id: number; name: string; email: string };
@@ -129,6 +133,7 @@ export interface IApplicationDetail extends IApplication {
 		added_at: string;
 		added_by: { id: number; name: string };
 	};
+	tags: ITag[];
 	comments: IApplicationComment[];
 	available_actions: {
 		action: string;

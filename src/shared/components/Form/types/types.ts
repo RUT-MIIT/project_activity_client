@@ -27,10 +27,11 @@ export interface IFormFieldError {
 }
 
 export interface IFormInputProps {
-	type?: 'text' | 'number';
+	type?: 'text' | 'number' | 'password';
 	name: string;
 	placeholder?: string;
 	value: string;
+	autoComplete?: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 

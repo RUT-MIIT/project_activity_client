@@ -16,13 +16,23 @@ export const getDepartmentsCatalog = () => {
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
 	});
 };
 
 export const getRolesCatalog = () => {
 	return request('/accounts/roles/', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const getTagsCatalog = () => {
+	return request('/showcase/tags/', {
 		method: 'GET',
 		headers: {
 			Accept: 'application/json',

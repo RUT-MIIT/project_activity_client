@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../../store/store';
 
-import { CoordinationTabs } from './coordination-tabs';
+import { CoordinationHeader } from './coordination-header';
 import { CoordinationAppDetail } from './coordination-app-detail';
 import { CoordinationAppsList } from './coordination-apps-list';
 import { CoordinationAppHistory } from './coordination-app-history';
@@ -43,7 +43,7 @@ export const Coordination: FC = () => {
 			count: completed.length,
 		},
 		{
-			label: 'Отправлены на доработку',
+			label: 'На доработке',
 			path: '/coordination/tabs/returned',
 			count: returned.length,
 		},
@@ -58,7 +58,7 @@ export const Coordination: FC = () => {
 
 	return (
 		<Routes>
-			<Route path='tabs' element={<CoordinationTabs tabs={tabs} />}>
+			<Route path='tabs' element={<CoordinationHeader tabs={tabs} />}>
 				<Route
 					path='active'
 					element={

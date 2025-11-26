@@ -4,11 +4,21 @@ export interface ITableProps {
 	children?: ReactNode;
 }
 
+export interface ITableHeaderProps {
+	children?: ReactNode;
+	withControl?: boolean;
+}
+
 export interface ITableColumnProps {
+	children?: ReactNode;
+	withChildren?: boolean;
 	text?: string | number;
 	textWeight?: 'normal' | 'bold';
 	columnType?: 'header' | 'default';
 	columnSize: string;
+	active?: boolean;
+	onClick?: (id: number) => void;
+	id?: number;
 }
 
 export interface ITableControlProps {

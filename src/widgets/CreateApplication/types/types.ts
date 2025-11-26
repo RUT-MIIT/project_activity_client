@@ -14,6 +14,7 @@ export interface ICreateAppMainForm {
 	recommended_tools: string;
 	stakeholders: string;
 	experts: string;
+	tags: { id: number; name: string };
 	additional_materials: string;
 	needs_consultation: boolean;
 }

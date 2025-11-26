@@ -8,6 +8,7 @@ const initialState: ICatalogStore = {
 	institutes: [],
 	departments: [],
 	roles: [],
+	tags: [],
 	isLoadingCatalog: false,
 	error: null,
 };
@@ -51,6 +52,18 @@ export const catalogSlice = createSlice({
 				state.roles = action.payload;
 			})
 			.addCase(actions.getRolesAction.rejected, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.error = action.error?.message || 'Не удалось загрузить каталог';
+			})
+			.addCase(actions.getTagsAction.pending, (state) => {
+				state.isLoadingCatalog = true;
+				state.error = null;
+			})
+			.addCase(actions.getTagsAction.fulfilled, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.tags = action.payload;
+			})
+			.addCase(actions.getTagsAction.rejected, (state, action) => {
 				state.isLoadingCatalog = false;
 				state.error = action.error?.message || 'Не удалось загрузить каталог';
 			});

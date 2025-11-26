@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useState } from 'react';
 import type { IFormInputProps } from '../../types/types';
 
 import styles from './form-input.module.scss';
@@ -6,20 +6,36 @@ import styles from './form-input.module.scss';
 export const FormInput: FC<IFormInputProps> = ({
 	type = 'text',
 	name,
-	placeholder = 'Введите значение..',
+	placeholder = 'Введите значение…',
 	value,
+	autoComplete = 'off',
 	onChange,
 }) => {
+	const [showPassword, setShowPassword] = useState(false);
+
+	const isPassword = type === 'password';
+	const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
+
 	return (
-		<input
-			className={styles.input}
-			type={type}
-			name={name}
-			id={`id-${name}`}
-			value={value}
-			onChange={onChange}
-			placeholder={placeholder}
-			autoComplete='off'
-		/>
+		<div className={styles.wrapper}>
+			<input
+				className={styles.input}
+				type={inputType}
+				name={name}
+				id={`id-${name}`}
+				value={value}
+				onChange={onChange}
+				placeholder={placeholder}
+				autoComplete={autoComplete}
+			/>
+
+			{isPassword && (
+				<button
+					type='button'
+					className={`${styles.toggle} ${showPassword ? styles.active : ''}`}
+					onClick={() => setShowPassword((p) => !p)}
+				/>
+			)}
+		</div>
 	);
 };

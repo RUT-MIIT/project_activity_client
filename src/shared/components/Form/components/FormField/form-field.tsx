@@ -1,6 +1,8 @@
 import type { FC } from 'react';
 import type { IFormFieldProps } from '../../types/types';
 
+import { Tooltip } from '../../../Tooltip/ui/tooltip';
+
 import styles from './form-field.module.scss';
 
 export const FormField: FC<IFormFieldProps> = ({
@@ -8,7 +10,6 @@ export const FormField: FC<IFormFieldProps> = ({
 	fieldError,
 	withInfo = false,
 	withMarginBottom = false,
-	onInfo,
 	infoText,
 	children,
 }) => {
@@ -20,12 +21,9 @@ export const FormField: FC<IFormFieldProps> = ({
 			<div className={styles.header}>
 				<h4 className={styles.title}>{title}</h4>
 				{withInfo && (
-					<div className={styles.icon_wrapper}>
-						<div className={styles.icon} onClick={onInfo}></div>
-						<div className={styles.info}>
-							<p className={styles.info__text}>{infoText}</p>
-						</div>
-					</div>
+					<Tooltip content={<p className={styles.tooltip__text}>{infoText}</p>}>
+						<div className={styles.tooltip__icon}></div>
+					</Tooltip>
 				)}
 			</div>
 			{children}

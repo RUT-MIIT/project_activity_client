@@ -69,6 +69,7 @@ export const App = () => {
 
 				<div id='modal-root'></div>
 				<div id='toast-root'></div>
+				<div id='tooltip-root'></div>
 			</div>
 		</ToastProvider>
 	);

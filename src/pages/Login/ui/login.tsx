@@ -67,10 +67,12 @@ export const Login: FC = () => {
 							isShow: !!errors.password,
 						}}>
 						<FormInput
+							type='password'
 							name='password'
 							placeholder='Ваш пароль'
 							value={values.password}
 							onChange={handleChange}
+							autoComplete='on'
 						/>
 					</FormField>
 					<FormButtons>

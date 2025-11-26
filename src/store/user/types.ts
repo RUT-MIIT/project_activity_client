@@ -10,6 +10,7 @@ export interface IRegistrationRequest {
 	email: string;
 	phone: string;
 	comment: string;
+	department: number;
 }
 
 export interface IAuthResponse {

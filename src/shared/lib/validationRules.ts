@@ -20,29 +20,43 @@ export const emailFormat = (
 });
 
 export const phoneFormat = (
-	errorMessage = 'Введите корректный номер телефона'
+	errorMessage = 'Введите корректный мобильный номер РФ'
 ) => ({
 	validate: (value: string) => {
 		if (!value) return false;
 
+		// Оставляем только цифры и +
 		const cleaned = value.replace(/[^\d+]/g, '');
 
+		// Проверяем количество "+"
+		if ((cleaned.match(/\+/g) || []).length > 1) return false;
+
+		// "+" только в начале
+		if (cleaned.includes('+') && !cleaned.startsWith('+')) return false;
+
+		// Убираем "+"
+		const digits = cleaned.replace(/\+/g, '');
+
+		// В РФ мобильные номера — строго 11 цифр
+		if (digits.length !== 11) return false;
+
+		// Нормализуем номер: +7, 7 или 8 — допустимо
 		if (
-			(cleaned.match(/\+/g) || []).length > 1 ||
-			(cleaned.includes('+') && !cleaned.startsWith('+'))
+			!(
+				cleaned.startsWith('+7') ||
+				cleaned.startsWith('7') ||
+				cleaned.startsWith('8')
+			)
 		) {
 			return false;
 		}
 
-		const digits = cleaned.replace(/\+/g, '');
+		// Начало мобильных номеров РФ: 9XX
+		const WITHOUT_COUNTRY = digits.replace(/^7|^8/, '');
 
-		if (digits.length < 10 || digits.length > 15) return false;
+		if (!WITHOUT_COUNTRY.startsWith('9')) return false;
 
-		if (cleaned.startsWith('+')) {
-			return /^\+[1-9]\d{9,14}$/.test(cleaned);
-		}
-
-		return /^(8|9)\d{9}$/.test(cleaned);
+		return true;
 	},
 	errorMessage,
 });

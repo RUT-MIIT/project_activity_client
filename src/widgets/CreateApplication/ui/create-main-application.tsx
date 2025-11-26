@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import type { ICreateAppMainForm } from '../types/types';
-import type { IInstitute } from '../../../store/catalog/types';
+import type { IInstitute, ITag } from '../../../store/catalog/types';
 import type { IProjectLevel } from '../../../shared/lib/lib';
 
 import { useState, useEffect } from 'react';
@@ -30,7 +30,10 @@ import {
 	formFieldData,
 } from '../lib/helpers';
 import { createAppMainAction } from '../../../store/application/actions';
-import { getInstitutesAction } from '../../../store/catalog/actions';
+import {
+	getInstitutesAction,
+	getTagsAction,
+} from '../../../store/catalog/actions';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 import { projectLevels } from '../../../shared/lib/lib';
 import { EMAINROUTES } from '../../../shared/utils/routes';
@@ -43,7 +46,7 @@ export const CreateMainApplication: FC = () => {
 	const { showToast } = useToast();
 
 	const { user } = useSelector((state) => state.user);
-	const { institutes, isLoadingCatalog } = useSelector(
+	const { institutes, tags, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
 	const [currentStep, setCurrentStep] = useState(1);
@@ -58,6 +61,7 @@ export const CreateMainApplication: FC = () => {
 	} = useForm<ICreateAppMainForm>(initialAppMainValues, validationSchema);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		console.log(user);
 		e.preventDefault();
 		if (!isBlockSubmit && user) {
 			const appMainData = {
@@ -75,6 +79,7 @@ export const CreateMainApplication: FC = () => {
 						? values.project_level.name
 						: values.project_level,
 				target_institutes: values.target_institutes.map((elem) => elem.code),
+				tags: [values.tags.id],
 			};
 
 			try {
@@ -106,6 +111,10 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('project_level', selected);
 	};
 
+	const handleChangeTags = (selected: ITag) => {
+		handleSelectChange('tags', selected);
+	};
+
 	const handleChangeConsultation = () => {
 		handleCheckboxToggle('needs_consultation');
 	};
@@ -119,6 +128,7 @@ export const CreateMainApplication: FC = () => {
 
 	useEffect(() => {
 		dispatch(getInstitutesAction());
+		dispatch(getTagsAction());
 	}, [dispatch]);
 
 	if (isLoadingCatalog) {
@@ -300,6 +310,16 @@ export const CreateMainApplication: FC = () => {
 			content: (
 				<>
 					<FormField
+						title={formFieldData.tags.title}
+						withInfo
+						infoText={formFieldData.tags.info}>
+						<Select
+							options={tags}
+							currentOption={values.tags}
+							onChooseOption={handleChangeTags}
+						/>
+					</FormField>
+					<FormField
 						title={formFieldData.additional_materials.title}
 						withInfo
 						infoText={formFieldData.additional_materials.info}>
@@ -348,6 +368,10 @@ export const CreateMainApplication: FC = () => {
 			value: values.recommended_tools,
 		},
 		{ title: 'Эксперты', value: values.experts },
+		{
+			title: 'Направление проекта',
+			value: values.tags.id === 0 ? '' : values.tags.name,
+		},
 	];
 
 	const isLastStep = currentStep === steps.length;

@@ -7,13 +7,13 @@ export const convertRole = (role: string): string => {
 		case 'cpds':
 			return 'ЦПДС';
 		case 'department_validator':
-			return 'Ответственный от кафедры';
+			return 'Представитель кафедры';
 		case 'employee':
 			return 'Работник РУТ (МИИТ)';
 		case 'institute_validator':
 			return 'Ответственный от института';
 		case 'mentor':
-			return 'Наставник';
+			return 'Сотрудник';
 		case 'other':
 			return 'Иное лицо';
 		case 'partner':

@@ -35,7 +35,7 @@ export const MyAppList: FC = () => {
 	};
 
 	const showHistoryApp = (id: number) => {
-		console.log(id);
+		navigate(`/${EMAINROUTES.MY_APPS}/history/${id}`);
 	};
 
 	const showDetailApp = (id: number) => {

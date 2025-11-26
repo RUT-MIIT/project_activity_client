@@ -1,10 +1,11 @@
-import type { IInstitute, IDepartment, IRole } from './types';
+import type { IInstitute, IDepartment, IRole, ITag } from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
 	getInstitutesCatalog,
 	getDepartmentsCatalog,
 	getRolesCatalog,
+	getTagsCatalog,
 } from '../../shared/api/catalog';
 
 export const getInstitutesAction = createAsyncThunk<IInstitute[]>(
@@ -20,4 +21,9 @@ export const getDepartmentsAction = createAsyncThunk<IDepartment[]>(
 export const getRolesAction = createAsyncThunk<IRole[]>(
 	'catalog/getRoles',
 	getRolesCatalog
+);
+
+export const getTagsAction = createAsyncThunk<ITag[]>(
+	'catalog/getTags',
+	getTagsCatalog
 );

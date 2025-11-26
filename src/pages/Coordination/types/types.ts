@@ -5,11 +5,17 @@ export interface ICoordinationAppProps {
 	card: IApplicationItem;
 }
 
-export interface ICoordinationAppTabsProps {
+export interface ICoordinationHeaderProps {
 	tabs: ITab[];
 }
 
 export interface ICoordinationAppsListProps {
 	apps: IApplicationItem[];
 	description?: string;
+}
+
+export interface ICoordinationAppsTableProps {
+	apps: IApplicationItem[];
+	onShowDetail: (id: number) => void;
+	onShowHistory: (id: number) => void;
 }

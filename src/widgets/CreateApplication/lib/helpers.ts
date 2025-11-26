@@ -33,6 +33,7 @@ export const initialAppMainValues: ICreateAppMainForm = {
 	recommended_tools: '',
 	stakeholders: '',
 	experts: '',
+	tags: { id: 0, name: 'Выберите направление..' },
 	additional_materials: '',
 	needs_consultation: false,
 };
@@ -115,6 +116,12 @@ export const formFieldData = {
 		title: 'Эксперты',
 		info: 'Какие эксперты уже готовы помочь проекту? Кто ещё может проконсультировать студентов?',
 		placeholder: 'Введите экспертов',
+	},
+	tags: {
+		name: 'tags',
+		title: 'Направление проекта',
+		info: 'Выберите подходящее направление, связанное с вашим проектом. Это поможет найти экспертов и участников с соответствующей компетенцией.',
+		placeholder: 'Выберите направление',
 	},
 	additional_materials: {
 		name: 'additional_materials',

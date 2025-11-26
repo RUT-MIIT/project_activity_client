@@ -82,7 +82,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  max-height: 180px;
+  max-height: 120px;
   overflow-y: auto;
 }
 
@@ -152,4 +152,19 @@
   &_empty {
     color: var(--main-grey-color);
   }
+}
+
+.search {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+	font-size: 14px;
+	background: transparent;
+	color: var(--main-black-color);
+
+	&::placeholder {
+		color: var(--main-grey-color);
+	}
 }

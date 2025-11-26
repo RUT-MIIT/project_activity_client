@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import type { IEditAppForm, IEditApplicationProps } from '../types/types';
-import type { IInstitute } from '../../../store/catalog/types';
+import type { IInstitute, ITag } from '../../../store/catalog/types';
 import type { IProjectLevel } from '../../../shared/lib/lib';
 import type {
 	IApplicationComment,
@@ -38,7 +38,10 @@ import {
 	reworkAppAction,
 	rejectAppAction,
 } from '../../../store/coordination/actions';
-import { getInstitutesAction } from '../../../store/catalog/actions';
+import {
+	getInstitutesAction,
+	getTagsAction,
+} from '../../../store/catalog/actions';
 import { setCurrentField } from '../../../store/coordination/reducer';
 import { projectLevels } from '../../../shared/lib/lib';
 import { EMAINROUTES } from '../../../shared/utils/routes';
@@ -55,7 +58,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 	const { applicationDetail, currentField, isLoadingAction } = useSelector(
 		(state) => state.coordination
 	);
-	const { institutes, isLoadingCatalog } = useSelector(
+	const { institutes, tags, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
 
@@ -188,6 +191,10 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		handleSelectChange('project_level', selected);
 	};
 
+	const handleChangeTags = (selected: ITag) => {
+		handleSelectChange('tags', selected);
+	};
+
 	const handleSelectField = (selected: IField) => {
 		dispatch(setCurrentField(selected));
 	};
@@ -198,6 +205,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 	useEffect(() => {
 		dispatch(setCurrentField(null));
 		dispatch(getInstitutesAction());
+		dispatch(getTagsAction());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -221,6 +229,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				recommended_tools: applicationDetail.recommended_tools || '',
 				stakeholders: applicationDetail.stakeholders || '',
 				experts: applicationDetail.experts || '',
+				tags: applicationDetail.tags[0],
 				additional_materials: applicationDetail.additional_materials || '',
 			});
 		}
@@ -445,19 +454,33 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 									</>
 								)}
 								{activeTab === '/additional' && (
-									<ApplicationField
-										title='Дополнительные материалы'
-										fieldCode='additional_materials'
-										currentField={currentField}
-										getCommentCount={getCommentCount}
-										onSelectField={handleSelectField}>
-										<FormTextarea
-											name='additional_materials'
-											value={values.additional_materials}
-											onChange={handleChange}
-											placeholder='Введите дополнительные материалы'
-										/>
-									</ApplicationField>
+									<>
+										<ApplicationField
+											title='Направление проекта'
+											fieldCode='tags'
+											currentField={currentField}
+											getCommentCount={getCommentCount}
+											onSelectField={handleSelectField}>
+											<Select
+												options={tags}
+												currentOption={values.tags}
+												onChooseOption={handleChangeTags}
+											/>
+										</ApplicationField>
+										<ApplicationField
+											title='Дополнительные материалы'
+											fieldCode='additional_materials'
+											currentField={currentField}
+											getCommentCount={getCommentCount}
+											onSelectField={handleSelectField}>
+											<FormTextarea
+												name='additional_materials'
+												value={values.additional_materials}
+												onChange={handleChange}
+												placeholder='Введите дополнительные материалы'
+											/>
+										</ApplicationField>
+									</>
 								)}
 							</div>
 							<div className={styles.form__control}>

@@ -11,6 +11,7 @@ import {
 } from '../../../../../shared/components/Form/components';
 import { Button } from '../../../../../shared/components/Button/ui/button';
 import { Select } from '../../../../../shared/components/Select/ui/select';
+import { SelectWithSearch } from '../../../../../shared/components/Select/ui/select-with-search';
 import { UserData } from './user-data';
 
 import { approveUserAction } from '../../../../../store/control-approve/actions';
@@ -23,7 +24,9 @@ export const ApproveUserForm: FC = () => {
 		(state) => state.controlApprove
 	);
 	const { departments, roles } = useSelector((state) => state.catalog);
-	const [department, setDepartment] = useState<IDepartment | null>(null);
+	const [department, setDepartment] = useState<IDepartment | null>(
+		currentApproveUser?.department || null
+	);
 	const [role, setRole] = useState<IRole | null>(null);
 
 	const handleChangeDepartment = (selected: IDepartment) => {
@@ -65,7 +68,14 @@ export const ApproveUserForm: FC = () => {
 				name='form-control-user-approve'
 				onSubmit={handleSubmit}
 				formWidth='large'>
-				<FormField title='Выберите роль:'>
+				<FormField title='Выберите подразделение'>
+					<SelectWithSearch
+						options={departments}
+						currentOption={department}
+						onChooseOption={handleChangeDepartment}
+					/>
+				</FormField>
+				<FormField title='Выберите роль' withMarginBottom>
 					<Select
 						options={roles}
 						currentOption={role}
@@ -74,14 +84,6 @@ export const ApproveUserForm: FC = () => {
 						labelKey='name'
 					/>
 				</FormField>
-				<FormField title='Выберите подразделение:' withMarginBottom>
-					<Select
-						options={departments}
-						currentOption={department}
-						onChooseOption={handleChangeDepartment}
-					/>
-				</FormField>
-
 				<FormButtons>
 					<Button
 						type='submit'

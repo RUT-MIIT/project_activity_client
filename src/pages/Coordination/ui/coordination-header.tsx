@@ -1,12 +1,12 @@
 import type { FC } from 'react';
-import type { ICoordinationAppTabsProps } from '../types/types';
+import type { ICoordinationHeaderProps } from '../types/types';
 
 import { Outlet } from 'react-router-dom';
 
 import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
 import { Section } from '../../../shared/components/Section';
 
-export const CoordinationTabs: FC<ICoordinationAppTabsProps> = ({ tabs }) => {
+export const CoordinationHeader: FC<ICoordinationHeaderProps> = ({ tabs }) => {
 	return (
 		<Section
 			sectionWidth='full'

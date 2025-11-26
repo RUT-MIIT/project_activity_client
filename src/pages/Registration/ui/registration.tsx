@@ -1,9 +1,12 @@
 import type { FC, FormEvent } from 'react';
 import type { IRegistrationForm } from '../types/types';
+import type { IDepartment } from '../../../store/catalog/types';
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../../store/store';
 import { useForm } from '../../../hooks/useForm';
+import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { PublicLayout } from '../../../shared/components/Layout/PublicLayout/ui/public-layout';
 import { Form } from '../../../shared/components/Form/ui/form';
@@ -15,6 +18,8 @@ import {
 	FormLinks,
 } from '../../../shared/components/Form/components';
 import { Button } from '../../../shared/components/Button/ui/button';
+import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
+import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 
 import {
 	links,
@@ -22,39 +27,80 @@ import {
 	validationSchema,
 	shouldBlockSubmit,
 } from '../lib/helpers';
+import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
+import { EPAGESROUTES } from '../../../shared/utils/routes';
 
 import { registerUser } from '../../../store/user/actions';
+import { getDepartmentsAction } from '../../../store/catalog/actions';
 
 import styles from '../styles/registration.module.scss';
 
 export const Registration: FC = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { showToast } = useToast();
 	const { isLoading } = useSelector((state) => state.user);
-	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
+	const { isLoadingCatalog, departments } = useSelector(
+		(state) => state.catalog
+	);
+
+	const [department, setDepartment] = useState<IDepartment | null>(null);
 	const { values, handleChange, errors } = useForm<IRegistrationForm>(
 		initialRegistrationValues,
 		validationSchema
 	);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
+
+	const handleChangeDepartment = (selected: IDepartment) => {
+		setDepartment(selected);
+	};
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!isBlockSubmit) {
-			dispatch(
-				registerUser({
-					email: values.email,
-					first_name: values.firstName,
-					last_name: values.lastName,
-					middle_name: values.middleName,
-					phone: values.phone,
-					comment: values.comment,
-				})
-			);
+
+		if (!isBlockSubmit && department) {
+			const registrationData = {
+				email: values.email,
+				first_name: values.firstName,
+				last_name: values.lastName,
+				middle_name: values.middleName,
+				phone: values.phone,
+				comment: values.comment,
+				department: department.id,
+			};
+
+			try {
+				await dispatch(registerUser(registrationData)).unwrap();
+				showToast({
+					title: 'Заявка на регистрацию успешно отправлена!',
+					text: 'После одобрения вашей заявки администратором системы вы получите данные для входа на электронную почту.',
+					type: 'success',
+				});
+				// Можно редиректить на login, если нужно
+				navigate(EPAGESROUTES.LOGIN, { replace: true });
+			} catch (err) {
+				console.error(err);
+				showToast({
+					title: 'Ошибка при регистрации!',
+					text: getErrorMessage(err),
+					type: 'error',
+				});
+			}
 		}
 	};
 
 	useEffect(() => {
-		setIsBlockSubmit(shouldBlockSubmit(values, errors));
-	}, [values, errors]);
+		setIsBlockSubmit(shouldBlockSubmit(values, errors, department));
+	}, [values, errors, department]);
+
+	useEffect(() => {
+		dispatch(getDepartmentsAction());
+	}, [dispatch]);
+
+	if (isLoadingCatalog) {
+		return <Preloader />;
+	}
 
 	return (
 		<PublicLayout>
@@ -126,6 +172,13 @@ export const Registration: FC = () => {
 							placeholder='+ 7'
 							value={values.phone}
 							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField title='Выберите структурное подразделение'>
+						<SelectWithSearch
+							options={departments}
+							currentOption={department}
+							onChooseOption={handleChangeDepartment}
 						/>
 					</FormField>
 					<FormField title='Комментарий'>
