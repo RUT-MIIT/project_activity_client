@@ -33,6 +33,7 @@ export interface IFormInputProps {
 	value: string;
 	autoComplete?: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	disabled?: boolean;
 }
 
 export interface IFormInputNumberProps {

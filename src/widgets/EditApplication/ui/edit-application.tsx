@@ -85,6 +85,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 						? values.project_level.name
 						: values.project_level,
 				target_institutes: values.target_institutes.map((elem) => elem.code),
+				tags: [values.tags.id],
 			};
 
 			try {
@@ -275,19 +276,6 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 								{activeTab === '/description' && (
 									<>
 										<ApplicationField
-											title='Наименование проекта'
-											fieldCode='title'
-											currentField={currentField}
-											getCommentCount={getCommentCount}
-											onSelectField={handleSelectField}>
-											<FormInput
-												name='title'
-												value={values.title}
-												onChange={handleChange}
-												placeholder='Введите наименование проекта'
-											/>
-										</ApplicationField>
-										<ApplicationField
 											title='Наименование организации-заказчика'
 											fieldCode='company'
 											currentField={currentField}
@@ -465,6 +453,19 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 												options={tags}
 												currentOption={values.tags}
 												onChooseOption={handleChangeTags}
+											/>
+										</ApplicationField>
+										<ApplicationField
+											title='Наименование проекта'
+											fieldCode='title'
+											currentField={currentField}
+											getCommentCount={getCommentCount}
+											onSelectField={handleSelectField}>
+											<FormInput
+												name='title'
+												value={values.title}
+												onChange={handleChange}
+												placeholder='Введите наименование проекта'
 											/>
 										</ApplicationField>
 										<ApplicationField

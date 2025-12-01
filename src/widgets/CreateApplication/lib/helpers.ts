@@ -1,9 +1,27 @@
-import type { ICreateAppMainForm } from '../types/types';
+import type { ICreateAppForm } from '../types/types';
 import type { TFormValidationErrors } from '../../../shared/components/Form/types/types';
 
-import { required } from '../../../shared/lib/validationRules';
+import {
+	required,
+	emailFormat,
+	phoneFormat,
+} from '../../../shared/lib/validationRules';
 
 export const validationSchema = {
+	author_lastname: [required('Введите фамилию')],
+	author_firstname: [required('Введите имя')],
+	author_middlename: [required('Введите отчество')],
+	author_email: [
+		required('Введите электронную почту'),
+		emailFormat('Неверный формат электронной почты'),
+	],
+	author_phone: [
+		required('Введите номер телефона'),
+		phoneFormat('Неверный формат номера телефона'),
+	],
+	author_role: [required('Введите категорию')],
+	author_division: [required('Введите компанию или подразделение')],
+
 	title: [required('Введите название')],
 	company: [required('Введите описание')],
 	company_contacts: [required('Введите компанию')],
@@ -19,31 +37,49 @@ export const validationSchema = {
 	additional_materials: [required('Введите компанию')],
 };
 
-export const initialAppMainValues: ICreateAppMainForm = {
-	title: '',
+export const initialAppValues: ICreateAppForm = {
+	author_lastname: '',
+	author_firstname: '',
+	author_middlename: '',
+	author_email: '',
+	author_phone: '',
+	author_role: { id: 0, name: 'Выберите категорию автора..' },
+	author_division: '',
+
+	company_type: { id: 0, name: 'Выберите тип заказчика..' },
 	company: '',
 	company_contacts: '',
 	project_level: { id: 0, name: 'Выберите уровень..' },
 	target_institutes: [],
+
 	problem_holder: '',
 	goal: '',
 	barrier: '',
 	existing_solutions: '',
+
 	context: '',
 	recommended_tools: '',
 	stakeholders: '',
 	experts: '',
+
+	title: '',
 	tags: { id: 0, name: 'Выберите направление..' },
 	additional_materials: '',
 	needs_consultation: false,
 };
 
-export const formFieldData = {
+export const formFieldMainData = {
 	title: {
 		name: 'title',
 		title: 'Наименование проекта',
 		info: 'Максимально коротко, ясно и ёмко. «Обходчик» предпочтительнее, чем «Проектирование и разработка системы мониторинга качества и дефектов путевого полотна, позволяющей избегать влияния человеческого фактора». Постарайтесь сформулировать так, чтобы название проекта напоминало всем о контексте существования проблемы. Можете даже взять что-то из ключевых слов поля "Контекст".',
 		placeholder: 'Введите наименование проекта',
+	},
+	company_type: {
+		name: 'company_type',
+		title: 'Тип организации-заказчика',
+		info: 'Если заказчик проекта РУТ (МИИТ) выберите - внутренний заказчик. Если другая компания - выберите внешний заказчик',
+		placeholder: '',
 	},
 	company: {
 		name: 'company',
@@ -137,8 +173,122 @@ export const formFieldData = {
 	},
 };
 
+export const formFieldPublicData = {
+	author_lastname: {
+		name: 'author_lastname',
+		title: 'Фамилия',
+		info: '',
+		placeholder: 'Введите фамилию',
+	},
+	author_firstname: {
+		name: 'author_firstname',
+		title: 'Имя',
+		info: '',
+		placeholder: 'Введите имя',
+	},
+	author_middlename: {
+		name: 'author_middlename',
+		title: 'Имя',
+		info: '',
+		placeholder: 'Введите имя',
+	},
+	author_email: {
+		name: 'author_email',
+		title: 'Почта',
+		info: '',
+		placeholder: 'Введите почту',
+	},
+	author_phone: {
+		name: 'author_phone',
+		title: 'Телефон',
+		info: '',
+		placeholder: 'Введите телефон',
+	},
+	author_role: {
+		name: 'author_role',
+		title: 'Категория автора',
+		info: '',
+		placeholder: 'Выберите категорию',
+	},
+	author_division: {
+		name: 'author_division',
+		title: 'Компания или подразделение',
+		info: 'Если вы представитель компании — укажите её наименование. Если вы внутренний сотрудник — укажите название вашего подразделения.',
+		placeholder: 'Введите название компании или подразделения',
+	},
+
+	company_type: {
+		name: 'company_type',
+		title: 'Тип организации-заказчика',
+		info: 'Если заказчик проекта РУТ (МИИТ) выберите - внутренний заказчик. Если другая компания - выберите внешний заказчик',
+		placeholder: '',
+	},
+	company: {
+		name: 'company',
+		title: 'Наименование организации-заказчика',
+		info: 'Название организации и, по возможности, отдел',
+		placeholder: 'Введите наименование организации-заказчика',
+	},
+	company_contacts: {
+		name: 'company_contacts',
+		title: 'Контактные данные представителя заказчика',
+		info: 'Именно этот человек отвечает за описываемую ситуацию, будет консультировать студентов и именно через оставленные здесь контакты с ним свяжется наставник студенческой команды.',
+		placeholder: 'Введите контактные данные',
+	},
+	target_institutes: {
+		name: 'target_institutes',
+		title: 'Экспертам из какого института / академии обратить внимание',
+		info: 'Заполняется, если вы точно знаете. Если не уверены - выберите все. Выбранные подразделения получат и рассмотрят заявку. Рекомендуется заранее обсудить заявку с наставниками из соответствующих подразделений.',
+		placeholder: '',
+	},
+
+	problem_holder: {
+		name: 'problem_holder',
+		title: 'Носитель проблемы',
+		info: 'У кого возникает ограничение в его деятельности? То есть, кто несёт ответственность внутри предприятия за этот участок работ или кому вменено в обязанности разобраться с ситуацией. Этот человек должен непосредственно иметь отношение к ситуации и обладать всей полнотой информации о ней.',
+		placeholder: 'Введите носителя проблемы',
+	},
+	goal: {
+		name: 'goal',
+		title: 'Цель',
+		info: 'Чего хочет добиться Носитель проблемы, но не может? Чего ему вменили в обязанность? Каково целевое состояние?',
+		placeholder: 'Введите цель проекта',
+	},
+	barrier: {
+		name: 'barrier',
+		title: 'Барьер',
+		info: 'Что мешает Носителю проблемы достичь Цели? Что ограничивает прямо сейчас? Это должно быть объективное ограничение, которое невозможно преодолеть имеющимися на рынке средствами. Обратите внимание, что деньги или отсутствие у заказчика в непосредственном распоряжении известных решений - это всего лишь факт, но не барьер. Проверочное слово - "Слишком". Барьер всегда начинается со слова "Слишком". Например: "Слишком долгий...", "Слишком трудоёмкий...", "Слишком тяжёлый...", "Слишком сложный...".',
+		placeholder: 'Что мешает решить проблему сейчас?',
+	},
+	existing_solutions: {
+		name: 'existing_solutions',
+		title: 'Существующие решения',
+		info: 'Как сейчас решают похожие проблемы? Почему существующие решения в данном случае не подходят? По возможности стоит перечислить все известные попытки и идеи решения, опробованные заказчиком или другими предприятиями из той же отрасли. Это поможет команде студентов лучше подготовить анализ ситуации.',
+		placeholder: 'Введите существующие решения',
+	},
+
+	title: {
+		name: 'title',
+		title: 'Наименование проекта',
+		info: 'Максимально коротко, ясно и ёмко. «Обходчик» предпочтительнее, чем «Проектирование и разработка системы мониторинга качества и дефектов путевого полотна, позволяющей избегать влияния человеческого фактора». Постарайтесь сформулировать так, чтобы название проекта напоминало всем о контексте существования проблемы. Можете даже взять что-то из ключевых слов поля "Контекст".',
+		placeholder: 'Введите наименование проекта',
+	},
+	tags: {
+		name: 'tags',
+		title: 'Направление проекта',
+		info: 'Выберите подходящее направление, связанное с вашим проектом. Это поможет найти экспертов и участников с соответствующей компетенцией.',
+		placeholder: 'Выберите направление',
+	},
+	additional_materials: {
+		name: 'additional_materials',
+		title: 'Дополнительные материалы',
+		info: 'Ссылки на дополнительные материалы по проекту — что будет полезно почитать, посмотреть изучить участникам, либо ваши дополнительные комментарии в произвольной форме. Это поможет студенческой команде лучше подготовиться к проведению интервью.',
+		placeholder: 'Введите дополнительные материалы',
+	},
+};
+
 export const shouldBlockSubmit = (
-	values: ICreateAppMainForm,
+	values: ICreateAppForm,
 	errors: TFormValidationErrors
 ): boolean => {
 	return (

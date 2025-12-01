@@ -17,7 +17,7 @@ export interface ICreateAppMain {
 	author_role: string;
 	author_division: string;
 
-	title: string;
+	is_internal_customer: boolean;
 	company: string;
 	company_contacts: string;
 	project_level: string;
@@ -32,6 +32,8 @@ export interface ICreateAppMain {
 	stakeholders: string;
 	recommended_tools: string;
 	experts: string;
+
+	title: string;
 	tags: number[];
 	additional_materials: string;
 	needs_consultation: boolean;
@@ -43,15 +45,22 @@ export interface ICreateAppPublic {
 	author_lastname: string;
 	author_phone: string;
 	author_email: string;
+	author_role: string;
+	author_division: string;
 
+	is_internal_customer: boolean;
 	company: string;
 	company_contacts: string;
-	target_institutes: { code: string; name: string }[];
+	target_institutes: string[];
 
 	problem_holder: string;
 	goal: string;
 	barrier: string;
 	existing_solutions: string;
+
+	title: string;
+	tags: number[];
+	additional_materials: string;
 }
 
 export interface IEditApp {

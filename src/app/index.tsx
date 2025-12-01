@@ -10,6 +10,7 @@ import {
 import { Login } from '../pages/Login/ui/login';
 import { Registration } from '../pages/Registration/ui/registration';
 import { ForgotPassword } from '../pages/ForgotPassword/ui/forgot-password';
+import { Apply } from '../pages/Apply/ui/apply';
 import { NotFound } from '../pages/NotFound/ui/not-found';
 import { Home } from '../pages/Home/ui/home';
 import { NewApp } from '../pages/Application/NewApp/ui/new-app';
@@ -17,11 +18,11 @@ import { MyApp } from '../pages/Application/MyApp/ui/my-app';
 import { Coordination } from '../pages/Coordination/ui/coordination';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
+import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
 
 import { checkUserAuth } from '../store/user/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
-
-import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
+import { EPAGESROUTES } from '../shared/utils/routes';
 
 import styles from './app.module.scss';
 
@@ -37,14 +38,21 @@ export const App = () => {
 			<div className={styles.page}>
 				<Routes>
 					{/* ---------- Неавторизованные ---------- */}
-					<Route path='/login' element={<OnlyUnAuth component={<Login />} />} />
 					<Route
-						path='/registration'
+						path={EPAGESROUTES.LOGIN}
+						element={<OnlyUnAuth component={<Login />} />}
+					/>
+					<Route
+						path={EPAGESROUTES.REGISTRATION}
 						element={<OnlyUnAuth component={<Registration />} />}
 					/>
 					<Route
-						path='/forgot-password'
+						path={EPAGESROUTES.FORGOT_PASSWORD}
 						element={<OnlyUnAuth component={<ForgotPassword />} />}
+					/>
+					<Route
+						path={EPAGESROUTES.APPLY}
+						element={<OnlyUnAuth component={<Apply />} />}
 					/>
 
 					{/* ---------- Авторизованный редирект для / ---------- */}

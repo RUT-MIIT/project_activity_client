@@ -1,7 +1,7 @@
 import type { FC, FormEvent } from 'react';
 import type { ICreateAppForm } from '../types/types';
 import type { IInstitute, ITag } from '../../../store/catalog/types';
-import type { IProjectLevel, ICompanyType } from '../../../shared/lib/lib';
+import type { IAuthorCategory, ICompanyType } from '../../../shared/lib/lib';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,70 +21,56 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Select } from '../../../shared/components/Select/ui/select';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
-import { Checkbox } from '../../../shared/components/Checkbox/ui/checkbox';
 
 import {
 	validationSchema,
 	initialAppValues,
 	shouldBlockSubmit,
-	formFieldMainData,
+	formFieldPublicData,
 } from '../lib/helpers';
-import { createAppMainAction } from '../../../store/application/actions';
+import { createAppPublicAction } from '../../../store/application/actions';
 import {
 	getInstitutesAction,
 	getTagsAction,
 } from '../../../store/catalog/actions';
+import { authorCategories, companyTypes } from '../../../shared/lib/lib';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
-import { projectLevels, companyTypes } from '../../../shared/lib/lib';
-import { EMAINROUTES } from '../../../shared/utils/routes';
+import { EPAGESROUTES } from '../../../shared/utils/routes';
 
-import styles from '../styles/create-main-application.module.scss';
+import styles from '../styles/create-public-application.module.scss';
 
-export const CreateMainApplication: FC = () => {
+export const CreatePublicApplication: FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { showToast } = useToast();
 
-	const { user } = useSelector((state) => state.user);
 	const { institutes, tags, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
 	const [currentStep, setCurrentStep] = useState(1);
 	const { isLoading } = useSelector((state) => state.application);
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
-	const {
-		values,
-		handleChange,
-		handleSelectChange,
-		handleCheckboxToggle,
-		errors,
-	} = useForm<ICreateAppForm>(initialAppValues, validationSchema);
+	const { values, handleChange, handleSelectChange, errors } =
+		useForm<ICreateAppForm>(initialAppValues, validationSchema);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!isBlockSubmit && user) {
+		if (!isBlockSubmit) {
 			const appMainData = {
-				author: user.id,
 				...values,
-				author_firstname: user.first_name,
-				author_middlename: user.middle_name,
-				author_lastname: user.last_name,
-				author_phone: user.phone,
-				author_email: user.email,
-				author_role: user.role,
-				author_division: user.department.name,
+				project_level: '',
 				is_internal_customer: values.company_type.id === 1 ? true : false,
-				project_level:
-					typeof values.project_level === 'object'
-						? values.project_level.name
-						: values.project_level,
+				author_role:
+					typeof values.author_role === 'object'
+						? values.author_role.name
+						: values.author_role,
 				target_institutes: values.target_institutes.map((elem) => elem.code),
 				tags: [values.tags.id],
 			};
 
 			try {
-				await dispatch(createAppMainAction(appMainData)).unwrap();
-				navigate(`/${EMAINROUTES.MY_APPS}`, {
+				await dispatch(createAppPublicAction(appMainData)).unwrap();
+				navigate(`/${EPAGESROUTES.LOGIN}`, {
 					replace: true,
 				});
 				showToast({
@@ -107,8 +93,8 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('target_institutes', selected);
 	};
 
-	const handleChangeLevel = (selected: IProjectLevel) => {
-		handleSelectChange('project_level', selected);
+	const handleChangeCategories = (selected: IAuthorCategory) => {
+		handleSelectChange('author_role', selected);
 	};
 
 	const handleChangeCompanyType = (selected: ICompanyType) => {
@@ -122,10 +108,6 @@ export const CreateMainApplication: FC = () => {
 
 	const handleChangeTags = (selected: ITag) => {
 		handleSelectChange('tags', selected);
-	};
-
-	const handleChangeConsultation = () => {
-		handleCheckboxToggle('needs_consultation');
 	};
 
 	const handleNextStep = () => setCurrentStep((prev) => prev + 1);
@@ -146,14 +128,115 @@ export const CreateMainApplication: FC = () => {
 
 	const steps = [
 		{
-			title: 'Шаг 1. О проекте',
-			subtitle: 'Укажите сведения о заказчике и уровне проекта',
+			title: 'Шаг 1. Личные данные автора',
+			subtitle: 'Укажите информацию об авторе заявки',
 			content: (
 				<>
 					<FormField
-						title={formFieldMainData.company_type.title}
+						title={formFieldPublicData.author_lastname.title}
+						fieldError={{
+							text: errors.author_lastname || '',
+							isShow: !!errors.author_lastname,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_lastname.name}
+							placeholder={formFieldPublicData.author_lastname.placeholder}
+							value={values.author_lastname}
+							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_firstname.title}
+						fieldError={{
+							text: errors.author_firstname || '',
+							isShow: !!errors.author_firstname,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_firstname.name}
+							placeholder={formFieldPublicData.author_firstname.placeholder}
+							value={values.author_firstname}
+							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_middlename.title}
+						fieldError={{
+							text: errors.author_middlename || '',
+							isShow: !!errors.author_middlename,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_middlename.name}
+							placeholder={formFieldPublicData.author_middlename.placeholder}
+							value={values.author_middlename}
+							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_email.title}
+						fieldError={{
+							text: errors.author_email || '',
+							isShow: !!errors.author_email,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_email.name}
+							placeholder={formFieldPublicData.author_email.placeholder}
+							value={values.author_email}
+							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_phone.title}
+						fieldError={{
+							text: errors.author_phone || '',
+							isShow: !!errors.author_phone,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_phone.name}
+							placeholder={formFieldPublicData.author_phone.placeholder}
+							value={values.author_phone}
+							onChange={handleChange}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_role.title}
+						fieldError={{
+							text: errors.author_role || '',
+							isShow: !!errors.author_role,
+						}}>
+						<Select
+							options={authorCategories}
+							currentOption={values.author_role}
+							onChooseOption={handleChangeCategories}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldPublicData.author_division.title}
 						withInfo
-						infoText={formFieldMainData.company_type.info}>
+						infoText={formFieldPublicData.author_division.info}
+						fieldError={{
+							text: errors.author_division || '',
+							isShow: !!errors.author_division,
+						}}>
+						<FormInput
+							name={formFieldPublicData.author_division.name}
+							placeholder={formFieldPublicData.author_division.placeholder}
+							value={values.author_division}
+							onChange={handleChange}
+						/>
+					</FormField>
+				</>
+			),
+		},
+		{
+			title: 'Шаг 2. О проекте',
+			subtitle:
+				'Укажите наименование проекта, сведения о заказчике и уровне проекта',
+			content: (
+				<>
+					<FormField
+						title={formFieldPublicData.company_type.title}
+						withInfo
+						infoText={formFieldPublicData.company_type.info}>
 						<Select
 							options={companyTypes}
 							currentOption={values.company_type}
@@ -161,42 +244,32 @@ export const CreateMainApplication: FC = () => {
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.company.title}
+						title={formFieldPublicData.company.title}
 						withInfo
-						infoText={formFieldMainData.company.info}>
+						infoText={formFieldPublicData.company.info}>
 						<FormInput
-							name={formFieldMainData.company.name}
+							name={formFieldPublicData.company.name}
 							value={values.company}
 							onChange={handleChange}
-							placeholder={formFieldMainData.company.placeholder}
+							placeholder={formFieldPublicData.company.placeholder}
 							disabled={values.company_type.id === 1}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.company_contacts.title}
+						title={formFieldPublicData.company_contacts.title}
 						withInfo
-						infoText={formFieldMainData.company_contacts.info}>
+						infoText={formFieldPublicData.company_contacts.info}>
 						<FormTextarea
-							name={formFieldMainData.company_contacts.name}
+							name={formFieldPublicData.company_contacts.name}
 							value={values.company_contacts}
 							onChange={handleChange}
-							placeholder={formFieldMainData.company_contacts.placeholder}
+							placeholder={formFieldPublicData.company_contacts.placeholder}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.project_level.title}
+						title={formFieldPublicData.target_institutes.title}
 						withInfo
-						infoText={formFieldMainData.project_level.info}>
-						<Select
-							options={projectLevels}
-							currentOption={values.project_level}
-							onChooseOption={handleChangeLevel}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.target_institutes.title}
-						withInfo
-						infoText={formFieldMainData.target_institutes.info}>
+						infoText={formFieldPublicData.target_institutes.info}>
 						<MultiSelect
 							options={institutes}
 							selectedOptions={values.target_institutes}
@@ -209,104 +282,52 @@ export const CreateMainApplication: FC = () => {
 			),
 		},
 		{
-			title: 'Шаг 2. Проблема',
+			title: 'Шаг 3. Проблема',
 			subtitle: 'Опишите задачу и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
 					<FormField
-						title={formFieldMainData.problem_holder.title}
+						title={formFieldPublicData.problem_holder.title}
 						withInfo
-						infoText={formFieldMainData.problem_holder.info}>
+						infoText={formFieldPublicData.problem_holder.info}>
 						<FormInput
-							name={formFieldMainData.problem_holder.name}
+							name={formFieldPublicData.problem_holder.name}
 							value={values.problem_holder}
 							onChange={handleChange}
-							placeholder={formFieldMainData.problem_holder.placeholder}
+							placeholder={formFieldPublicData.problem_holder.placeholder}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.goal.title}
+						title={formFieldPublicData.goal.title}
 						withInfo
-						infoText={formFieldMainData.goal.info}>
+						infoText={formFieldPublicData.goal.info}>
 						<FormTextarea
-							name={formFieldMainData.goal.name}
+							name={formFieldPublicData.goal.name}
 							value={values.goal}
 							onChange={handleChange}
-							placeholder={formFieldMainData.goal.placeholder}
+							placeholder={formFieldPublicData.goal.placeholder}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.barrier.title}
+						title={formFieldPublicData.barrier.title}
 						withInfo
-						infoText={formFieldMainData.barrier.info}>
+						infoText={formFieldPublicData.barrier.info}>
 						<FormTextarea
-							name={formFieldMainData.barrier.name}
+							name={formFieldPublicData.barrier.name}
 							value={values.barrier}
 							onChange={handleChange}
-							placeholder={formFieldMainData.barrier.placeholder}
+							placeholder={formFieldPublicData.barrier.placeholder}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.existing_solutions.title}
+						title={formFieldPublicData.existing_solutions.title}
 						withInfo
-						infoText={formFieldMainData.existing_solutions.info}>
+						infoText={formFieldPublicData.existing_solutions.info}>
 						<FormTextarea
-							name={formFieldMainData.existing_solutions.name}
+							name={formFieldPublicData.existing_solutions.name}
 							value={values.existing_solutions}
 							onChange={handleChange}
-							placeholder={formFieldMainData.existing_solutions.placeholder}
-						/>
-					</FormField>
-				</>
-			),
-		},
-		{
-			title: 'Шаг 3. Контекст и рекомендации',
-			subtitle: 'Опишите окружение проекта',
-			content: (
-				<>
-					<FormField
-						title={formFieldMainData.context.title}
-						withInfo
-						infoText={formFieldMainData.context.info}>
-						<FormTextarea
-							name={formFieldMainData.context.name}
-							value={values.context}
-							onChange={handleChange}
-							placeholder={formFieldMainData.context.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.stakeholders.title}
-						withInfo
-						infoText={formFieldMainData.stakeholders.info}>
-						<FormTextarea
-							name={formFieldMainData.stakeholders.name}
-							value={values.stakeholders}
-							onChange={handleChange}
-							placeholder={formFieldMainData.stakeholders.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.recommended_tools.title}
-						withInfo
-						infoText={formFieldMainData.recommended_tools.info}>
-						<FormTextarea
-							name={formFieldMainData.recommended_tools.name}
-							value={values.recommended_tools}
-							onChange={handleChange}
-							placeholder={formFieldMainData.recommended_tools.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.experts.title}
-						withInfo
-						infoText={formFieldMainData.experts.info}>
-						<FormTextarea
-							name={formFieldMainData.experts.name}
-							value={values.experts}
-							onChange={handleChange}
-							placeholder={formFieldMainData.experts.placeholder}
+							placeholder={formFieldPublicData.existing_solutions.placeholder}
 						/>
 					</FormField>
 				</>
@@ -318,9 +339,9 @@ export const CreateMainApplication: FC = () => {
 			content: (
 				<>
 					<FormField
-						title={formFieldMainData.tags.title}
+						title={formFieldPublicData.tags.title}
 						withInfo
-						infoText={formFieldMainData.tags.info}>
+						infoText={formFieldPublicData.tags.info}>
 						<Select
 							options={tags}
 							currentOption={values.tags}
@@ -328,32 +349,25 @@ export const CreateMainApplication: FC = () => {
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.title.title}
+						title={formFieldPublicData.title.title}
 						withInfo
-						infoText={formFieldMainData.title.info}>
+						infoText={formFieldPublicData.title.info}>
 						<FormInput
-							name={formFieldMainData.title.name}
+							name={formFieldPublicData.title.name}
 							value={values.title}
 							onChange={handleChange}
-							placeholder={formFieldMainData.title.placeholder}
+							placeholder={formFieldPublicData.title.placeholder}
 						/>
 					</FormField>
 					<FormField
-						title={formFieldMainData.additional_materials.title}
+						title={formFieldPublicData.additional_materials.title}
 						withInfo
-						infoText={formFieldMainData.additional_materials.info}>
+						infoText={formFieldPublicData.additional_materials.info}>
 						<FormTextarea
-							name={formFieldMainData.additional_materials.name}
+							name={formFieldPublicData.additional_materials.name}
 							value={values.additional_materials}
 							onChange={handleChange}
-							placeholder={formFieldMainData.additional_materials.placeholder}
-						/>
-					</FormField>
-					<FormField title={formFieldMainData.needs_consultation.title}>
-						<Checkbox
-							checked={values.needs_consultation}
-							label={formFieldMainData.needs_consultation.placeholder}
-							onChange={handleChangeConsultation}
+							placeholder={formFieldPublicData.additional_materials.placeholder}
 						/>
 					</FormField>
 				</>
@@ -365,10 +379,6 @@ export const CreateMainApplication: FC = () => {
 		{ title: 'Организация-заказчик', value: values.company },
 		{ title: 'Контактные данные заказчика', value: values.company_contacts },
 		{
-			title: 'Уровень проекта',
-			value: values.project_level.id === 0 ? '' : values.project_level.name,
-		},
-		{
 			title: 'Институт / академия',
 			value:
 				values.target_institutes.length > 0
@@ -379,13 +389,6 @@ export const CreateMainApplication: FC = () => {
 		{ title: 'Цель', value: values.goal },
 		{ title: 'Барьер', value: values.barrier },
 		{ title: 'Существующие решения', value: values.existing_solutions },
-		{ title: 'Контекст проекта', value: values.context },
-		{ title: 'Другие заинтересованные стороны', value: values.stakeholders },
-		{
-			title: 'Рекомендуемые инструменты / методы',
-			value: values.recommended_tools,
-		},
-		{ title: 'Эксперты', value: values.experts },
 		{
 			title: 'Направление проекта',
 			value: values.tags.id === 0 ? '' : values.tags.name,
@@ -482,6 +485,11 @@ export const CreateMainApplication: FC = () => {
 									<p className={styles.summary__text}>{value?.trim() || '—'}</p>
 								</li>
 							))}
+							<Button
+								text='Вернуться на главную'
+								withIcon={{ type: 'back', color: 'black' }}
+								onClick={() => navigate(-1)}
+							/>
 						</ul>
 					</Card>
 				</div>

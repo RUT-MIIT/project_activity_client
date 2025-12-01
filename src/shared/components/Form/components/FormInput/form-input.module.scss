@@ -27,6 +27,17 @@
     border-color: var(--main-blue-color);
   }
 
+	&.disabled {
+    background: var(--main-grey-light-color);
+    color: var(--main-grey-color);
+    border-color: var(--main-grey-color);
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: var(--main-grey-color);
+    }
+  }
+
   &::placeholder {
     font-style: normal;
 		font-weight: normal;
