@@ -15,10 +15,12 @@ import { NotFound } from '../pages/NotFound/ui/not-found';
 import { Home } from '../pages/Home/ui/home';
 import { NewApp } from '../pages/Application/NewApp/ui/new-app';
 import { MyApp } from '../pages/Application/MyApp/ui/my-app';
+import { ExternalApp } from '../pages/Application/ExternalApp/ui/external-app';
 import { Coordination } from '../pages/Coordination/ui/coordination';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
+import { Privacy } from '../pages/Privacy/ui/privacy';
 
 import { checkUserAuth } from '../store/user/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
@@ -54,6 +56,7 @@ export const App = () => {
 						path={EPAGESROUTES.APPLY}
 						element={<OnlyUnAuth component={<Apply />} />}
 					/>
+					<Route path={EPAGESROUTES.PRIVACY} element={<Privacy />} />
 
 					{/* ---------- Авторизованный редирект для / ---------- */}
 					<Route
@@ -66,6 +69,7 @@ export const App = () => {
 						<Route path='/home' element={<Home />} />
 						<Route path='/new-application' element={<NewApp />} />
 						<Route path='/my-applications/*' element={<MyApp />} />
+						<Route path='/external-applications/*' element={<ExternalApp />} />
 						<Route path='/coordination/*' element={<Coordination />} />
 						<Route path='/stats' element={<Stats />} />
 						<Route path='/control/*' element={<Control />} />

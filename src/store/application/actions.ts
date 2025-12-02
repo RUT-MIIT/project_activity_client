@@ -10,6 +10,7 @@ import {
 	getApplications,
 	createMainApplication,
 	createPublicApplication,
+	getExternalApplications,
 } from '../../shared/api/application';
 
 export const getAppsAction = createAsyncThunk<IApplicationItem[]>(
@@ -26,3 +27,8 @@ export const createAppPublicAction = createAsyncThunk<
 	IApplication,
 	ICreateAppPublic
 >('application/createAppPublic', createPublicApplication);
+
+export const getExternalAppsAction = createAsyncThunk<IApplicationItem[]>(
+	'application/getExternalApps',
+	getExternalApplications
+);

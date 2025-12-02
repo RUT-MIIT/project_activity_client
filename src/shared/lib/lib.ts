@@ -15,7 +15,7 @@ export interface IAuthorCategory {
 }
 
 export const authorCategories: IAuthorCategory[] = [
-	{ id: 1, name: 'Внутренний сотрудник' },
+	{ id: 1, name: 'Работник РУТ (МИИТ)' },
 	{ id: 2, name: 'Представитель компании' },
 ];
 

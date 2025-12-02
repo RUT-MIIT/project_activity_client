@@ -18,6 +18,8 @@ import styles from '../styles/app-card.module.scss';
 
 export const AppCard: FC<IAppCardProps> = ({
 	card,
+	withComment = false,
+	withStage = false,
 	withAuthor = false,
 	onShowHistory,
 	onShowDetail,
@@ -33,8 +35,12 @@ export const AppCard: FC<IAppCardProps> = ({
 		<li className={styles.card} key={card.id}>
 			<div className={styles.card__header}>
 				<Badge text={statusText} color={statusColor} />
-				<div className={styles.card__comments}>{card.comments_count}</div>
-				<span className={styles.card__stage}>Этап {stage} из 4</span>
+				{withComment && (
+					<div className={styles.card__comments}>{card.comments_count}</div>
+				)}
+				{withStage && (
+					<span className={styles.card__stage}>Этап {stage} из 4</span>
+				)}
 			</div>
 			<div className={styles.card__main}>
 				<h4 className={styles.card__title}>{card.title}</h4>
@@ -81,12 +87,17 @@ export const AppCard: FC<IAppCardProps> = ({
 					<span className={styles.card__help}>Нужна помощь!</span>
 				)}
 
-				<Button
-					text='История изменения'
-					color='cancel'
-					onClick={() => onShowHistory(card.id)}
-				/>
-				<Button text='Просмотр' onClick={() => onShowDetail(card.id)} />
+				{onShowHistory && (
+					<Button
+						text='История изменения'
+						color='cancel'
+						onClick={() => onShowHistory(card.id)}
+					/>
+				)}
+
+				{onShowDetail && (
+					<Button text='Просмотр' onClick={() => onShowDetail(card.id)} />
+				)}
 			</div>
 		</li>
 	);

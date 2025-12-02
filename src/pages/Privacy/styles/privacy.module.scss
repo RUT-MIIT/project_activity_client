@@ -1,0 +1,28 @@
+.container {
+	margin: 0;
+	max-width: 100%;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	padding: 32px 24px;
+	background-color: var(--background-color);
+	background-image: url('../../../shared/images/main-layout/background.svg');
+	background-position: left;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+.text {
+  margin: 8px 0 0 0;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: normal;
+}

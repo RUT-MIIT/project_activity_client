@@ -1,13 +1,14 @@
 export const getStatusColor = (
 	statusCode: string,
 	userLevel: 'user' | 'department' | 'institute' | 'admin'
-): 'green' | 'red' | 'yellow' | 'blue' => {
+): 'green' | 'red' | 'yellow' | 'blue' | 'purple' => {
 	// 1. Универсальные статусы
 	if (statusCode === 'approved' || statusCode.startsWith('approved_'))
 		return 'green';
 	if (statusCode === 'rejected' || statusCode.startsWith('rejected_'))
 		return 'red';
 	if (statusCode.startsWith('returned_')) return 'yellow';
+	if (statusCode.startsWith('require_')) return 'purple';
 
 	// 2. Для статусов "в работе" и "передана" проверяем уровень пользователя
 	const isDepartmentLevel =

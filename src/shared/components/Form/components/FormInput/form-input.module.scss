@@ -57,6 +57,23 @@
   }
 }
 
+.input:-webkit-autofill {
+  box-shadow: 0 0 0 1000px var(--main-blue-background-color) inset !important;
+  -webkit-text-fill-color: var(--main-black-color) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* При hover в авто-заполненном состоянии */
+.input:-webkit-autofill:hover {
+  box-shadow: 0 0 0 1000px var(--main-blue-background-color) inset !important;
+}
+
+/* При focus в автозаполнении */
+.input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--main-white-color) inset !important;
+  border-color: var(--main-blue-color);
+}
+
 .toggle {
   position: absolute;
   top: 50%;

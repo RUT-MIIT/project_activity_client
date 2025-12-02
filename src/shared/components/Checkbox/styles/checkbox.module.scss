@@ -1,9 +1,9 @@
-.checkbox_label {
+.wrapper {
+	margin: 0;
   display: flex;
   align-items: center;
   width: 100%;
-	padding: 11px 0;
-  cursor: pointer;
+  padding: 11px 0;
 }
 
 .checkbox {
@@ -39,9 +39,8 @@
 .text {
 	margin: 0;
   font-size: 14px;
-  line-height: 18px;
+  line-height: 16px;
   color: var(--main-black-color);
-  pointer-events: none;
 
   &_empty {
     color: var(--main-grey-color);

@@ -18,14 +18,16 @@ import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
 import { Card } from '../../../shared/components/Card/ui/card';
 import { Form } from '../../../shared/components/Form/ui/form';
 import {
+	FormField,
 	FormInput,
 	FormTextarea,
 } from '../../../shared/components/Form/components';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Select } from '../../../shared/components/Select/ui/select';
+import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
+import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
 import { ApplicationField } from './application-field';
 import { ApplicationComments } from './application-comments';
-import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
 
 import {
 	validationSchema,
@@ -217,6 +219,13 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				) || projectLevels[0];
 
 			setValues({
+				author_lastname: applicationDetail.author_lastname,
+				author_firstname: applicationDetail.author_firstname,
+				author_middlename: applicationDetail.author_middlename,
+				author_email: applicationDetail.author_email,
+				author_phone: applicationDetail.author_phone,
+				author_role: applicationDetail.author_role,
+				author_division: applicationDetail.author_division,
 				title: applicationDetail.title || '',
 				company: applicationDetail.company || '',
 				company_contacts: applicationDetail.company_contacts || '',
@@ -244,16 +253,27 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		return <Preloader />;
 	}
 
+	const tabs =
+		status === 'external-app'
+			? [
+					{ path: '/person', label: 'Автор' },
+					{ path: '/description', label: 'О проекте' },
+					{ path: '/problem', label: 'Проблема' },
+					{ path: '/context', label: 'Контекст' },
+					{ path: '/additional', label: 'Дополнительно' },
+			  ]
+			: [
+					{ path: '/description', label: 'О проекте' },
+					{ path: '/problem', label: 'Проблема' },
+					{ path: '/context', label: 'Контекст' },
+					{ path: '/additional', label: 'Дополнительно' },
+			  ];
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.header}>
 				<Tabs
-					tabs={[
-						{ path: '/description', label: 'О проекте' },
-						{ path: '/problem', label: 'Проблема' },
-						{ path: '/context', label: 'Контекст' },
-						{ path: '/additional', label: 'Дополнительно' },
-					]}
+					tabs={tabs}
 					activeTab={activeTab}
 					onTabChange={(path) => setActiveTab(path)}
 				/>
@@ -273,6 +293,66 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 							formWidth='full'
 							withHeightStretch>
 							<div className={styles.form__content}>
+								{activeTab === '/person' && (
+									<>
+										<FormField title='Фамилия'>
+											<FormInput
+												name='author_lastname'
+												value={values.author_lastname}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Имя'>
+											<FormInput
+												name='author_firstname'
+												value={values.author_firstname}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Отчество'>
+											<FormInput
+												name='author_middlename'
+												value={values.author_middlename}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Электронная почта'>
+											<FormInput
+												name='author_email'
+												value={values.author_email}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Мобильный телефон'>
+											<FormInput
+												name='author_phone'
+												value={values.author_phone}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Категория автора'>
+											<FormInput
+												name='author_role'
+												value={values.author_role}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+										<FormField title='Компания или подразделение'>
+											<FormInput
+												name='author_division'
+												value={values.author_division}
+												onChange={handleChange}
+												disabled
+											/>
+										</FormField>
+									</>
+								)}
 								{activeTab === '/description' && (
 									<>
 										<ApplicationField
@@ -449,7 +529,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 											currentField={currentField}
 											getCommentCount={getCommentCount}
 											onSelectField={handleSelectField}>
-											<Select
+											<SelectWithSearch
 												options={tags}
 												currentOption={values.tags}
 												onChooseOption={handleChangeTags}
@@ -485,6 +565,15 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 								)}
 							</div>
 							<div className={styles.form__control}>
+								{hasAction('transfer_to_institute') && (
+									<Button
+										text='Распределить'
+										color='purple'
+										withIcon={{ type: 'send', color: 'white' }}
+										onClick={handleApproveApp}
+										isBlock={isLoadingAction}
+									/>
+								)}
 								{hasAction('save_changes') && (
 									<Button
 										text='Сохранить'

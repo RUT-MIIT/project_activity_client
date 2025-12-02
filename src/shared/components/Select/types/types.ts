@@ -15,4 +15,5 @@ export interface IMultiSelectProps<T> {
 	valueKey?: keyof T;
 	labelKey?: keyof T;
 	placeholder?: string;
+	listHeight?: '120' | '160' | '200' | '240';
 }

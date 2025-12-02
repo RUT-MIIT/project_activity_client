@@ -5,8 +5,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as actions from './actions';
 
 const initialState: IApplicationStore = {
-	applications: [],
 	application: null,
+	applications: [],
+	externalApplications: [],
 	isLoading: false,
 	error: null,
 };
@@ -50,6 +51,18 @@ export const applicationSlice = createSlice({
 			.addCase(actions.createAppPublicAction.rejected, (state, action) => {
 				state.isLoading = false;
 				state.error = action.error?.message || 'Произошла ошибка';
+			})
+			.addCase(actions.getExternalAppsAction.pending, (state) => {
+				state.isLoading = true;
+				state.error = null;
+			})
+			.addCase(actions.getExternalAppsAction.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.externalApplications = action.payload;
+			})
+			.addCase(actions.getExternalAppsAction.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.error?.message || 'Не удалось загрузить заявки';
 			});
 	},
 });

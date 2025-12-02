@@ -20,6 +20,13 @@ export const validationSchema = {
 };
 
 export const initialAppValues: IEditAppForm = {
+	author_lastname: '',
+	author_firstname: '',
+	author_middlename: '',
+	author_email: '',
+	author_phone: '',
+	author_role: '',
+	author_division: '',
 	title: '',
 	company: '',
 	company_contacts: '',

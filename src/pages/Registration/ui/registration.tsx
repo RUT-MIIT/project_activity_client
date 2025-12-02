@@ -13,7 +13,6 @@ import { Form } from '../../../shared/components/Form/ui/form';
 import {
 	FormField,
 	FormInput,
-	FormTextarea,
 	FormButtons,
 	FormLinks,
 } from '../../../shared/components/Form/components';
@@ -160,7 +159,7 @@ export const Registration: FC = () => {
 							/>
 						</FormField>
 						<FormField
-							title='Телефон'
+							title='Мобильный телефон'
 							fieldError={{
 								text: errors.phone || '',
 								isShow: !!errors.phone,
@@ -180,7 +179,7 @@ export const Registration: FC = () => {
 							/>
 						</FormField>
 						<FormField title='Комментарий'>
-							<FormTextarea
+							<FormInput
 								name='comment'
 								placeholder='Опишите цель регистрации'
 								value={values.comment}

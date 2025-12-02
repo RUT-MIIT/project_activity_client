@@ -38,3 +38,17 @@ export const createPublicApplication = (data: ICreateAppPublic) => {
 		body: JSON.stringify(data),
 	});
 };
+
+export const getExternalApplications = () => {
+	return request(
+		'/showcase/project-applications/external?status=require_assignment',
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};

@@ -6,7 +6,15 @@ export interface IButtonProps {
 	form?: string;
 	href?: string;
 	style?: CSSProperties;
-	color?: 'default' | 'blue' | 'white' | 'confirm' | 'cancel' | 'green' | 'red';
+	color?:
+		| 'default'
+		| 'blue'
+		| 'white'
+		| 'confirm'
+		| 'cancel'
+		| 'green'
+		| 'red'
+		| 'purple';
 	withIcon?: {
 		type:
 			| 'add'

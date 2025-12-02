@@ -14,6 +14,11 @@ export const links = [
 		text: 'Регистрация',
 		url: EPAGESROUTES.REGISTRATION,
 	},
+	{
+		label: 'Вы не сотрудник РУТ (МИИТ)?',
+		text: 'Подать заявку',
+		url: EPAGESROUTES.APPLY,
+	},
 ];
 
 export const validationSchema = {

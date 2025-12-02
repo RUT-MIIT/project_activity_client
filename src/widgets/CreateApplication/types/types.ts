@@ -27,4 +27,6 @@ export interface ICreateAppForm {
 	title: string;
 	additional_materials: string;
 	needs_consultation: boolean;
+	privacy_person: boolean;
+	privacy_org: boolean;
 }

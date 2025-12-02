@@ -70,6 +70,11 @@
 		background: var(--accent-red-color);
 		border: 1px solid var(--accent-red-color);
 	}
+	&_color_purple {
+		color: var(--main-white-color);
+		background: var(--accent-purple-color);
+		border: 1px solid var(--accent-purple-color);
+	}
 	&_block {
 		color: var(--main-grey-color);
 		background: var(--inactive-color);

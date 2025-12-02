@@ -20,7 +20,10 @@ import {
 import { Button } from '../../../shared/components/Button/ui/button';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Select } from '../../../shared/components/Select/ui/select';
+import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
+import { Checkbox } from '../../../shared/components/Checkbox/ui/checkbox';
+import { Link } from '../../../shared/components/Link/ui/link';
 
 import {
 	validationSchema,
@@ -50,8 +53,13 @@ export const CreatePublicApplication: FC = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const { isLoading } = useSelector((state) => state.application);
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
-	const { values, handleChange, handleSelectChange, errors } =
-		useForm<ICreateAppForm>(initialAppValues, validationSchema);
+	const {
+		values,
+		handleChange,
+		handleSelectChange,
+		handleCheckboxToggle,
+		errors,
+	} = useForm<ICreateAppForm>(initialAppValues, validationSchema);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -70,7 +78,7 @@ export const CreatePublicApplication: FC = () => {
 
 			try {
 				await dispatch(createAppPublicAction(appMainData)).unwrap();
-				navigate(`/${EPAGESROUTES.LOGIN}`, {
+				navigate(EPAGESROUTES.LOGIN, {
 					replace: true,
 				});
 				showToast({
@@ -95,6 +103,19 @@ export const CreatePublicApplication: FC = () => {
 
 	const handleChangeCategories = (selected: IAuthorCategory) => {
 		handleSelectChange('author_role', selected);
+		if (selected.id === 1) {
+			handleSelectChange('company_type', {
+				id: 1,
+				name: 'Внутренний заказчик',
+			});
+			handleSelectChange('company', 'РУТ (МИИТ)');
+		} else {
+			handleSelectChange('company_type', {
+				id: 2,
+				name: 'Внешний заказчик',
+			});
+			handleSelectChange('company', '');
+		}
 	};
 
 	const handleChangeCompanyType = (selected: ICompanyType) => {
@@ -108,6 +129,14 @@ export const CreatePublicApplication: FC = () => {
 
 	const handleChangeTags = (selected: ITag) => {
 		handleSelectChange('tags', selected);
+	};
+
+	const handleChangePrivacyPerson = () => {
+		handleCheckboxToggle('privacy_person');
+	};
+
+	const handleChangePrivacyOrg = () => {
+		handleCheckboxToggle('privacy_org');
 	};
 
 	const handleNextStep = () => setCurrentStep((prev) => prev + 1);
@@ -129,7 +158,7 @@ export const CreatePublicApplication: FC = () => {
 	const steps = [
 		{
 			title: 'Шаг 1. Личные данные автора',
-			subtitle: 'Укажите информацию об авторе заявки',
+			subtitle: 'Введите ваши данные',
 			content: (
 				<>
 					<FormField
@@ -276,6 +305,7 @@ export const CreatePublicApplication: FC = () => {
 							valueKey='code'
 							labelKey='name'
 							onChange={handleChangeInstitute}
+							listHeight='160'
 						/>
 					</FormField>
 				</>
@@ -283,7 +313,7 @@ export const CreatePublicApplication: FC = () => {
 		},
 		{
 			title: 'Шаг 3. Проблема',
-			subtitle: 'Опишите задачу и препятствия, с которыми сталкиваетесь',
+			subtitle: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
 					<FormField
@@ -342,7 +372,7 @@ export const CreatePublicApplication: FC = () => {
 						title={formFieldPublicData.tags.title}
 						withInfo
 						infoText={formFieldPublicData.tags.info}>
-						<Select
+						<SelectWithSearch
 							options={tags}
 							currentOption={values.tags}
 							onChooseOption={handleChangeTags}
@@ -369,6 +399,34 @@ export const CreatePublicApplication: FC = () => {
 							onChange={handleChange}
 							placeholder={formFieldPublicData.additional_materials.placeholder}
 						/>
+					</FormField>
+					<FormField title={formFieldPublicData.privacy_person.title}>
+						<Checkbox
+							checked={values.privacy_person}
+							onChange={handleChangePrivacyPerson}>
+							<div>
+								Даю{' '}
+								<Link
+									text='согласие на обработку'
+									path='https://pd.emiit.ru/privacy'
+								/>{' '}
+								своих персональных данных
+							</div>
+						</Checkbox>
+					</FormField>
+					<FormField title={formFieldPublicData.privacy_org.title}>
+						<Checkbox
+							checked={values.privacy_org}
+							onChange={handleChangePrivacyOrg}>
+							<div>
+								Подтверждаю, что лично ознакомился(-ась) с{' '}
+								<Link
+									text='Положением об обработке персональных данных РУТ (МИИТ)'
+									path='https://rut-miit.ru/org/privacy'
+								/>{' '}
+								и принимаю условия этого положения
+							</div>
+						</Checkbox>
 					</FormField>
 				</>
 			),

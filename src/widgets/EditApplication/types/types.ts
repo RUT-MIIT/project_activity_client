@@ -2,6 +2,14 @@ import type { PropsWithChildren } from 'react';
 import type { IField } from '../../../store/application/types';
 
 export interface IEditAppForm {
+	author_lastname: string;
+	author_firstname: string;
+	author_middlename: string;
+	author_email: string;
+	author_phone: string;
+	author_role: string;
+	author_division: string;
+
 	title: string;
 	company: string;
 	company_contacts: string;
@@ -30,5 +38,5 @@ export interface IApplicationFieldProps extends PropsWithChildren {
 }
 
 export interface IEditApplicationProps {
-	status: 'my-app' | 'coordination';
+	status: 'my-app' | 'external-app' | 'coordination';
 }

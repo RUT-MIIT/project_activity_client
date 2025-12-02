@@ -19,10 +19,13 @@
 	--background-red-color: #FFF5F5;
 	--accent-yellow-color: #DD6B20;
 	--background-yellow-color: #FFFAF0;
+	--accent-purple-color: #7C3AED;
+	--background-purple-color: #E0D4FF;
 	--accent-grey-color: #797E8B;
 	--accent-blue-light-color: #D5E1FF;
 	--accent-green-light-color: #DAF5DF;
 	--accent-red-light-color: #FFD7D6;
+	--accent-purple-light-color: #C4B5FD;
 	--slider-color: #d9d9d9;
 	--inactive-color: #F6F6F7;
 	--border-radius: 12px;
@@ -41,3 +44,16 @@
 	background-color: var(--background-color);
 }
 
+/* Chrome / Edge / Safari */
+
+::-webkit-scrollbar-track {
+  background: var(--slider-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--main-grey-light-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--main-grey-color);
+}

@@ -3,6 +3,7 @@ import type { ITag } from '../catalog/types';
 export interface IApplicationStore {
 	application: IApplication | null;
 	applications: IApplicationItem[];
+	externalApplications: IApplicationItem[];
 	isLoading: boolean;
 	error: string | null;
 }

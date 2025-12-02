@@ -15,6 +15,7 @@ export const MultiSelect = <T,>({
 	valueKey = 'id' as keyof T,
 	labelKey = 'name' as keyof T,
 	placeholder = 'Выберите из списка...',
+	listHeight = '120',
 }: IMultiSelectProps<T>) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const selectRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,7 @@ export const MultiSelect = <T,>({
 				className={`${styles.options} ${
 					isOpen ? styles.options_status_open : ''
 				}`}>
-				<ul className={styles.list}>
+				<ul className={`${styles.list} ${styles[`list_height_${listHeight}`]}`}>
 					{options.length > 0 ? (
 						options.map((item) => {
 							const checked = selectedOptions.some(

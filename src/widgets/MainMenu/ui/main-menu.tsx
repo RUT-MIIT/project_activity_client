@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from '../../../store/store';
 import { getUser } from '../../../store/user/reducer';
 import { logoutUser } from '../../../store/user/actions';
 
-import { links } from '../lib/helpers';
+import { getLinksByRole } from '../lib/helpers';
 
 import styles from '../styles/main-menu.module.scss';
 
@@ -19,12 +19,7 @@ export const MainMenu: FC = () => {
 		dispatch(logoutUser());
 	};
 
-	const visibleLinks =
-		user?.role === 'admin' || user?.role === 'cpds'
-			? links
-			: user?.role === 'mentor'
-			? links.slice(0, 3)
-			: links.slice(0, 4);
+	const visibleLinks = getLinksByRole(user?.role);
 
 	return (
 		<section className={styles.container}>

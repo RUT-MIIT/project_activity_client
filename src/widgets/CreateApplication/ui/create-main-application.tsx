@@ -21,6 +21,7 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Select } from '../../../shared/components/Select/ui/select';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
+import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 import { Checkbox } from '../../../shared/components/Checkbox/ui/checkbox';
 
 import {
@@ -210,7 +211,7 @@ export const CreateMainApplication: FC = () => {
 		},
 		{
 			title: 'Шаг 2. Проблема',
-			subtitle: 'Опишите задачу и препятствия, с которыми сталкиваетесь',
+			subtitle: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
 					<FormField
@@ -321,7 +322,7 @@ export const CreateMainApplication: FC = () => {
 						title={formFieldMainData.tags.title}
 						withInfo
 						infoText={formFieldMainData.tags.info}>
-						<Select
+						<SelectWithSearch
 							options={tags}
 							currentOption={values.tags}
 							onChooseOption={handleChangeTags}

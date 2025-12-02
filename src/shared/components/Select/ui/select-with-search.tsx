@@ -68,7 +68,9 @@ export const SelectWithSearch = <T,>({
 				) : (
 					<p
 						className={`${styles.title} ${
-							!currentOption ? styles.text_empty : ''
+							!currentOption || getValue(currentOption) === '0'
+								? styles.text_empty
+								: ''
 						}`}>
 						{currentOption ? getLabel(currentOption) : placeholder}
 					</p>

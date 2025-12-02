@@ -5,18 +5,19 @@ import styles from '../styles/checkbox.module.scss';
 
 export const Checkbox: FC<ICheckboxProps> = ({
 	checked,
-	label,
 	onChange,
 	disabled = false,
+	children,
+	label,
 }) => {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.checked);
 	};
 
 	return (
-		<label
-			className={styles.checkbox_label}
-			onClick={(e) => e.stopPropagation()}>
+		// Контейнер НЕ является кликабельным
+		<div className={styles.wrapper} onClick={(e) => e.stopPropagation()}>
+			{/* Сам чекбокс кликабелен */}
 			<input
 				type='checkbox'
 				checked={checked}
@@ -24,7 +25,12 @@ export const Checkbox: FC<ICheckboxProps> = ({
 				onChange={handleChange}
 				className={styles.checkbox}
 			/>
-			{label && <span className={styles.text}>{label}</span>}
-		</label>
+
+			{/* Если есть children — рендерим */}
+			{children && <div className={styles.text}>{children}</div>}
+
+			{/* Если есть label — рендерим (не кликабельно) */}
+			{label && !children && <span className={styles.text}>{label}</span>}
+		</div>
 	);
 };
