@@ -88,3 +88,18 @@ export const rejectApp = (applicationId: number, reason: string) => {
 		body: JSON.stringify({ reason: reason }),
 	});
 };
+
+export const distributeApp = (applicationId: number, code: string) => {
+	return request(
+		`/showcase/project-applications/${applicationId}/transfer_to_institute/`,
+		{
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+			body: JSON.stringify({ code: code }),
+		}
+	);
+};

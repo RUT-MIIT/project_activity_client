@@ -26,8 +26,10 @@ import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Select } from '../../../shared/components/Select/ui/select';
 import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
+import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { ApplicationField } from './application-field';
 import { ApplicationComments } from './application-comments';
+import { DistributeApplication } from './distribute-application';
 
 import {
 	validationSchema,
@@ -35,10 +37,11 @@ import {
 	shouldBlockSubmit,
 } from '../lib/helpers';
 import {
-	editAppAction,
 	approveAppAction,
+	editAppAction,
 	reworkAppAction,
 	rejectAppAction,
+	distributeAppAction,
 } from '../../../store/coordination/actions';
 import {
 	getInstitutesAction,
@@ -65,6 +68,8 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 	);
 
 	const [activeTab, setActiveTab] = useState('/description');
+	const [isDistributeModalOpen, setIsDistributeModalOpen] =
+		useState<boolean>(false);
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(false);
 	const { values, handleChange, handleSelectChange, errors, setValues } =
 		useForm<IEditAppForm>(initialAppValues, validationSchema);
@@ -135,6 +140,31 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		}
 	};
 
+	const handleDistributeApp = async (code: string) => {
+		if (user && applicationDetail) {
+			try {
+				await dispatch(
+					distributeAppAction({ applicationId: applicationDetail.id, code })
+				).unwrap();
+				closeModal();
+				navigate(`/${EMAINROUTES.EXTERNAL_APPS}`, {
+					replace: true,
+				});
+				showToast({
+					title: 'Заявка успешно распределена!',
+					text: `Заявка «${applicationDetail.title}» распределена.`,
+					type: 'success',
+				});
+			} catch (err) {
+				showToast({
+					title: 'Произошла ошибка при распределении заявки!',
+					text: getErrorMessage(err),
+					type: 'error',
+				});
+			}
+		}
+	};
+
 	const handleReworkApp = async () => {
 		if (user && applicationDetail) {
 			try {
@@ -186,6 +216,14 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		}
 	};
 
+	const openDistributeModal = () => {
+		setIsDistributeModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setIsDistributeModalOpen(false);
+	};
+
 	const handleChangeInstitute = (selected: IInstitute[]) => {
 		handleSelectChange('target_institutes', selected);
 	};
@@ -213,10 +251,9 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 
 	useEffect(() => {
 		if (applicationDetail) {
-			const levelOption =
-				projectLevels.find(
-					(level) => level.name === applicationDetail.project_level
-				) || projectLevels[0];
+			const levelOption = projectLevels.find(
+				(level) => level.name === applicationDetail.project_level
+			) || { id: 0, name: 'Выберите уровень..' };
 
 			setValues({
 				author_lastname: applicationDetail.author_lastname,
@@ -226,7 +263,6 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				author_phone: applicationDetail.author_phone,
 				author_role: applicationDetail.author_role,
 				author_division: applicationDetail.author_division,
-				title: applicationDetail.title || '',
 				company: applicationDetail.company || '',
 				company_contacts: applicationDetail.company_contacts || '',
 				project_level: levelOption,
@@ -240,6 +276,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				stakeholders: applicationDetail.stakeholders || '',
 				experts: applicationDetail.experts || '',
 				tags: applicationDetail.tags[0],
+				title: applicationDetail.title || '',
 				additional_materials: applicationDetail.additional_materials || '',
 			});
 		}
@@ -570,7 +607,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 										text='Распределить'
 										color='purple'
 										withIcon={{ type: 'send', color: 'white' }}
-										onClick={handleApproveApp}
+										onClick={openDistributeModal}
 										isBlock={isLoadingAction}
 									/>
 								)}
@@ -619,6 +656,16 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 					</Card>
 				</div>
 			</div>
+
+			{isDistributeModalOpen && (
+				<Modal
+					isOpen={isDistributeModalOpen}
+					onClose={closeModal}
+					title='Распределение заявки'
+					description='Выберите подразделение на которое хотите распределить заявку.'>
+					<DistributeApplication onDistribute={handleDistributeApp} />
+				</Modal>
+			)}
 		</div>
 	);
 };

@@ -27,6 +27,7 @@ import { Checkbox } from '../../../shared/components/Checkbox/ui/checkbox';
 import {
 	validationSchema,
 	initialAppValues,
+	requiredFieldsMain,
 	shouldBlockSubmit,
 	formFieldMainData,
 } from '../lib/helpers';
@@ -133,7 +134,7 @@ export const CreateMainApplication: FC = () => {
 	const handlePrevStep = () => setCurrentStep((prev) => prev - 1);
 
 	useEffect(() => {
-		setIsBlockSubmit(shouldBlockSubmit(values, errors));
+		setIsBlockSubmit(shouldBlockSubmit(values, requiredFieldsMain, errors));
 	}, [values, errors]);
 
 	useEffect(() => {
@@ -164,7 +165,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.company.title}
 						withInfo
-						infoText={formFieldMainData.company.info}>
+						infoText={formFieldMainData.company.info}
+						fieldError={{
+							text: errors.company || '',
+							isShow: !!errors.company,
+						}}>
 						<FormInput
 							name={formFieldMainData.company.name}
 							value={values.company}
@@ -176,7 +181,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.company_contacts.title}
 						withInfo
-						infoText={formFieldMainData.company_contacts.info}>
+						infoText={formFieldMainData.company_contacts.info}
+						fieldError={{
+							text: errors.company_contacts || '',
+							isShow: !!errors.company_contacts,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.company_contacts.name}
 							value={values.company_contacts}
@@ -217,7 +226,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.problem_holder.title}
 						withInfo
-						infoText={formFieldMainData.problem_holder.info}>
+						infoText={formFieldMainData.problem_holder.info}
+						fieldError={{
+							text: errors.problem_holder || '',
+							isShow: !!errors.problem_holder,
+						}}>
 						<FormInput
 							name={formFieldMainData.problem_holder.name}
 							value={values.problem_holder}
@@ -228,7 +241,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.goal.title}
 						withInfo
-						infoText={formFieldMainData.goal.info}>
+						infoText={formFieldMainData.goal.info}
+						fieldError={{
+							text: errors.goal || '',
+							isShow: !!errors.goal,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.goal.name}
 							value={values.goal}
@@ -239,7 +256,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.barrier.title}
 						withInfo
-						infoText={formFieldMainData.barrier.info}>
+						infoText={formFieldMainData.barrier.info}
+						fieldError={{
+							text: errors.barrier || '',
+							isShow: !!errors.barrier,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.barrier.name}
 							value={values.barrier}
@@ -250,7 +271,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.existing_solutions.title}
 						withInfo
-						infoText={formFieldMainData.existing_solutions.info}>
+						infoText={formFieldMainData.existing_solutions.info}
+						fieldError={{
+							text: errors.existing_solutions || '',
+							isShow: !!errors.existing_solutions,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.existing_solutions.name}
 							value={values.existing_solutions}
@@ -269,7 +294,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.context.title}
 						withInfo
-						infoText={formFieldMainData.context.info}>
+						infoText={formFieldMainData.context.info}
+						fieldError={{
+							text: errors.context || '',
+							isShow: !!errors.context,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.context.name}
 							value={values.context}
@@ -280,7 +309,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.stakeholders.title}
 						withInfo
-						infoText={formFieldMainData.stakeholders.info}>
+						infoText={formFieldMainData.stakeholders.info}
+						fieldError={{
+							text: errors.stakeholders || '',
+							isShow: !!errors.stakeholders,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.stakeholders.name}
 							value={values.stakeholders}
@@ -291,7 +324,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.recommended_tools.title}
 						withInfo
-						infoText={formFieldMainData.recommended_tools.info}>
+						infoText={formFieldMainData.recommended_tools.info}
+						fieldError={{
+							text: errors.recommended_tools || '',
+							isShow: !!errors.recommended_tools,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.recommended_tools.name}
 							value={values.recommended_tools}
@@ -302,7 +339,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.experts.title}
 						withInfo
-						infoText={formFieldMainData.experts.info}>
+						infoText={formFieldMainData.experts.info}
+						fieldError={{
+							text: errors.experts || '',
+							isShow: !!errors.experts,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.experts.name}
 							value={values.experts}
@@ -331,7 +372,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.title.title}
 						withInfo
-						infoText={formFieldMainData.title.info}>
+						infoText={formFieldMainData.title.info}
+						fieldError={{
+							text: errors.title || '',
+							isShow: !!errors.title,
+						}}>
 						<FormInput
 							name={formFieldMainData.title.name}
 							value={values.title}
@@ -342,7 +387,11 @@ export const CreateMainApplication: FC = () => {
 					<FormField
 						title={formFieldMainData.additional_materials.title}
 						withInfo
-						infoText={formFieldMainData.additional_materials.info}>
+						infoText={formFieldMainData.additional_materials.info}
+						fieldError={{
+							text: errors.additional_materials || '',
+							isShow: !!errors.additional_materials,
+						}}>
 						<FormTextarea
 							name={formFieldMainData.additional_materials.name}
 							value={values.additional_materials}

@@ -144,6 +144,17 @@ export const coordinationSlice = createSlice({
 				state.error =
 					action.error?.message || 'Не удалось вернуть заявку на доработку';
 			})
+			.addCase(actions.distributeAppAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.distributeAppAction.fulfilled, (state) => {
+				state.isLoadingAction = false;
+			})
+			.addCase(actions.distributeAppAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не удалось распределить заявку';
+			})
 
 			.addCase(actions.createCommentToFieldAction.pending, (state) => {
 				state.isLoadingComment = true;

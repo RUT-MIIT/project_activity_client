@@ -40,3 +40,7 @@ export interface IApplicationFieldProps extends PropsWithChildren {
 export interface IEditApplicationProps {
 	status: 'my-app' | 'external-app' | 'coordination';
 }
+
+export interface IDistributeApplicationProps {
+	onDistribute: (code: string) => void;
+}

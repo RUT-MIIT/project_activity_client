@@ -3,14 +3,6 @@ export const required = (errorMessage = 'Поле обязательно для 
 	errorMessage,
 });
 
-export const minLength = (
-	length: number,
-	errorMessage = `Минимальная длина: ${length} символов`
-) => ({
-	validate: (value: string) => value.length >= length,
-	errorMessage,
-});
-
 export const emailFormat = (
 	errorMessage = 'Неверный формат электронной почты'
 ) => ({
@@ -58,5 +50,51 @@ export const phoneFormat = (
 
 		return true;
 	},
+	errorMessage,
+});
+
+export const selectRequired = (
+	errorMessage = 'Необходимо выбрать значение'
+) => ({
+	validate: (value: unknown) => {
+		if (!value) return false;
+
+		// Если строка — запрещаем '' или '0'
+		if (typeof value === 'string') return value.trim() !== '' && value !== '0';
+
+		// Если число — запрещаем 0
+		if (typeof value === 'number') return value !== 0;
+
+		// Если объект — предполагаем наличие id или code
+		if (typeof value === 'object') {
+			if ('id' in value) return value.id !== 0;
+			if ('code' in value) return value.code !== '0' && value.code !== 0;
+		}
+
+		return false;
+	},
+	errorMessage,
+});
+
+export const arrayRequired = (
+	errorMessage = 'Необходимо выбрать минимум один элемент'
+) => ({
+	validate: (value: any[]) => Array.isArray(value) && value.length > 0,
+	errorMessage,
+});
+
+export const minLength = (
+	length: number,
+	errorMessage = `Минимальная длина: ${length} символов`
+) => ({
+	validate: (value: string) => value.length >= length,
+	errorMessage,
+});
+
+export const maxLength = (
+	length: number,
+	errorMessage = `Максимальная длина: ${length} символов`
+) => ({
+	validate: (value: string) => value.length <= length,
 	errorMessage,
 });

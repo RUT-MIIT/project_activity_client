@@ -15,6 +15,7 @@ import {
 	approveApp,
 	reworkApp,
 	rejectApp,
+	distributeApp,
 } from '../../shared/api/coordination';
 
 export const getCoordinationAppsAction = createAsyncThunk<IApplicationItem[]>(
@@ -58,4 +59,11 @@ export const rejectAppAction = createAsyncThunk<
 	{ applicationId: number; reason: string }
 >('coordination/rejectApp', async ({ applicationId, reason }) => {
 	return rejectApp(applicationId, reason);
+});
+
+export const distributeAppAction = createAsyncThunk<
+	IAppActionResponse,
+	{ applicationId: number; code: string }
+>('coordination/distributeApp', async ({ applicationId, code }) => {
+	return distributeApp(applicationId, code);
 });

@@ -53,6 +53,7 @@ export interface IFormTextareaProps {
 
 export interface IFormButtonsProps {
 	children?: ReactNode;
+	withMargin?: boolean;
 }
 
 export interface IFormLink {
