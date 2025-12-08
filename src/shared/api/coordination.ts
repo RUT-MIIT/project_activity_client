@@ -77,6 +77,20 @@ export const reworkApp = (applicationId: number) => {
 	);
 };
 
+export const revokeApp = (applicationId: number) => {
+	return request(
+		`/showcase/project-applications/${applicationId}/return_by_author/`,
+		{
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};
+
 export const rejectApp = (applicationId: number, reason: string) => {
 	return request(`/showcase/project-applications/${applicationId}/reject/`, {
 		method: 'POST',

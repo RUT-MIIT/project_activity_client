@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from '../../../../store/store';
 
 import { Section } from '../../../../shared/components/Section/ui/section';
 import { Preloader } from '../../../../shared/components/Preloader/ui/preloader';
-import { Filter } from '../../../../shared/components/Filter/ui/filter';
 import { Select } from '../../../../shared/components/Select/ui/select';
+import { Search } from '../../../../shared/components/Search/ui/search';
 import { Button } from '../../../../shared/components/Button/ui/button';
 import { Text } from '../../../../shared/components/Typography';
 import { AppCard } from '../../components/AppCard/ui/app-card';
@@ -89,7 +89,7 @@ export const MyAppList: FC = () => {
 			) : (
 				<>
 					<div className={styles.header}>
-						<Filter<IApplicationItem>
+						<Search<IApplicationItem>
 							data={applications}
 							searchKey='title'
 							placeholder='Поиск по названию...'

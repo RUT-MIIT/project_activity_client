@@ -70,7 +70,7 @@ export const AppCard: FC<IAppCardProps> = ({
 								className={`${styles.card__text} ${styles.card__text_color_grey}`}>
 								Автор
 							</p>
-							<p className={styles.card__text}>{card.author_name}</p>
+							<p className={styles.card__text}>{card.author_short_name}</p>
 						</div>
 						<div className={styles.card__column}>
 							<p

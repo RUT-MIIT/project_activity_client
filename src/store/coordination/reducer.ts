@@ -127,6 +127,28 @@ export const coordinationSlice = createSlice({
 				state.error =
 					action.error?.message || 'Не удалось вернуть заявку на доработку';
 			})
+			.addCase(actions.revokeAppAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.revokeAppAction.fulfilled, (state, action) => {
+				state.isLoadingAction = false;
+				const response = action.payload;
+				const appId = action.meta.arg.applicationId;
+
+				state.applications = state.applications.map((app) =>
+					app.id === appId
+						? {
+								...app,
+								status: { code: response.status, name: response.status_name },
+						  }
+						: app
+				);
+			})
+			.addCase(actions.revokeAppAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не удалось отозвать заявку';
+			})
 			.addCase(actions.rejectAppAction.pending, (state) => {
 				state.isLoadingAction = true;
 				state.error = null;

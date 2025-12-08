@@ -9,7 +9,11 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { Badge } from '../../../shared/components/Badge/ui/badge';
 
 import { convertDate } from '../../../shared/lib/date';
-import { getStatusColor, getStatusText } from '../lib/helpers';
+import {
+	getStatusColor,
+	getStatusText,
+	getStatusComment,
+} from '../lib/helpers';
 
 import styles from '../styles/history-application.module.scss';
 
@@ -48,7 +52,9 @@ export const HistoryApplication: FC = () => {
 								</span>
 							</div>
 							<p className={styles.item__name}>Инициатор: {elem.actor}</p>
-							<p className={styles.item__caption}>Комментарий</p>
+							<p className={styles.item__caption}>
+								{getStatusComment(elem.to_status)}
+							</p>
 						</li>
 					))}
 				</ul>

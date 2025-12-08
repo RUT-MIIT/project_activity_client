@@ -18,6 +18,7 @@ export const filterAppsByRole = (
 			activeStatuses = [
 				'await_department',
 				'work_department',
+				'returned_author',
 				'returned_institute',
 				'returned_cpds',
 			];
@@ -27,6 +28,7 @@ export const filterAppsByRole = (
 		case 'institute_validator':
 			activeStatuses = ['work_institute', 'await_institute', 'returned_cpds'];
 			returnedStatuses = [
+				'returned_author',
 				'returned_department',
 				'returned_institute',
 				'await_department',
@@ -37,6 +39,7 @@ export const filterAppsByRole = (
 		case 'cpds':
 			activeStatuses = ['work_cpds', 'await_cpds'];
 			returnedStatuses = [
+				'returned_author',
 				'returned_department',
 				'returned_institute',
 				'work_institute',

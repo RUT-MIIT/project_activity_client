@@ -14,6 +14,7 @@ import {
 	editApp,
 	approveApp,
 	reworkApp,
+	revokeApp,
 	rejectApp,
 	distributeApp,
 } from '../../shared/api/coordination';
@@ -52,6 +53,13 @@ export const reworkAppAction = createAsyncThunk<
 	{ applicationId: number }
 >('coordination/reworkApp', async ({ applicationId }) => {
 	return reworkApp(applicationId);
+});
+
+export const revokeAppAction = createAsyncThunk<
+	IAppActionResponse,
+	{ applicationId: number }
+>('coordination/revokeApp', async ({ applicationId }) => {
+	return revokeApp(applicationId);
 });
 
 export const rejectAppAction = createAsyncThunk<

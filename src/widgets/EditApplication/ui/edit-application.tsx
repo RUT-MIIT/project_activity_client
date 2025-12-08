@@ -40,6 +40,7 @@ import {
 	approveAppAction,
 	editAppAction,
 	reworkAppAction,
+	revokeAppAction,
 	rejectAppAction,
 	distributeAppAction,
 } from '../../../store/coordination/actions';
@@ -182,6 +183,32 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 			} catch (err) {
 				showToast({
 					title: 'Произошла ошибка при отправке заявки на доработку!',
+					text: getErrorMessage(err),
+					type: 'error',
+				});
+			}
+		}
+	};
+
+	const handleRevokeApp = async () => {
+		if (user && applicationDetail) {
+			try {
+				await dispatch(
+					revokeAppAction({ applicationId: applicationDetail.id })
+				).unwrap();
+				navigate(
+					`/${
+						status === 'my-app' ? EMAINROUTES.MY_APPS : EMAINROUTES.COORDINATION
+					}`
+				);
+				showToast({
+					title: 'Заявка отозвана!',
+					text: `Заявка «${applicationDetail.title}» отозвана.`,
+					type: 'success',
+				});
+			} catch (err) {
+				showToast({
+					title: 'Произошла ошибка при отзыве заявки!',
 					text: getErrorMessage(err),
 					type: 'error',
 				});
@@ -626,6 +653,14 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 										color='blue'
 										withIcon={{ type: 'send', color: 'white' }}
 										onClick={handleApproveApp}
+										isBlock={isLoadingAction}
+									/>
+								)}
+								{hasAction('return_by_author') && (
+									<Button
+										text='Отозвать'
+										withIcon={{ type: 'return', color: 'black' }}
+										onClick={handleRevokeApp}
 										isBlock={isLoadingAction}
 									/>
 								)}

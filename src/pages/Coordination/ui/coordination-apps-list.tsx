@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import type { IApplicationItem } from '../../../store/application/types';
 import type { ICoordinationAppsListProps } from '../types/types';
 
 import { useNavigate } from 'react-router-dom';
@@ -8,15 +9,13 @@ import { AppCard } from '../../Application/components/AppCard/ui/app-card';
 import { Text } from '../../../shared/components/Typography';
 import { CoordinationAppsTable } from './coordination-apps-table';
 import { Filter } from '../../../shared/components/Filter/ui/filter';
+import { Select } from '../../../shared/components/Select/ui/select';
+import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 
 import { EMAINROUTES } from '../../../shared/utils/routes';
+import { sortOptions, viewOptions, type ISortOption } from '../lib/lib';
 
 import styles from '../styles/coordination.module.scss';
-
-const viewOptions = [
-	{ id: 'cards', name: 'Плитка' },
-	{ id: 'table', name: 'Таблица' },
-];
 
 export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 	apps,
@@ -24,11 +23,36 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 }) => {
 	const navigate = useNavigate();
 
+	const [searchQuery, setSearchQuery] = useState('');
+	const [currentSortOption, setCurrentSortOption] = useState<ISortOption>(
+		sortOptions[0]
+	);
+	const [currentCompany, setCurrentCompany] = useState<ISortOption>({
+		id: 0,
+		name: 'Все компании',
+	});
 	const [filteredApps, setFilteredApps] = useState(apps);
 	const [activeView, setActiveView] = useState<'cards' | 'table'>(() => {
 		const saved = localStorage.getItem('coordinationView');
 		return saved === 'cards' || saved === 'table' ? saved : 'cards';
 	});
+
+	const companyOptions = useMemo<ISortOption[]>(() => {
+		setCurrentCompany({
+			id: 0,
+			name: 'Все компании',
+		});
+		const map = new Map<string, ISortOption>();
+		let counter = 1;
+
+		apps.forEach((app) => {
+			if (app.company && !map.has(app.company)) {
+				map.set(app.company, { id: counter++, name: app.company });
+			}
+		});
+
+		return [{ id: 0, name: 'Все компании' }, ...Array.from(map.values())];
+	}, [apps]);
 
 	const showHistoryApp = (id: number) => {
 		navigate(`/${EMAINROUTES.COORDINATION}/history/${id}`);
@@ -38,15 +62,61 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 		navigate(`/${EMAINROUTES.COORDINATION}/app/${id}`);
 	};
 
+	const sortApps = (apps: IApplicationItem[], option: ISortOption) => {
+		switch (option.id) {
+			case 1: // По дате
+				return [...apps].sort(
+					(a, b) =>
+						new Date(b.creation_date).getTime() -
+						new Date(a.creation_date).getTime()
+				);
+
+			case 2: // По имени (title)
+				return [...apps].sort((a, b) => a.title.localeCompare(b.title));
+
+			case 3: // По автору
+				return [...apps].sort((a, b) =>
+					a.author_short_name.localeCompare(b.author_short_name)
+				);
+
+			case 4: // По номеру заявки (id)
+				return [...apps].sort((a, b) => a.id - b.id);
+
+			default:
+				return apps;
+		}
+	};
+
 	useEffect(() => {
 		localStorage.setItem('coordinationView', activeView);
 	}, [activeView]);
 
-	const sortedApps = useMemo(() => filteredApps, [filteredApps]);
+	const sortedApps = useMemo(() => {
+		return sortApps(filteredApps, currentSortOption);
+	}, [filteredApps, currentSortOption]);
 
 	useEffect(() => {
-		setFilteredApps(apps);
-	}, [apps]);
+		let result = apps;
+
+		// фильтр компании
+		if (currentCompany.id !== 0) {
+			const selected = companyOptions.find(
+				(opt) => opt.id === currentCompany.id
+			);
+			if (selected) {
+				result = result.filter((app) => app.company === selected.name);
+			}
+		}
+
+		// фильтр поиска
+		if (searchQuery.trim() !== '') {
+			result = result.filter((app) =>
+				app.title.toLowerCase().includes(searchQuery.toLowerCase())
+			);
+		}
+
+		setFilteredApps(result);
+	}, [apps, currentCompany, searchQuery, companyOptions]);
 
 	if (apps.length < 1) {
 		return <Text text='Заявки не найдены.' color='grey' withMarginTop />;
@@ -58,10 +128,20 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 
 			<div className={styles.header}>
 				<Filter
-					data={apps}
-					searchKey='title'
 					placeholder='Поиск по названию заявки...'
-					onFilter={setFilteredApps}
+					onFilter={setSearchQuery}
+				/>
+				<SelectWithSearch
+					currentOption={currentCompany}
+					options={companyOptions}
+					onChooseOption={(opt) => setCurrentCompany(opt)}
+					width='default'
+				/>
+				<Select
+					currentOption={currentSortOption}
+					options={sortOptions}
+					onChooseOption={setCurrentSortOption}
+					width='default'
 				/>
 
 				<div className={styles.view}>

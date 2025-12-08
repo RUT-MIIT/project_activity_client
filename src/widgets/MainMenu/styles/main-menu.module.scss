@@ -122,6 +122,12 @@
 		background-repeat: no-repeat;
 		background-size: contain;
 	}
+	&_type_external {
+		background-image: url('../../../shared/images/icons/new/external-grey.svg');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
 	&_type_app-add {
 		background-image: url('../../../shared/images/icons/new/add-app-grey.svg');
 		background-position: center;
@@ -129,7 +135,13 @@
 		background-size: contain;
 	}
 	&_type_stats {
-		background-image: url('../../../shared/images/icons/new/chart-grey.svg');
+		background-image: url('../../../shared/images/icons/new/stats-grey.svg');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	&_type_graph {
+		background-image: url('../../../shared/images/icons/new/graph-grey.svg');
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: contain;
@@ -170,12 +182,20 @@
 	background-image: url('../../../shared/images/icons/new/app-blue.svg');
 }
 
+.link_active .icon_type_external {
+	background-image: url('../../../shared/images/icons/new/external-blue.svg');
+}
+
 .link_active .icon_type_app-add {
 	background-image: url('../../../shared/images/icons/new/add-app-blue.svg');
 }
 
 .link_active .icon_type_stats {
-	background-image: url('../../../shared/images/icons/new/chart-blue.svg');
+	background-image: url('../../../shared/images/icons/new/stats-blue.svg');
+}
+
+.link_active .icon_type_graph {
+	background-image: url('../../../shared/images/icons/new/graph-blue.svg');
 }
 
 .link_active .icon_type_coordination {
@@ -198,12 +218,20 @@
 	background-image: url('../../../shared/images/icons/new/app-blue.svg');
 }
 
+.link:hover .icon_type_external {
+	background-image: url('../../../shared/images/icons/new/external-blue.svg');
+}
+
 .link:hover .icon_type_app-add {
 	background-image: url('../../../shared/images/icons/new/add-app-blue.svg');
 }
 
 .link:hover .icon_type_stats {
-	background-image: url('../../../shared/images/icons/new/chart-blue.svg');
+	background-image: url('../../../shared/images/icons/new/stats-blue.svg');
+}
+
+.link:hover .icon_type_graph {
+	background-image: url('../../../shared/images/icons/new/graph-blue.svg');
 }
 
 .link:hover .icon_type_coordination {

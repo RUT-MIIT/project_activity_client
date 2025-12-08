@@ -16,7 +16,7 @@
   cursor: pointer;
 
 	&_width_default {
-		width: fit-content;
+		width: 200px;
 	}
 
   &:hover {
@@ -82,7 +82,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  max-height: 120px;
+  max-height: 140px;
   overflow-y: auto;
 	&_height_120 {
   	max-height: 120px;

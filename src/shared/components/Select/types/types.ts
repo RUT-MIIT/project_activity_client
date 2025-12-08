@@ -4,7 +4,7 @@ export interface ISelectProps<T> {
 	onChooseOption: (option: T) => void;
 	valueKey?: keyof T;
 	labelKey?: keyof T;
-	width?: 'default' | 'full';
+	width?: 'default' | 'full' | 'small' | 'large' | 'auto';
 	placeholder?: string;
 }
 

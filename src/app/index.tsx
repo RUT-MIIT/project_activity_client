@@ -17,6 +17,7 @@ import { NewApp } from '../pages/Application/NewApp/ui/new-app';
 import { MyApp } from '../pages/Application/MyApp/ui/my-app';
 import { ExternalApp } from '../pages/Application/ExternalApp/ui/external-app';
 import { Coordination } from '../pages/Coordination/ui/coordination';
+import { Structure } from '../pages/Structure/ui/structure';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
@@ -71,6 +72,7 @@ export const App = () => {
 						<Route path='/my-applications/*' element={<MyApp />} />
 						<Route path='/external-applications/*' element={<ExternalApp />} />
 						<Route path='/coordination/*' element={<Coordination />} />
+						<Route path='/structure' element={<Structure />} />
 						<Route path='/stats' element={<Stats />} />
 						<Route path='/control/*' element={<Control />} />
 					</Route>

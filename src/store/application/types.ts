@@ -119,6 +119,8 @@ export interface IApplication {
 export interface IApplicationItem {
 	author_email: string;
 	author_name: string;
+	author_short_name: string;
+	author_middlename: string;
 	company: string;
 	creation_date: string;
 	comments_count: number;
@@ -127,6 +129,9 @@ export interface IApplicationItem {
 	status: { code: string; name: string };
 	title: string;
 	print_number?: string;
+	application_year: number;
+	is_external: boolean;
+	is_internal_customer: boolean;
 }
 
 export interface IApplicationDetail extends IApplication {

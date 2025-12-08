@@ -28,14 +28,15 @@ export const SelectWithSearch = <T,>({
 		setFiltered(options);
 	}, [options]);
 
-	const handleOpen = () => setIsOpen(true);
-
-	const handleChoose = (option: T) => {
+	const handleChoose = (option: T, e: React.MouseEvent) => {
+		e.stopPropagation(); // <-- важно!
 		onChooseOption(option);
 		setSearchText('');
 		setIsOpen(false);
 		setFiltered(options);
 	};
+
+	const toggleOpen = () => setIsOpen((prev) => !prev);
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.stopPropagation();
@@ -54,7 +55,7 @@ export const SelectWithSearch = <T,>({
 			className={`${styles.select} ${
 				width === 'default' ? styles.select_width_default : ''
 			} ${isOpen ? styles.select_open : ''}`}
-			onClick={!isOpen ? handleOpen : undefined}>
+			onClick={toggleOpen}>
 			<div className={styles.main}>
 				{isOpen ? (
 					<input
@@ -99,7 +100,7 @@ export const SelectWithSearch = <T,>({
 								<li
 									key={getValue(item)}
 									className={styles.item}
-									onClick={() => handleChoose(item)}>
+									onClick={(e) => handleChoose(item, e)}>
 									<p className={styles.text}>{getLabel(item)}</p>
 								</li>
 							))

@@ -43,11 +43,11 @@ export const validationSchema = {
 		minLength(10),
 		maxLength(100),
 	],
-	goal: [required('Введите цель'), minLength(100), maxLength(500)],
-	barrier: [required('Введите барьер'), minLength(100), maxLength(500)],
+	goal: [required('Введите цель'), minLength(30), maxLength(500)],
+	barrier: [required('Введите барьер'), minLength(30), maxLength(500)],
 	existing_solutions: [
 		required('Введите существующие решения'),
-		minLength(100),
+		minLength(30),
 		maxLength(2000),
 	],
 

@@ -1,6 +1,4 @@
-export interface IFilterProps<T> {
-	data: T[];
-	searchKey: keyof T;
+export interface IFilterProps {
 	placeholder?: string;
-	onFilter: (filtered: T[]) => void;
+	onFilter: (value: string) => void;
 }

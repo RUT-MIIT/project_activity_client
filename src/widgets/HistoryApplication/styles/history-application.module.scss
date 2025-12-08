@@ -82,6 +82,9 @@
 	&_blue::before {
 		background-color: var(--main-blue-color);
 	}
+	&_purple::before {
+		background-color: var(--accent-purple-color);
+	}
 	&_grey::before {
 		background-color: #718096;
 	}

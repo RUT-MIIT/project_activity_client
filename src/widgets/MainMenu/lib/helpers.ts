@@ -4,13 +4,18 @@ export const adminLinks = [
 	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
 	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
 	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
-	{ name: 'Внешние заявки', url: EMAINROUTES.EXTERNAL_APPS, icon: 'apps' },
+	{ name: 'Внешние заявки', url: EMAINROUTES.EXTERNAL_APPS, icon: 'external' },
 	{
 		name: 'Согласование',
 		url: EMAINROUTES.COORDINATION,
 		icon: 'coordination',
 	},
-	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'stats' },
+	{
+		name: 'Структура',
+		url: EMAINROUTES.STRUCTURE,
+		icon: 'stats',
+	},
+	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'graph' },
 	{ name: 'Управление', url: EMAINROUTES.CONTROL, icon: 'control' },
 ];
 
@@ -40,20 +45,30 @@ export const instituteValidatorLinks = [
 		url: EMAINROUTES.COORDINATION,
 		icon: 'coordination',
 	},
-	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'stats' },
+	{
+		name: 'Структура',
+		url: EMAINROUTES.STRUCTURE,
+		icon: 'stats',
+	},
+	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'graph' },
 ];
 
 export const cpdsLinks = [
 	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
 	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
 	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
-	{ name: 'Внешние заявки', url: EMAINROUTES.EXTERNAL_APPS, icon: 'apps' },
+	{ name: 'Внешние заявки', url: EMAINROUTES.EXTERNAL_APPS, icon: 'external' },
 	{
 		name: 'Согласование',
 		url: EMAINROUTES.COORDINATION,
 		icon: 'coordination',
 	},
-	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'stats' },
+	{
+		name: 'Структура',
+		url: EMAINROUTES.STRUCTURE,
+		icon: 'stats',
+	},
+	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'graph' },
 	{ name: 'Управление', url: EMAINROUTES.CONTROL, icon: 'control' },
 ];
 
