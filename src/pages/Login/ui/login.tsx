@@ -4,6 +4,7 @@ import type { ILoginForm } from '../types/types';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../../store/store';
 import { useForm } from '../../../hooks/useForm';
+import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { PublicLayout } from '../../../shared/components/Layout/PublicLayout/ui/public-layout';
 import { Form } from '../../../shared/components/Form/ui/form';
@@ -16,13 +17,14 @@ import {
 import { Button } from '../../../shared/components/Button/ui/button';
 
 import { links, validationSchema, shouldBlockSubmit } from '../lib/helpers';
-
 import { loginUser } from '../../../store/user/actions';
+import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/login.module.scss';
 
 export const Login: FC = () => {
 	const dispatch = useDispatch();
+	const { showToast } = useToast();
 	const { isLoading } = useSelector((state) => state.user);
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
 	const { values, handleChange, errors } = useForm<ILoginForm>(
@@ -30,10 +32,18 @@ export const Login: FC = () => {
 		validationSchema
 	);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isBlockSubmit) {
-			dispatch(loginUser(values));
+			try {
+				await dispatch(loginUser(values)).unwrap();
+			} catch (err) {
+				showToast({
+					title: 'Ошибка авторизации',
+					text: getErrorMessage(err),
+					type: 'error',
+				});
+			}
 		}
 	};
 

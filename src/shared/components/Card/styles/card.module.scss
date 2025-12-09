@@ -2,12 +2,17 @@
 	margin: 0;
 	padding: 28px 36px;
 	box-sizing: border-box;
-	width: 100%;
 	border-radius: var(--border-radius);
 	border: 1px solid var(--main-grey-light-color);
 	background-color: var(--main-white-color);
 	display: flex;
 	flex-direction: column;
+	&_width_full {
+		width: 100%;
+	}
+	&_width_content {
+		width: fit-content;
+	}
 	&_height_stretch {
 		flex: 1;
 		min-height: 0;
@@ -31,5 +36,16 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--main-black-color);
-		text-align: left;
+	text-align: left;
+}
+
+.control {
+	margin: 0;
+	padding-top: 16px;
+	box-sizing: border-box;
+	border-top: 1px solid var(--main-grey-light-color);
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
 }

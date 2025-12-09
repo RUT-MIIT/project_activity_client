@@ -10,6 +10,7 @@ export const Form: FC<IFormProps> = ({
 	formWidth = 'full',
 	withHeightStretch = false,
 	name,
+	autoComplete = 'on',
 	onSubmit,
 	children,
 }) => {
@@ -21,7 +22,8 @@ export const Form: FC<IFormProps> = ({
 			name={name}
 			id={name}
 			onSubmit={onSubmit}
-			noValidate>
+			noValidate
+			autoComplete={autoComplete}>
 			{title && (
 				<h2
 					className={`${styles.title} ${styles[`title_align_${titleAlign}`]}`}>

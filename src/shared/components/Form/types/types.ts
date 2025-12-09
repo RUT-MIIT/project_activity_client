@@ -7,6 +7,7 @@ export interface IFormProps {
 	formWidth?: 'full' | 'large' | 'default' | 'small';
 	withHeightStretch?: boolean;
 	name: string;
+	autoComplete?: string;
 	onSubmit?: FormEventHandler<HTMLFormElement>;
 	children?: ReactNode;
 }
@@ -34,6 +35,10 @@ export interface IFormInputProps {
 	autoComplete?: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
+}
+
+export interface IFormInputStubProps {
+	value: string;
 }
 
 export interface IFormInputNumberProps {

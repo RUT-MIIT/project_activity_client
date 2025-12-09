@@ -8,6 +8,7 @@ const initialState: IUserStore = {
 	user: null,
 	isAuthChecked: false,
 	isLoading: false,
+	isLoadingRequest: false,
 	error: null,
 };
 
@@ -54,6 +55,57 @@ export const userSlice = createSlice({
 			})
 			.addCase(actions.logoutUser.fulfilled, (state) => {
 				state.user = null;
+			})
+			.addCase(actions.changePasswordAction.pending, (state) => {
+				state.isLoadingRequest = true;
+				state.error = null;
+			})
+			.addCase(actions.changePasswordAction.fulfilled, (state) => {
+				state.isLoadingRequest = false;
+			})
+			.addCase(actions.changePasswordAction.rejected, (state, action) => {
+				state.isLoadingRequest = false;
+
+				if (action.payload) {
+					state.error = String(action.payload);
+				} else {
+					state.error =
+						action.error?.message || 'Произошла ошибка при смене пароля';
+				}
+			})
+			.addCase(actions.forgotPasswordAction.pending, (state) => {
+				state.isLoadingRequest = true;
+				state.error = null;
+			})
+			.addCase(actions.forgotPasswordAction.fulfilled, (state) => {
+				state.isLoadingRequest = false;
+			})
+			.addCase(actions.forgotPasswordAction.rejected, (state, action) => {
+				state.isLoadingRequest = false;
+
+				if (action.payload) {
+					state.error = String(action.payload);
+				} else {
+					state.error =
+						action.error?.message || 'Произошла ошибка при сбросе пароля';
+				}
+			})
+			.addCase(actions.resetPasswordAction.pending, (state) => {
+				state.isLoadingRequest = true;
+				state.error = null;
+			})
+			.addCase(actions.resetPasswordAction.fulfilled, (state) => {
+				state.isLoadingRequest = false;
+			})
+			.addCase(actions.resetPasswordAction.rejected, (state, action) => {
+				state.isLoadingRequest = false;
+
+				if (action.payload) {
+					state.error = String(action.payload);
+				} else {
+					state.error =
+						action.error?.message || 'Произошла ошибка при смене пароля';
+				}
 			});
 	},
 });

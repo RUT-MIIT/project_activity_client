@@ -95,3 +95,19 @@
     background-image: url('../../../../images/icons/eye-off.svg');
   }
 }
+
+.stub {
+	margin: 0;
+  width: 100%;
+  padding: 9px 16px 9px 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--main-grey-light-color);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--main-black-color);
+	outline: none;
+  transition: border-color .3s ease-in-out;
+	background: var(--background-color);
+	cursor: default;
+}

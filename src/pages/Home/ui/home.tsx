@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from '../../../store/store';
 
 import { Button } from '../../../shared/components/Button/ui/button';
+import { HomePerson } from './home-person';
 
 import { getUser } from '../../../store/user/reducer';
 
@@ -39,6 +40,11 @@ export const Home: FC = () => {
 						withIcon={{ type: 'add', position: 'left', color: 'blue' }}
 						onClick={createNewApp}
 					/>
+				</div>
+				<div className={styles.container}>
+					<div className={styles.row}>
+						<HomePerson />
+					</div>
 				</div>
 			</div>
 		)

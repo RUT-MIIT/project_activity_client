@@ -38,6 +38,7 @@ export interface IUserStore {
 	user: IUser | null;
 	isAuthChecked: boolean;
 	isLoading: boolean;
+	isLoadingRequest: boolean;
 	error: string | null;
 }
 

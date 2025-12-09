@@ -10,6 +10,7 @@ import {
 import { Login } from '../pages/Login/ui/login';
 import { Registration } from '../pages/Registration/ui/registration';
 import { ForgotPassword } from '../pages/ForgotPassword/ui/forgot-password';
+import { ResetPassword } from '../pages/ResetPassword/reset-password';
 import { Apply } from '../pages/Apply/ui/apply';
 import { NotFound } from '../pages/NotFound/ui/not-found';
 import { Home } from '../pages/Home/ui/home';
@@ -52,6 +53,10 @@ export const App = () => {
 					<Route
 						path={EPAGESROUTES.FORGOT_PASSWORD}
 						element={<OnlyUnAuth component={<ForgotPassword />} />}
+					/>
+					<Route
+						path={`${EPAGESROUTES.RESET_PASSWORD}/:uid/:token`}
+						element={<OnlyUnAuth component={<ResetPassword />} />}
 					/>
 					<Route
 						path={EPAGESROUTES.APPLY}

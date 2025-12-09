@@ -7,11 +7,12 @@ export const Card: FC<ICardProps> = ({
 	title,
 	subtitle,
 	withHeightStretch,
+	width = 'full',
 	children,
 }) => {
 	return (
 		<div
-			className={`${styles.card} ${
+			className={`${styles.card}  ${styles[`card_width_${width}`]} ${
 				withHeightStretch ? styles.card_height_stretch : ''
 			}`}>
 			{title && <h2 className={styles.title}>{title}</h2>}

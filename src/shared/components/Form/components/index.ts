@@ -1,5 +1,6 @@
 export { FormField } from './FormField/form-field';
 export { FormInput } from './FormInput/form-input';
+export { FormInputStub } from './FormInput/form-input-stub';
 export { FormInputNumber } from './FormInput/form-input-number';
 export { FormTextarea } from './FormTextarea/form-textarea';
 export { FormButtons } from './FormButtons/form-buttons';

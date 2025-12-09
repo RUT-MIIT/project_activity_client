@@ -10,6 +10,11 @@ import {
 
 export const links = [
 	{
+		label: 'Забыли пароль?',
+		text: 'Восстановить',
+		url: EPAGESROUTES.FORGOT_PASSWORD,
+	},
+	{
 		label: 'Новый пользователь?',
 		text: 'Регистрация',
 		url: EPAGESROUTES.REGISTRATION,
@@ -28,7 +33,7 @@ export const validationSchema = {
 	],
 	password: [
 		required('Введите пароль'),
-		minLength(6, 'Пароль должен быть не менее 6 символов'),
+		minLength(8, 'Пароль должен быть не менее 8 символов'),
 	],
 };
 
