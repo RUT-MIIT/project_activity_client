@@ -6,6 +6,7 @@ import {
 	getDepartmentsCatalog,
 	getRolesCatalog,
 	getTagsCatalog,
+	getExternalTagsCatalog,
 } from '../../shared/api/catalog';
 
 export const getInstitutesAction = createAsyncThunk<IInstitute[]>(
@@ -26,4 +27,9 @@ export const getRolesAction = createAsyncThunk<IRole[]>(
 export const getTagsAction = createAsyncThunk<ITag[]>(
 	'catalog/getTags',
 	getTagsCatalog
+);
+
+export const getExternalTagsAction = createAsyncThunk<ITag[]>(
+	'catalog/getExternalTags',
+	getExternalTagsCatalog
 );

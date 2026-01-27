@@ -1,6 +1,7 @@
 .container {
 	margin: 16px 0;
 	width: 100%;
+	min-width: 260px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -36,7 +37,7 @@
 }
 
 .name {
-	margin: 0;
+	margin: 0 auto 0 0;
 	max-width: 180px;
 	font-style: normal;
 	font-size: 14px;
@@ -45,8 +46,12 @@
 	color: var(--main-black-color);
 }
 
+.badge {
+	display: block;
+}
+
 .role {
-	margin: 0 0 0 52px;
+	margin: 0 0 0 48px;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -67,3 +72,14 @@
 		color: var(--main-black-color);
 	}
 }
+
+@media (max-width: 1440px) {
+	.name {
+		margin: 0;
+		max-width: none;
+	}
+	.badge {
+		display: none;
+	}
+}
+

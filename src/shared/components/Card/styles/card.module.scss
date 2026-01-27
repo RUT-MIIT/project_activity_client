@@ -49,3 +49,9 @@
 	justify-content: flex-end;
 	gap: 8px;
 }
+
+@media (max-width: 1600px) {
+	.card {
+		padding: 24px;
+	}
+}

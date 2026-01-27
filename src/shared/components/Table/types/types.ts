@@ -14,7 +14,9 @@ export interface ITableColumnProps {
 	withChildren?: boolean;
 	text?: string | number;
 	textWeight?: 'normal' | 'bold';
+	textColor?: 'default' | 'grey' | 'blue' | 'red' | 'yellow' | 'green';
 	columnType?: 'header' | 'default';
+	alignType?: 'left' | 'right' | 'center';
 	columnSize: string;
 	active?: boolean;
 	onClick?: (id: number) => void;

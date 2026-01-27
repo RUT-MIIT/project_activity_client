@@ -16,7 +16,7 @@ export const FormInputNumber: FC<IFormInputNumberProps> = ({
 			type={type}
 			name={name}
 			id={`id-${name}`}
-			value={value || ''}
+			value={value === 0 ? 0 : value ? value : ''}
 			onChange={onChange}
 			placeholder={placeholder}
 			autoComplete='off'

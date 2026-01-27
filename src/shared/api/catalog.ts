@@ -37,6 +37,17 @@ export const getTagsCatalog = () => {
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const getExternalTagsCatalog = () => {
+	return request('/showcase/tags/', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
 		},
 	});
 };

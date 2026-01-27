@@ -66,6 +66,18 @@ export const catalogSlice = createSlice({
 			.addCase(actions.getTagsAction.rejected, (state, action) => {
 				state.isLoadingCatalog = false;
 				state.error = action.error?.message || 'Не удалось загрузить каталог';
+			})
+			.addCase(actions.getExternalTagsAction.pending, (state) => {
+				state.isLoadingCatalog = true;
+				state.error = null;
+			})
+			.addCase(actions.getExternalTagsAction.fulfilled, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.tags = action.payload;
+			})
+			.addCase(actions.getExternalTagsAction.rejected, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.error = action.error?.message || 'Не удалось загрузить каталог';
 			});
 	},
 });

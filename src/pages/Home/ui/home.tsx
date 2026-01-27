@@ -1,12 +1,17 @@
 import type { FC } from 'react';
 
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from '../../../store/store';
+import { useDispatch, useSelector } from '../../../store/store';
 
+import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Button } from '../../../shared/components/Button/ui/button';
 import { HomePerson } from './home-person';
+import { HomeStats } from './home-stats';
+import { HomePlan } from './home-plan';
 
 import { getUser } from '../../../store/user/reducer';
+import { getMyDivisionStatsAction } from '../../../store/structure/actions';
 
 import { EMAINROUTES } from '../../../shared/utils/routes';
 
@@ -14,6 +19,10 @@ import styles from '../styles/home.module.scss';
 
 export const Home: FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { currentSemester, isLoadingStats } = useSelector(
+		(state) => state.structure
+	);
 	const user = useSelector(getUser);
 
 	const createNewApp = () => {
@@ -21,6 +30,16 @@ export const Home: FC = () => {
 			replace: true,
 		});
 	};
+
+	useEffect(() => {
+		if (currentSemester) {
+			dispatch(getMyDivisionStatsAction(currentSemester.id));
+		}
+	}, [dispatch, currentSemester]);
+
+	if (isLoadingStats) {
+		<Preloader />;
+	}
 
 	return (
 		user && (
@@ -44,6 +63,8 @@ export const Home: FC = () => {
 				<div className={styles.container}>
 					<div className={styles.row}>
 						<HomePerson />
+						<HomeStats />
+						<HomePlan />
 					</div>
 				</div>
 			</div>

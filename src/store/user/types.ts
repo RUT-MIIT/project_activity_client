@@ -32,6 +32,7 @@ export interface IUser {
 		name: string;
 		short_name: string;
 	};
+	institute_code: string | null;
 }
 
 export interface IUserStore {

@@ -76,6 +76,7 @@
   box-sizing: border-box;
 	position: relative;
 	display: flex;
+	align-items: center;
   flex-grow: 1;
   justify-content: space-between;
 }
@@ -111,10 +112,10 @@
   margin: 0px;
   padding: 0;
   list-style-type: none;
-  flex-grow: 0;
   display: flex;
   flex-direction: column;
   flex-grow: 2;
+	height: 50%;
 }
 .table__main_height_smallest {
   height: 101px;
@@ -171,6 +172,10 @@
   width: 124px;
   flex-shrink: 0;
 }
+.table__column_size_progress {
+  width: 188px;
+  flex-shrink: 0;
+}
 .table__column_size_status {
   width: 214px;
   flex-shrink: 0;
@@ -202,7 +207,7 @@
 .table__text {
   margin: 0px;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   font-size: 14px;
   line-height: 18px;
   color: var(--main-black-color);
@@ -212,22 +217,31 @@
 		color: var(--main-blue-color);
 		cursor: pointer;
 	}
-}
-.table__text_weight_bold {
-  font-weight: bold;
-}
-.table__text_type_empty {
-  color: var(--accent-grey-color);
-}
-.table__text_type_error {
-  color: var(--accent-orange-color);
+	&_weight_bold {
+		font-weight: bold;
+	}
+	&_color_default {
+		color: var(--main-black-color);
+	}
+	&_color_grey {
+		color: var(--main-grey-color);
+	}
+	&_color_blue {
+		color: var(--main-blue-color);
+	}
+	&_color_red {
+		color: var(--accent-red-color);
+	}
+	&_color_yellow {
+		color: var(--accent-yellow-color);
+	}
+	&_color_green {
+		color: var(--accent-green-color);
+	}
 }
 
 .table__text_align_center {
   text-align: center;
-}
-.table__text_color_orange {
-  color: var(--accent-orange-color);
 }
 .table__text_type_cut {
   -webkit-line-clamp: 2;

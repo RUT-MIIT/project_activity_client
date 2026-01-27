@@ -21,12 +21,18 @@ export const filterAppsByRole = (
 				'returned_author',
 				'returned_institute',
 				'returned_cpds',
+				'require_assignment',
 			];
-			returnedStatuses = ['returned_department'];
+			returnedStatuses = ['returned_department,'];
 			break;
 
 		case 'institute_validator':
-			activeStatuses = ['work_institute', 'await_institute', 'returned_cpds'];
+			activeStatuses = [
+				'work_institute',
+				'await_institute',
+				'returned_cpds',
+				'require_assignment',
+			];
 			returnedStatuses = [
 				'returned_author',
 				'returned_department',
@@ -37,7 +43,7 @@ export const filterAppsByRole = (
 			break;
 
 		case 'cpds':
-			activeStatuses = ['work_cpds', 'await_cpds'];
+			activeStatuses = ['work_cpds', 'await_cpds', 'require_assignment'];
 			returnedStatuses = [
 				'returned_author',
 				'returned_department',

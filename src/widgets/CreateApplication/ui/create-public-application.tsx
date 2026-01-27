@@ -35,7 +35,7 @@ import {
 import { createAppPublicAction } from '../../../store/application/actions';
 import {
 	getInstitutesAction,
-	getTagsAction,
+	getExternalTagsAction,
 } from '../../../store/catalog/actions';
 import { authorCategories, companyTypes } from '../../../shared/lib/lib';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
@@ -149,7 +149,7 @@ export const CreatePublicApplication: FC = () => {
 
 	useEffect(() => {
 		dispatch(getInstitutesAction());
-		dispatch(getTagsAction());
+		dispatch(getExternalTagsAction());
 	}, [dispatch]);
 
 	if (isLoadingCatalog) {

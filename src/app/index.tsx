@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import { useDispatch } from '../store/store';
+import { useDispatch, useSelector } from '../store/store';
 import {
 	OnlyUnAuth,
 	OnlyAuth,
@@ -25,6 +25,7 @@ import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layou
 import { Privacy } from '../pages/Privacy/ui/privacy';
 
 import { checkUserAuth } from '../store/user/actions';
+import { getSemestersAction } from '../store/structure/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
 import { EPAGESROUTES } from '../shared/utils/routes';
 
@@ -32,10 +33,17 @@ import styles from './app.module.scss';
 
 export const App = () => {
 	const dispatch = useDispatch();
+	const { user, isAuthChecked } = useSelector((state) => state.user);
 
 	useEffect(() => {
 		dispatch(checkUserAuth());
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (isAuthChecked && user) {
+			dispatch(getSemestersAction());
+		}
+	}, [dispatch, isAuthChecked, user]);
 
 	return (
 		<ToastProvider>
@@ -77,7 +85,7 @@ export const App = () => {
 						<Route path='/my-applications/*' element={<MyApp />} />
 						<Route path='/external-applications/*' element={<ExternalApp />} />
 						<Route path='/coordination/*' element={<Coordination />} />
-						<Route path='/structure' element={<Structure />} />
+						<Route path='/structure/*' element={<Structure />} />
 						<Route path='/stats' element={<Stats />} />
 						<Route path='/control/*' element={<Control />} />
 					</Route>

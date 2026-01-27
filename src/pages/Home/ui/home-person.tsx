@@ -38,7 +38,7 @@ export const HomePerson: FC = () => {
 	return (
 		user && (
 			<>
-				<Card title='Информация профиля' width='content'>
+				<Card title='Информация профиля'>
 					<div className={styles.container}>
 						<div className={styles.info}>
 							<div className={styles.img}>
@@ -49,7 +49,9 @@ export const HomePerson: FC = () => {
 								className={
 									styles.name
 								}>{`${user.last_name} ${user.first_name} ${user.middle_name}`}</h4>
-							<Badge text='Активен' color='green' />
+							<div className={styles.badge}>
+								<Badge text='Активен' color='green' />
+							</div>
 						</div>
 						<div className={styles.role}>
 							<span className={styles.role__caption}>Роль</span>
