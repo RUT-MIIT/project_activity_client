@@ -4,7 +4,7 @@ export enum EPAGESROUTES {
 	LOGIN = '/login',
 	REGISTRATION = '/registration',
 	FORGOT_PASSWORD = '/forgot-password',
-	RESET_PASSWORD = '/reset-password',
+	RESET_PASSWORD = '/reset_password',
 	NOT_FOUND = '*',
 }
 
@@ -15,6 +15,7 @@ export enum EMAINROUTES {
 	EXTERNAL_APPS = 'external-applications',
 	COORDINATION = 'coordination',
 	STRUCTURE = 'structure',
+	TRACK = 'track',
 	STATS = 'stats',
 	CONTROL = 'control',
 }

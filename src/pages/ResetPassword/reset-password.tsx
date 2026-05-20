@@ -37,6 +37,8 @@ export const ResetPassword: FC = () => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
+		console.log('tyt');
+
 		if (!isBlockSubmit && uid && token) {
 			try {
 				await dispatch(

@@ -11,7 +11,7 @@ export const SelectWithSearch = <T,>({
 	valueKey = 'id' as keyof T,
 	labelKey = 'name' as keyof T,
 	width = 'full',
-	placeholder = 'Выберите значение...',
+	placeholder = 'Выберите из списка...',
 }: ISelectProps<T>) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
@@ -52,9 +52,9 @@ export const SelectWithSearch = <T,>({
 	return (
 		<div
 			ref={selectRef}
-			className={`${styles.select} ${
-				width === 'default' ? styles.select_width_default : ''
-			} ${isOpen ? styles.select_open : ''}`}
+			className={`${styles.select} ${styles[`select_width_${width}`]} ${
+				isOpen ? styles.select_open : ''
+			}`}
 			onClick={toggleOpen}>
 			<div className={styles.main}>
 				{isOpen ? (

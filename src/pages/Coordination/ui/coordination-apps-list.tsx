@@ -135,7 +135,7 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 					currentOption={currentCompany}
 					options={companyOptions}
 					onChooseOption={(opt) => setCurrentCompany(opt)}
-					width='default'
+					width='medium'
 				/>
 				<Select
 					currentOption={currentSortOption}

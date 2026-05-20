@@ -38,7 +38,7 @@ export const ForgotPassword: FC = () => {
 			try {
 				await dispatch(forgotPasswordAction({ email: values.email })).unwrap();
 				showToast({
-					title: 'Пароль отправлено на указанную!',
+					title: 'Пароль отправлен на указанную почту!',
 					text: 'Для продолжения процедуры сброса пароля перейдтие по ссылку в письме.',
 					type: 'success',
 				});

@@ -19,6 +19,14 @@
 		width: 200px;
 	}
 
+	&_width_medium {
+		width: 400px;
+	}
+
+	&_width_full {
+		width: 100%;
+	}
+
   &:hover {
     border: 1px solid var(--main-grey-color);
   }

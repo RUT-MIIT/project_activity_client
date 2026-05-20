@@ -4,7 +4,7 @@ export const getApiUrl = (): string => {
 	if (hostname === 'localhost') {
 		return 'http://10.242.221.0:8000/api';
 	} else {
-		return 'https://pd.emiit.ru/api';
+		return 'https://pd.rut-miit.ru/api';
 	}
 };
 
