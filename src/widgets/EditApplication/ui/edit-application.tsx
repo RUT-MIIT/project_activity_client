@@ -127,13 +127,22 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 					}`
 				);
 				showToast({
-					title: 'Заявка успешно согласована!',
-					text: `Заявка «${applicationDetail.title}» согласована.`,
+					title:
+						status === 'my-app'
+							? 'Заявка отправлена на рассмотрение!'
+							: 'Заявка успешно согласована!',
+					text:
+						status === 'my-app'
+							? `Заявка «${applicationDetail.title}» отправлена. Ожидайте решения по заявке.`
+							: `Заявка «${applicationDetail.title}» согласована.`,
 					type: 'success',
 				});
 			} catch (err) {
 				showToast({
-					title: 'Произошла ошибка при согласовании заявки!',
+					title:
+						status === 'my-app'
+							? 'Произошла ошибка при отправке заявки!'
+							: 'Произошла ошибка при согласовании заявки!',
 					text: getErrorMessage(err),
 					type: 'error',
 				});

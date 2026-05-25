@@ -8,11 +8,13 @@ import { getUser } from '../../../store/user/reducer';
 import { logoutUser } from '../../../store/user/actions';
 
 import { getLinksByRole } from '../lib/helpers';
+import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/main-menu.module.scss';
 
 export const MainMenu: FC = () => {
 	const user = useSelector(getUser);
+	const { unseenChangesCount } = useSelector((state) => state.application);
 	const dispatch = useDispatch();
 
 	const handleLogout = () => {
@@ -39,6 +41,9 @@ export const MainMenu: FC = () => {
 							className={`${styles.icon} ${styles[`icon_type_${elem.icon}`]}`}
 						/>
 						<p className={styles.icon__text}>{elem.name}</p>
+						{elem.url === EMAINROUTES.MY_APPS && unseenChangesCount > 0 && (
+							<div className={styles.icon__count}>{unseenChangesCount}</div>
+						)}
 					</NavLink>
 				))}
 			</nav>

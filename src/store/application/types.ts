@@ -4,6 +4,7 @@ export interface IApplicationStore {
 	application: IApplication | null;
 	applications: IApplicationItem[];
 	externalApplications: IApplicationItem[];
+	unseenChangesCount: number;
 	isLoading: boolean;
 	error: string | null;
 }
@@ -132,6 +133,7 @@ export interface IApplicationItem {
 	application_year: number;
 	is_external: boolean;
 	is_internal_customer: boolean;
+	has_unseen_changes: boolean;
 }
 
 export interface IApplicationDetail extends IApplication {

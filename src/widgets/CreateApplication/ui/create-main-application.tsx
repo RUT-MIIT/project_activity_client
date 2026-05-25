@@ -97,7 +97,7 @@ export const CreateMainApplication: FC = () => {
 			} catch (err) {
 				console.log(err);
 				showToast({
-					title: 'Произошла ошибка при отправки заявки!',
+					title: 'Произошла ошибка при отправке заявки!',
 					text: getErrorMessage(err),
 					type: 'error',
 				});
@@ -412,10 +412,10 @@ export const CreateMainApplication: FC = () => {
 	];
 
 	const summaryFields = [
-		{ title: 'Организация-заказчик', value: values.company },
-		{ title: 'Контактные данные заказчика', value: values.company_contacts },
+		{ title: 'Организация-заказчик*', value: values.company },
+		{ title: 'Контактные данные заказчика*', value: values.company_contacts },
 		{
-			title: 'Уровень проекта',
+			title: 'Уровень проекта*',
 			value: values.project_level.id === 0 ? '' : values.project_level.name,
 		},
 		{
@@ -425,11 +425,11 @@ export const CreateMainApplication: FC = () => {
 					? values.target_institutes.map((elem) => elem.name).join(', ')
 					: '',
 		},
-		{ title: 'Носитель проблемы', value: values.problem_holder },
-		{ title: 'Цель', value: values.goal },
-		{ title: 'Барьер', value: values.barrier },
-		{ title: 'Существующие решения', value: values.existing_solutions },
-		{ title: 'Контекст проекта', value: values.context },
+		{ title: 'Носитель проблемы*', value: values.problem_holder },
+		{ title: 'Цель*', value: values.goal },
+		{ title: 'Барьер*', value: values.barrier },
+		{ title: 'Существующие решения*', value: values.existing_solutions },
+		{ title: 'Контекст проекта*', value: values.context },
 		{ title: 'Другие заинтересованные стороны', value: values.stakeholders },
 		{
 			title: 'Рекомендуемые инструменты / методы',
@@ -440,7 +440,7 @@ export const CreateMainApplication: FC = () => {
 			title: 'Направление проекта',
 			value: values.tags.id === 0 ? '' : values.tags.name,
 		},
-		{ title: 'Наименование проекта', value: values.title },
+		{ title: 'Наименование проекта*', value: values.title },
 	];
 
 	const isLastStep = currentStep === steps.length;

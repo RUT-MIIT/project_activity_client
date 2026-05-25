@@ -5,6 +5,7 @@ export interface IAppCardProps {
 	withComment?: boolean;
 	withStage?: boolean;
 	withAuthor?: boolean;
+	isAuthor?: boolean;
 	onShowHistory?: (id: number) => void;
 	onShowDetail?: (id: number) => void;
 }

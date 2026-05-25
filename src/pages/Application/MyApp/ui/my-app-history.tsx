@@ -9,6 +9,7 @@ import { Preloader } from '../../../../shared/components/Preloader/ui/preloader'
 import { HistoryApplication } from '../../../../widgets/HistoryApplication/ui/history-application';
 
 import { getAppHistoryAction } from '../../../../store/history/actions';
+import { markApplicationAsSeen } from '../../../../store/application/reducer';
 
 export const MyAppHistory: FC = () => {
 	const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export const MyAppHistory: FC = () => {
 	useEffect(() => {
 		if (appId) {
 			dispatch(getAppHistoryAction(appId));
+			dispatch(markApplicationAsSeen(Number(appId)));
 		}
 	}, [dispatch, appId]);
 

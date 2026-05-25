@@ -52,6 +52,10 @@ export function useForm<T>(
 
 	const handleSelectChange = <K extends keyof T>(name: K, value: T[K]) => {
 		setValues((prev) => ({ ...prev, [name]: value }));
+
+		if (typeof value === 'string') {
+			validateField(name, value);
+		}
 	};
 
 	const handleCheckboxToggle = <K extends keyof T>(name: K) => {

@@ -27,6 +27,7 @@ import { Privacy } from '../pages/Privacy/ui/privacy';
 
 import { checkUserAuth } from '../store/user/actions';
 import { getSemestersAction } from '../store/structure/actions';
+import { getAppsAction } from '../store/application/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
 import { EPAGESROUTES } from '../shared/utils/routes';
 
@@ -43,6 +44,7 @@ export const App = () => {
 	useEffect(() => {
 		if (isAuthChecked && user) {
 			dispatch(getSemestersAction());
+			dispatch(getAppsAction());
 		}
 	}, [dispatch, isAuthChecked, user]);
 

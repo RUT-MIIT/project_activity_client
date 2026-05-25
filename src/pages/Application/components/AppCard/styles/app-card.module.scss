@@ -9,6 +9,20 @@
 	background-color: var(--main-white-color);
 	display: flex;
 	flex-direction: column;
+	position: relative;
+	&__attention {
+		position: absolute;
+		top: 4px;
+		right: 8px;
+		width: 32px;
+		height: 32px;
+		background-color: var(--main-blue-color);
+		background-image: url('../../../../../shared/images/attention.svg');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 50%;
+		border-radius: 50%;
+	}
 	&__header {
 		margin: 0;
 		width: 100%;
@@ -135,3 +149,4 @@
 		pointer-events: none;
 	}
 }
+

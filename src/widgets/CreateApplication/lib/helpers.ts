@@ -29,7 +29,7 @@ export const validationSchema = {
 	],
 
 	company_type: [],
-	company: [required('Введите наименование'), minLength(10), maxLength(100)],
+	company: [required('Введите наименование'), minLength(6), maxLength(100)],
 	company_contacts: [
 		required('Введите контактные данные'),
 		minLength(10),

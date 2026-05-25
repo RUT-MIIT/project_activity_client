@@ -19,6 +19,7 @@ export interface IStructureStore {
 
 export interface ISemester {
 	name: string;
+	code: string;
 	id: number;
 	is_active: boolean;
 	position: number;

@@ -4,14 +4,17 @@ import type { ICreateCommentAction } from '../../store/coordination/types';
 import { request } from './utils';
 
 export const getCoordinationApps = () => {
-	return request('/showcase/project-applications/coordination/', {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-		},
-	});
+	return request(
+		'/showcase/project-applications/coordination/?semester_id=next',
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
 };
 
 export const getCoordinationDetail = (id: string) => {

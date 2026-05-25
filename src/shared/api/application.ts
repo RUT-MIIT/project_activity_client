@@ -6,14 +6,17 @@ import type {
 import { request } from './utils';
 
 export const getApplications = () => {
-	return request('/showcase/project-applications/my_applications', {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-		},
-	});
+	return request(
+		'/showcase/project-applications/my_applications/?semester_id=next',
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
 };
 
 export const createMainApplication = (data: ICreateAppMain) => {

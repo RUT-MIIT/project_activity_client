@@ -9,6 +9,7 @@ import { Preloader } from '../../../../shared/components/Preloader/ui/preloader'
 import { EditApplication } from '../../../../widgets/EditApplication/ui/edit-application';
 
 import { getCoordinationAppDetailAction } from '../../../../store/coordination/actions';
+import { markApplicationAsSeen } from '../../../../store/application/reducer';
 
 export const MyAppDetail: FC = () => {
 	const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export const MyAppDetail: FC = () => {
 	useEffect(() => {
 		if (appId) {
 			dispatch(getCoordinationAppDetailAction(appId));
+			dispatch(markApplicationAsSeen(Number(appId)));
 		}
 	}, [dispatch, appId]);
 

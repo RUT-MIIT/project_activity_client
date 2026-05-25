@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import type { IPublicLayoutProps } from '../types/types';
 
 import { PublicLayoutFooter } from './public-layout-footer';
-import { Button } from '../../../Button/ui/button';
 
 import styles from '../styles/public-layout.module.scss';
 
@@ -18,7 +17,6 @@ export const PublicLayout: FC<IPublicLayoutProps> = ({ children }) => {
 					<p className={styles.subtitle}>
 						Создавайте, развивайте и реализуйте свои идеи вместе с университетом
 					</p>
-					<Button text='Подробнее' color='blue' />
 				</div>
 				<PublicLayoutFooter />
 			</div>

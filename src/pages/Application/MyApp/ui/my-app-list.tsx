@@ -121,6 +121,7 @@ export const MyAppList: FC = () => {
 									key={item.id}
 									onShowHistory={showHistoryApp}
 									onShowDetail={showDetailApp}
+									isAuthor={true}
 								/>
 							))}
 						</ul>

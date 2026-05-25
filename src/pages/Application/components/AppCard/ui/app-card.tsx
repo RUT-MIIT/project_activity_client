@@ -21,6 +21,7 @@ export const AppCard: FC<IAppCardProps> = ({
 	withComment = false,
 	withStage = false,
 	withAuthor = false,
+	isAuthor = false,
 	onShowHistory,
 	onShowDetail,
 }) => {
@@ -33,6 +34,9 @@ export const AppCard: FC<IAppCardProps> = ({
 
 	return (
 		<li className={styles.card} key={card.id}>
+			{card.has_unseen_changes && isAuthor && (
+				<div className={styles.card__attention}></div>
+			)}
 			<div className={styles.card__header}>
 				<Badge text={statusText} color={statusColor} />
 				{withComment && (

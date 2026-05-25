@@ -2,12 +2,15 @@ import type { IApplicationStore } from './types';
 
 import { createSlice } from '@reduxjs/toolkit';
 
+import { countUnseenChanges } from './selectors';
+
 import * as actions from './actions';
 
 const initialState: IApplicationStore = {
 	application: null,
 	applications: [],
 	externalApplications: [],
+	unseenChangesCount: 0,
 	isLoading: false,
 	error: null,
 };
@@ -15,7 +18,22 @@ const initialState: IApplicationStore = {
 export const applicationSlice = createSlice({
 	name: 'application',
 	initialState,
-	reducers: {},
+	reducers: {
+		markApplicationAsSeen: (state, action) => {
+			const appId = action.payload;
+
+			const app = state.applications.find((a) => a.id === appId);
+
+			console.log(state.applications);
+			console.log(appId);
+			console.log(app);
+
+			if (app && app.has_unseen_changes) {
+				app.has_unseen_changes = false;
+				state.unseenChangesCount -= 1;
+			}
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(actions.getAppsAction.pending, (state) => {
@@ -25,6 +43,11 @@ export const applicationSlice = createSlice({
 			.addCase(actions.getAppsAction.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.applications = action.payload;
+
+				state.unseenChangesCount = countUnseenChanges([
+					...action.payload,
+					...state.externalApplications,
+				]);
 			})
 			.addCase(actions.getAppsAction.rejected, (state, action) => {
 				state.isLoading = false;
@@ -66,3 +89,5 @@ export const applicationSlice = createSlice({
 			});
 	},
 });
+
+export const { markApplicationAsSeen } = applicationSlice.actions;

@@ -48,6 +48,7 @@ export const filterAppsByRole = (
 				'returned_author',
 				'returned_department',
 				'returned_institute',
+				'returned_cpds',
 				'work_institute',
 				'await_institute',
 				'work_department',
