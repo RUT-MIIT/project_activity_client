@@ -11,9 +11,10 @@ import { CoordinationAppsTable } from './coordination-apps-table';
 import { Filter } from '../../../shared/components/Filter/ui/filter';
 import { Select } from '../../../shared/components/Select/ui/select';
 import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
+import { ViewSwitcher } from '../../../shared/components/ViewSwitcher/ui/view-switcher';
 
 import { EMAINROUTES } from '../../../shared/utils/routes';
-import { sortOptions, viewOptions, type ISortOption } from '../lib/lib';
+import { sortOptions, type ISortOption } from '../lib/lib';
 
 import styles from '../styles/coordination.module.scss';
 
@@ -32,9 +33,9 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 		name: 'Все компании',
 	});
 	const [filteredApps, setFilteredApps] = useState(apps);
-	const [activeView, setActiveView] = useState<'cards' | 'table'>(() => {
-		const saved = localStorage.getItem('coordinationView');
-		return saved === 'cards' || saved === 'table' ? saved : 'cards';
+	const [activeView, setActiveView] = useState<string>(() => {
+		const view = localStorage.getItem('coordinationView');
+		return view ?? 'cards';
 	});
 
 	const companyOptions = useMemo<ISortOption[]>(() => {
@@ -86,10 +87,6 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 				return apps;
 		}
 	};
-
-	useEffect(() => {
-		localStorage.setItem('coordinationView', activeView);
-	}, [activeView]);
 
 	const sortedApps = useMemo(() => {
 		return sortApps(filteredApps, currentSortOption);
@@ -144,18 +141,11 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 					width='default'
 				/>
 
-				<div className={styles.view}>
-					{viewOptions.map((option) => (
-						<button
-							key={option.id}
-							className={`${styles.view__btn} ${
-								activeView === option.id ? styles.view__btn_active : ''
-							}`}
-							onClick={() => setActiveView(option.id as 'cards' | 'table')}>
-							{option.name}
-						</button>
-					))}
-				</div>
+				<ViewSwitcher
+					defaultView={activeView}
+					storageKey='coordinationView'
+					onChange={(view) => setActiveView(view)}
+				/>
 			</div>
 
 			{sortedApps.length > 0 ? (

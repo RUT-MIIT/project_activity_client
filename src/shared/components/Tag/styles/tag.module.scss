@@ -1,6 +1,6 @@
 .list {
-	margin: 12px 0;
-	padding: 0;
+	margin: 0;
+	padding: 8px 0;
 	width: 100%;
 	list-style-type: none;
 	display: flex;
@@ -8,6 +8,8 @@
 	gap: 12px;
 	align-items: center;
 	position: relative;
+	max-height: 144px;
+	overflow-y: auto;
 }
 
 .item {
@@ -21,7 +23,7 @@
 	box-sizing: border-box;
 	border-radius: var(--border-radius);
 	background-color: var(--main-blue-background-color);
-	color: var(--main-blue-light-color);
+	color: var(--main-blue-color);
 	position: relative;
 	transition: all .3s ease-in-out;
 	&:hover {

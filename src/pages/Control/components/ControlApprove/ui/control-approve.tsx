@@ -58,9 +58,38 @@ export const ControlApprove: FC = () => {
 	};
 
 	useEffect(() => {
-		dispatch(getApproveUsersAction());
-		dispatch(getDepartmentsAction());
-		dispatch(getRolesAction());
+		let timeoutId: ReturnType<typeof setTimeout>;
+
+		const loadData = () => {
+			dispatch(getApproveUsersAction());
+			dispatch(getDepartmentsAction());
+			dispatch(getRolesAction());
+		};
+
+		loadData();
+
+		const scheduleNextUpdate = () => {
+			const now = new Date();
+
+			const nextUpdate = new Date();
+
+			nextUpdate.setHours(6, 0, 0, 0);
+
+			if (now >= nextUpdate) {
+				nextUpdate.setDate(nextUpdate.getDate() + 1);
+			}
+
+			const delay = nextUpdate.getTime() - now.getTime();
+
+			timeoutId = setTimeout(() => {
+				loadData();
+				scheduleNextUpdate();
+			}, delay);
+		};
+
+		scheduleNextUpdate();
+
+		return () => clearTimeout(timeoutId);
 	}, [dispatch]);
 
 	if (isLoadingApprove || isLoadingCatalog) {
