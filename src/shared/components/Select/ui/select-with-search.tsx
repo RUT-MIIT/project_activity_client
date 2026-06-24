@@ -12,6 +12,7 @@ export const SelectWithSearch = <T,>({
 	labelKey = 'name' as keyof T,
 	width = 'full',
 	placeholder = 'Выберите из списка...',
+	withClear = true,
 }: ISelectProps<T>) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
@@ -77,11 +78,27 @@ export const SelectWithSearch = <T,>({
 					</p>
 				)}
 
-				<div
-					className={`${styles.arrow} ${
-						isOpen ? styles.arrow_status_open : ''
-					}`}
-				/>
+				<div className={styles.controls}>
+					{currentOption && withClear && (
+						<button
+							type='button'
+							className={styles.clear}
+							onClick={(e) => {
+								e.stopPropagation();
+								onChooseOption(null);
+								setSearchText('');
+								setFiltered(options);
+							}}>
+							✕
+						</button>
+					)}
+
+					<div
+						className={`${styles.arrow} ${
+							isOpen ? styles.arrow_status_open : ''
+						}`}
+					/>
+				</div>
 			</div>
 
 			<div

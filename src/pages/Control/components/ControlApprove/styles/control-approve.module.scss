@@ -8,6 +8,14 @@
 	min-height: 0;
 }
 
+.header {
+	margin: 0 0 20px 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
 .list {
 	margin: 0;
 	padding: 0;

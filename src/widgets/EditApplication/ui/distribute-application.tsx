@@ -2,7 +2,7 @@ import type { FC, FormEvent } from 'react';
 import type { IDistributeApplicationProps } from '../types/types';
 import type { IInstitute } from '../../../store/catalog/types';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from '../../../store/store';
 
 import { Form } from '../../../shared/components/Form/ui/form';
@@ -20,24 +20,21 @@ export const DistributeApplication: FC<IDistributeApplicationProps> = ({
 	const { institutes } = useSelector((state) => state.catalog);
 	const { isLoadingAction } = useSelector((state) => state.coordination);
 
-	const [currentInstitute, setCurrentInstitute] = useState<IInstitute>({
-		code: '0',
-		name: 'Выберите подразделение..',
-	});
-	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
+	const [currentInstitute, setCurrentInstitute] = useState<IInstitute | null>(
+		null
+	);
 
-	const handleChangeInstitute = (selected: IInstitute) => {
+	const handleChangeInstitute = (selected: IInstitute | null) => {
 		setCurrentInstitute(selected);
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		if (!currentInstitute) return;
+
 		onDistribute(currentInstitute.code);
 	};
-
-	useEffect(() => {
-		setIsBlockSubmit(currentInstitute.code === '0' ? true : false);
-	}, [currentInstitute]);
 
 	return (
 		<Form
@@ -47,6 +44,7 @@ export const DistributeApplication: FC<IDistributeApplicationProps> = ({
 			withHeightStretch>
 			<FormField title='Подразделение'>
 				<Select
+					placeholder='Выберите подразделение..'
 					options={institutes}
 					currentOption={currentInstitute}
 					onChooseOption={handleChangeInstitute}
@@ -60,7 +58,7 @@ export const DistributeApplication: FC<IDistributeApplicationProps> = ({
 					type='submit'
 					color='green'
 					withIcon={{ type: 'check', color: 'white' }}
-					isBlock={isLoadingAction || isBlockSubmit}
+					isBlock={isLoadingAction || !currentInstitute}
 				/>
 			</FormButtons>
 		</Form>

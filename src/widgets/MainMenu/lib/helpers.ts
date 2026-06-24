@@ -50,6 +50,11 @@ export const instituteValidatorLinks = [
 		url: EMAINROUTES.STRUCTURE,
 		icon: 'stats',
 	},
+	{
+		name: 'Проектные треки',
+		url: EMAINROUTES.TRACK,
+		icon: 'control',
+	},
 ];
 
 export const cpdsLinks = [

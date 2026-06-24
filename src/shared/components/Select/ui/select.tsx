@@ -13,6 +13,7 @@ export const Select = <T,>({
 	labelKey = 'name' as keyof T,
 	width = 'full',
 	placeholder = 'Выберите значение...',
+	withClear = true,
 }: ISelectProps<T>) => {
 	const [isOpenSelectOptions, setIsOpenSelectOptions] = useState(false);
 	const selectRef = useRef<HTMLDivElement>(null);
@@ -55,11 +56,26 @@ export const Select = <T,>({
 					}`}>
 					{currentOption ? getLabel(currentOption) : placeholder}
 				</p>
-				<div
-					className={`${styles.arrow} ${
-						isOpenSelectOptions ? styles.arrow_status_open : ''
-					}`}
-				/>
+
+				<div className={styles.controls}>
+					{currentOption && withClear && (
+						<button
+							type='button'
+							className={styles.clear}
+							onClick={(e) => {
+								e.stopPropagation();
+								onChooseOption(null);
+							}}>
+							✕
+						</button>
+					)}
+
+					<div
+						className={`${styles.arrow} ${
+							isOpenSelectOptions ? styles.arrow_status_open : ''
+						}`}
+					/>
+				</div>
 			</div>
 			<div
 				className={`${styles.options} ${

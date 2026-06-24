@@ -30,7 +30,7 @@ export const initialAppValues: IEditAppForm = {
 	title: '',
 	company: '',
 	company_contacts: '',
-	project_level: { id: 0, name: 'Выберите уровень..' },
+	project_level: null,
 	target_institutes: [],
 	problem_holder: '',
 	goal: '',
@@ -40,7 +40,7 @@ export const initialAppValues: IEditAppForm = {
 	recommended_tools: '',
 	stakeholders: '',
 	experts: '',
-	tags: { id: 0, name: 'Выберите направление..' },
+	tags: null,
 	additional_materials: '',
 };
 

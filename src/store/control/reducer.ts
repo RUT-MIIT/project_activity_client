@@ -1,22 +1,27 @@
-import type { IControlApproveStore, IApproveUser } from './types';
+import type { IControlStore, IApproveUser } from './types';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import * as actions from './actions';
 
-const initialState: IControlApproveStore = {
+const initialState: IControlStore = {
 	approveUsers: [],
+	apps: [],
+	users: [],
 	currentApproveUser: null,
+	currentUser: null,
 	isOpenApproveModal: false,
 	isOpenRejectModal: false,
-	isOpenDetailModal: false,
+	isOpenApproveDetailModal: false,
 	isLoadingApprove: false,
 	isLoadingRequest: false,
+	isLoadingApps: false,
+	isLoadingUsers: false,
 	error: null,
 };
 
-export const controlApproveSlice = createSlice({
-	name: 'controlApprove',
+export const controlSlice = createSlice({
+	name: 'control',
 	initialState,
 	reducers: {
 		setCurrentApproveUser(state, action: PayloadAction<IApproveUser>) {
@@ -31,13 +36,13 @@ export const controlApproveSlice = createSlice({
 		openRejectModal(state) {
 			state.isOpenRejectModal = true;
 		},
-		openDetailModal(state) {
-			state.isOpenDetailModal = true;
+		openApproveDetailModal(state) {
+			state.isOpenApproveDetailModal = true;
 		},
 		closeModals(state) {
 			state.isOpenApproveModal = false;
 			state.isOpenRejectModal = false;
-			state.isOpenDetailModal = false;
+			state.isOpenApproveDetailModal = false;
 		},
 	},
 	extraReducers: (builder) => {
@@ -52,6 +57,31 @@ export const controlApproveSlice = createSlice({
 			})
 			.addCase(actions.getApproveUsersAction.rejected, (state, action) => {
 				state.isLoadingApprove = false;
+				state.error =
+					action.error?.message || 'Не удалось загрузить пользователей';
+			})
+			.addCase(actions.getControlAppsAction.pending, (state) => {
+				state.isLoadingApps = true;
+				state.error = null;
+			})
+			.addCase(actions.getControlAppsAction.fulfilled, (state, action) => {
+				state.isLoadingApps = false;
+				state.apps = action.payload;
+			})
+			.addCase(actions.getControlAppsAction.rejected, (state, action) => {
+				state.isLoadingApps = false;
+				state.error = action.error?.message || 'Не удалось загрузить заявки';
+			})
+			.addCase(actions.getControlUsersAction.pending, (state) => {
+				state.isLoadingUsers = true;
+				state.error = null;
+			})
+			.addCase(actions.getControlUsersAction.fulfilled, (state, action) => {
+				state.isLoadingUsers = false;
+				state.users = action.payload;
+			})
+			.addCase(actions.getControlUsersAction.rejected, (state, action) => {
+				state.isLoadingUsers = false;
 				state.error =
 					action.error?.message || 'Не удалось загрузить пользователей';
 			})
@@ -99,6 +129,6 @@ export const {
 	clearCurrentApproveUser,
 	openApproveModal,
 	openRejectModal,
-	openDetailModal,
+	openApproveDetailModal,
 	closeModals,
-} = controlApproveSlice.actions;
+} = controlSlice.actions;

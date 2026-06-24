@@ -68,13 +68,13 @@ export const CreatePublicApplication: FC = () => {
 			const appMainData = {
 				...values,
 				project_level: '',
-				is_internal_customer: values.company_type.id === 1 ? true : false,
+				is_internal_customer: values.company_type?.id === 1,
 				author_role:
 					typeof values.author_role === 'object'
 						? values.author_role.name
 						: values.author_role,
 				target_institutes: values.target_institutes.map((elem) => elem.code),
-				tags: [values.tags.id],
+				tags: values.tags ? [values.tags.id] : [],
 			};
 
 			try {
@@ -102,33 +102,37 @@ export const CreatePublicApplication: FC = () => {
 		handleSelectChange('target_institutes', selected);
 	};
 
-	const handleChangeCategories = (selected: IAuthorCategory) => {
-		handleSelectChange('author_role', selected);
-		if (selected.id === 1) {
-			handleSelectChange('company_type', {
-				id: 1,
-				name: 'Внутренний заказчик',
-			});
-			handleSelectChange('company', 'РУТ (МИИТ)');
-		} else {
-			handleSelectChange('company_type', {
-				id: 2,
-				name: 'Внешний заказчик',
-			});
-			handleSelectChange('company', '');
+	const handleChangeCategories = (selected: IAuthorCategory | null) => {
+		if (selected) {
+			handleSelectChange('author_role', selected);
+			if (selected.id === 1) {
+				handleSelectChange('company_type', {
+					id: 1,
+					name: 'Внутренний заказчик',
+				});
+				handleSelectChange('company', 'РУТ (МИИТ)');
+			} else {
+				handleSelectChange('company_type', {
+					id: 2,
+					name: 'Внешний заказчик',
+				});
+				handleSelectChange('company', '');
+			}
 		}
 	};
 
-	const handleChangeCompanyType = (selected: ICompanyType) => {
-		handleSelectChange('company_type', selected);
-		if (selected.id === 1) {
-			handleSelectChange('company', 'РУТ (МИИТ)');
-		} else {
-			handleSelectChange('company', '');
+	const handleChangeCompanyType = (selected: ICompanyType | null) => {
+		if (selected) {
+			handleSelectChange('company_type', selected);
+			if (selected.id === 1) {
+				handleSelectChange('company', 'РУТ (МИИТ)');
+			} else {
+				handleSelectChange('company', '');
+			}
 		}
 	};
 
-	const handleChangeTags = (selected: ITag) => {
+	const handleChangeTags = (selected: ITag | null) => {
 		handleSelectChange('tags', selected);
 	};
 
@@ -234,9 +238,11 @@ export const CreatePublicApplication: FC = () => {
 							isShow: !!errors.author_role,
 						}}>
 						<Select
+							placeholder='Выберите категорию автора..'
 							options={authorCategories}
 							currentOption={values.author_role}
 							onChooseOption={handleChangeCategories}
+							withClear={false}
 						/>
 					</FormField>
 					<FormField
@@ -268,9 +274,11 @@ export const CreatePublicApplication: FC = () => {
 						withInfo
 						infoText={formFieldPublicData.company_type.info}>
 						<Select
+							placeholder='Выберите тип заказчика..'
 							options={companyTypes}
 							currentOption={values.company_type}
 							onChooseOption={handleChangeCompanyType}
+							withClear={false}
 						/>
 					</FormField>
 					<FormField
@@ -286,7 +294,7 @@ export const CreatePublicApplication: FC = () => {
 							value={values.company}
 							onChange={handleChange}
 							placeholder={formFieldPublicData.company.placeholder}
-							disabled={values.company_type.id === 1}
+							disabled={values.company_type?.id === 1}
 						/>
 					</FormField>
 					<FormField
@@ -482,7 +490,7 @@ export const CreatePublicApplication: FC = () => {
 		{ title: 'Существующие решения', value: values.existing_solutions },
 		{
 			title: 'Направление проекта',
-			value: values.tags.id === 0 ? '' : values.tags.name,
+			value: values.tags?.id === 0 ? '' : values.tags?.name ?? '',
 		},
 		{ title: 'Наименование проекта', value: values.title },
 	];

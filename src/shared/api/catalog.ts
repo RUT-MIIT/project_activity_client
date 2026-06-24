@@ -20,6 +20,28 @@ export const getDepartmentsCatalog = () => {
 	});
 };
 
+export const getDirectionsCatalog = () => {
+	return request('/teams/directions/', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const getGroupsCatalog = () => {
+	return request('/teams/study-groups/?is_end=false', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
 export const getRolesCatalog = () => {
 	return request('/accounts/roles/', {
 		method: 'GET',

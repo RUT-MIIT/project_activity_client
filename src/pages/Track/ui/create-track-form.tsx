@@ -1,9 +1,14 @@
 import type { FC, FormEvent } from 'react';
-import type { ITag } from '../../../store/catalog/types';
-import type { IDirection, ICourse, IGroup } from '../lib/lib';
+import type {
+	ITag,
+	IDirection,
+	ICourse,
+	IGroup,
+} from '../../../store/catalog/types';
 
 import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../store/store';
+import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { TagList } from '../../../shared/components/Tag/ui/tag-list';
@@ -18,26 +23,43 @@ import { ViewSwitcher } from '../../../shared/components/ViewSwitcher/ui/view-sw
 import { Filter } from '../../../shared/components/Filter/ui/filter';
 import { Text } from '../../../shared/components/Typography';
 import { ProjectCard } from '../../Project/components/ProjectCard/project-card';
+import { ProjectDetailModal } from '../../Project/components/ProjectDetailModal/project-detail-modal';
 
-import { getTagsAction } from '../../../store/catalog/actions';
-import { directions, courses, groups, projects } from '../lib/lib';
+import {
+	getDirectionsAction,
+	getGroupsAction,
+} from '../../../store/catalog/actions';
+import {
+	getTrackProjectsAction,
+	createTrackAction,
+} from '../../../store/track/actions';
+import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/track.module.scss';
 
 export const CreateTrackForm: FC = () => {
 	const dispatch = useDispatch();
-	const { isLoadingCatalog } = useSelector((state) => state.catalog);
+	const { showToast } = useToast();
+	const { directions, courses, groups, isLoadingCatalog } = useSelector(
+		(state) => state.catalog
+	);
+	const { projects, isLoadingProjects } = useSelector((state) => state.track);
+	const { currentSemester } = useSelector((state) => state.structure);
 	const [currentDirection, setCurrentDirection] = useState<IDirection | null>(
 		null
 	);
 	const [currentCourse, setCurrentCourse] = useState<ICourse | null>(null);
 	const [currentGroup, setCurrentGroup] = useState<IGroup | null>(null);
+	const [currentProjectId, setCurrentProjectId] = useState<number | null>(null);
 	const [isBlockAddGroupButton, setIsBlockAddGroupButton] =
 		useState<boolean>(true);
 	const [filteredGroups, setFilteredGroups] = useState<IGroup[]>(groups);
 	const [selectedGroups, setSelectedGroups] = useState<IGroup[]>([]);
 	const [selectedTags, setSelectedTags] = useState<ITag[]>([]);
 	const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([]);
+
+	const [isShowProjectDetail, setIsShowProjectDetail] =
+		useState<boolean>(false);
 
 	const [activeView, setActiveView] = useState<string>(() => {
 		const view = localStorage.getItem('createTrackView');
@@ -47,6 +69,30 @@ export const CreateTrackForm: FC = () => {
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (currentSemester) {
+			const data = {
+				semester_id: currentSemester.id,
+				group_ids: selectedGroups.map((group) => group.id),
+				project_application_ids: selectedProjectIds,
+			};
+			try {
+				await dispatch(createTrackAction(data)).unwrap();
+				showToast({
+					title: 'Проектный трек успешно создан!',
+					text: 'Вы можете увидеть его на вкладке «Просмотр».',
+					type: 'success',
+				});
+				setSelectedGroups([]);
+				setSelectedProjectIds([]);
+			} catch (err) {
+				console.log(err);
+				showToast({
+					title: 'Произошла ошибка при отправке заявки!',
+					text: getErrorMessage(err),
+					type: 'error',
+				});
+			}
+		}
 	};
 
 	const handleChangeTags = (selected: ITag[]) => {
@@ -81,7 +127,13 @@ export const CreateTrackForm: FC = () => {
 	};
 
 	const handleShowDetail = (id: number) => {
-		console.log(id);
+		setCurrentProjectId(id);
+		setIsShowProjectDetail(true);
+	};
+
+	const handleCloseDetail = () => {
+		setCurrentProjectId(null);
+		setIsShowProjectDetail(false);
 	};
 
 	const handleSelectProject = (id: number) => {
@@ -105,8 +157,8 @@ export const CreateTrackForm: FC = () => {
 		else if (currentDirection && currentCourse) {
 			newGroups = groups.filter(
 				(g) =>
-					g.directionId === currentDirection.id &&
-					g.courseId === currentCourse.id
+					g.direction_code === currentDirection.code &&
+					g.course_number === currentCourse.id
 			);
 
 			setCurrentCourse(null);
@@ -114,14 +166,16 @@ export const CreateTrackForm: FC = () => {
 
 		// Если выбран только курс
 		else if (currentCourse) {
-			newGroups = groups.filter((g) => g.courseId === currentCourse.id);
+			newGroups = groups.filter((g) => g.course_number === currentCourse.id);
 
 			setCurrentCourse(null);
 		}
 
 		// Если выбрано только направление
 		else if (currentDirection) {
-			newGroups = groups.filter((g) => g.directionId === currentDirection.id);
+			newGroups = groups.filter(
+				(g) => g.direction_code === currentDirection.code
+			);
 
 			setCurrentDirection(null);
 		}
@@ -145,9 +199,17 @@ export const CreateTrackForm: FC = () => {
 		}
 	}, [currentDirection, currentCourse, currentGroup]);
 
-	const tags: ITag[] = Array.from(
-		new Map(projects.map((project) => [project.tag.id, project.tag])).values()
-	);
+	const tags = useMemo(() => {
+		const map = new Map<number, ITag>();
+
+		projects.forEach((project) => {
+			project.tags.forEach((tag) => {
+				map.set(tag.id, tag);
+			});
+		});
+
+		return Array.from(map.values());
+	}, [projects]);
 
 	useEffect(() => {
 		let result = groups;
@@ -158,16 +220,16 @@ export const CreateTrackForm: FC = () => {
 
 		// 2. Фильтр по направлению
 		if (currentDirection) {
-			result = result.filter((g) => g.directionId === currentDirection.id);
+			result = result.filter((g) => g.direction_code === currentDirection.code);
 		}
 
 		// 3. Фильтр по курсу
 		if (currentCourse) {
-			result = result.filter((g) => g.courseId === currentCourse.id);
+			result = result.filter((g) => g.course_number === currentCourse.id);
 		}
 
 		setFilteredGroups(result);
-	}, [selectedGroups, currentDirection, currentCourse]);
+	}, [groups, selectedGroups, currentDirection, currentCourse]);
 
 	const filteredProjects = useMemo(() => {
 		let result = projects;
@@ -175,7 +237,9 @@ export const CreateTrackForm: FC = () => {
 		if (selectedTags.length > 0) {
 			const selectedTagIds = new Set(selectedTags.map((tag) => tag.id));
 
-			result = result.filter((project) => selectedTagIds.has(project.tag.id));
+			result = result.filter((project) =>
+				project.tags.some((tag) => selectedTagIds.has(tag.id))
+			);
 		}
 
 		if (searchQuery.trim() !== '') {
@@ -185,13 +249,15 @@ export const CreateTrackForm: FC = () => {
 		}
 
 		return result;
-	}, [selectedTags, searchQuery]);
+	}, [selectedTags, searchQuery, projects]);
 
 	useEffect(() => {
-		dispatch(getTagsAction());
+		dispatch(getDirectionsAction());
+		dispatch(getGroupsAction());
+		dispatch(getTrackProjectsAction());
 	}, [dispatch]);
 
-	if (isLoadingCatalog) return <Preloader />;
+	if (isLoadingCatalog || isLoadingProjects) return <Preloader />;
 
 	return (
 		<Form
@@ -254,6 +320,8 @@ export const CreateTrackForm: FC = () => {
 							<SelectWithSearch
 								placeholder='Выберите направление..'
 								currentOption={currentDirection}
+								valueKey='code'
+								labelKey='name'
 								options={directions}
 								onChooseOption={(opt) => handleChangeDirection(opt)}
 							/>
@@ -311,12 +379,21 @@ export const CreateTrackForm: FC = () => {
 								type='submit'
 								text='Создать трек'
 								color='blue'
-								isBlock={selectedGroups.length < 1}
+								isBlock={
+									selectedGroups.length < 1 || selectedProjectIds.length < 1
+								}
 							/>
 						</CardControl>
 					</Card>
 				</div>
 			</div>
+			{isShowProjectDetail && (
+				<ProjectDetailModal
+					id={currentProjectId}
+					isOpen={isShowProjectDetail}
+					onClose={handleCloseDetail}
+				/>
+			)}
 		</Form>
 	);
 };

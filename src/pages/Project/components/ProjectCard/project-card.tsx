@@ -15,7 +15,13 @@ export const ProjectCard: FC<IProjectCardProps> = ({
 	return (
 		<div className={`${styles.card} ${isSelect ? styles.card_select : ''}`}>
 			<div className={styles.card__header}>
-				<Badge text={card.tag.name} color={isSelect ? 'white' : 'blue'} />
+				{card.tags.map((elem) => (
+					<Badge
+						key={elem.id}
+						text={elem.name}
+						color={isSelect ? 'white' : 'blue'}
+					/>
+				))}
 			</div>
 			<div className={styles.card__main}>
 				<h4 className={styles.card__title}>{card.title}</h4>

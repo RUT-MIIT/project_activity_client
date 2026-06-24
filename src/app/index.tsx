@@ -29,7 +29,7 @@ import { checkUserAuth } from '../store/user/actions';
 import { getSemestersAction } from '../store/structure/actions';
 import { getAppsAction } from '../store/application/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
-import { EPAGESROUTES } from '../shared/utils/routes';
+import { EPAGESROUTES, EMAINROUTES } from '../shared/utils/routes';
 
 import styles from './app.module.scss';
 
@@ -83,15 +83,24 @@ export const App = () => {
 
 					{/* ---------- Авторизованные страницы в MainLayout ---------- */}
 					<Route element={<OnlyAuth component={<MainLayout />} />}>
-						<Route path='/home' element={<Home />} />
-						<Route path='/new-application' element={<NewApp />} />
-						<Route path='/my-applications/*' element={<MyApp />} />
-						<Route path='/external-applications/*' element={<ExternalApp />} />
-						<Route path='/coordination/*' element={<Coordination />} />
-						<Route path='/structure/*' element={<Structure />} />
-						<Route path='/track/*' element={<Track />} />
-						<Route path='/stats' element={<Stats />} />
-						<Route path='/control/*' element={<Control />} />
+						<Route path={`/${EMAINROUTES.HOME}`} element={<Home />} />
+						<Route path={`/${EMAINROUTES.NEW_APP}`} element={<NewApp />} />
+						<Route path={`/${EMAINROUTES.MY_APPS}/*`} element={<MyApp />} />
+						<Route
+							path={`/${EMAINROUTES.EXTERNAL_APPS}/*`}
+							element={<ExternalApp />}
+						/>
+						<Route
+							path={`/${EMAINROUTES.COORDINATION}/*`}
+							element={<Coordination />}
+						/>
+						<Route
+							path={`/${EMAINROUTES.STRUCTURE}/*`}
+							element={<Structure />}
+						/>
+						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
+						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
+						<Route path={`/${EMAINROUTES.CONTROL}/*`} element={<Control />} />
 					</Route>
 
 					{/* ---------- 404 ---------- */}

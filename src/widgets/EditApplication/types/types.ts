@@ -1,5 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import type { IField } from '../../../store/application/types';
+import type { IProjectLevel } from '../../../shared/lib/lib';
+import type { ITag } from '../../../store/catalog/types';
 
 export interface IEditAppForm {
 	author_lastname: string;
@@ -13,7 +15,7 @@ export interface IEditAppForm {
 	title: string;
 	company: string;
 	company_contacts: string;
-	project_level: { id: number; name: string };
+	project_level: IProjectLevel | null;
 	target_institutes: { code: string; name: string }[];
 
 	problem_holder: string;
@@ -25,7 +27,7 @@ export interface IEditAppForm {
 	recommended_tools: string;
 	stakeholders: string;
 	experts: string;
-	tags: { id: number; name: string };
+	tags: ITag | null;
 	additional_materials: string;
 }
 

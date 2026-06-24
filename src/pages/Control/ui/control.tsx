@@ -5,11 +5,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Section } from '../../../shared/components/Section';
 import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
 import { ControlApprove } from '../components/ControlApprove/ui/control-approve';
+import { ControlUsers } from '../components/ControlUsers/ui/control-users';
+import { ControlApps } from '../components/ControlApps/ui/control-apps';
 
 import { tabs } from '../lib/helpers';
-
-const Users = () => <div>Пользователи</div>;
-const Apps = () => <div>Заявки</div>;
 
 export const Control: FC = () => {
 	return (
@@ -22,8 +21,8 @@ export const Control: FC = () => {
 
 			<Routes>
 				<Route path='approve' element={<ControlApprove />} />
-				<Route path='users' element={<Users />} />
-				<Route path='apps' element={<Apps />} />
+				<Route path='users' element={<ControlUsers />} />
+				<Route path='apps' element={<ControlApps />} />
 
 				<Route path='' element={<Navigate to='approve' replace />} />
 			</Routes>

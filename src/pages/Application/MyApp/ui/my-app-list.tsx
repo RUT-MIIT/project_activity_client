@@ -24,9 +24,8 @@ export const MyAppList: FC = () => {
 	const dispatch = useDispatch();
 	const { applications, isLoading } = useSelector((state) => state.application);
 	const [filteredApps, setFilteredApps] = useState<IApplicationItem[]>([]);
-	const [currentSortOption, setCurrentSortOption] = useState<ISortOption>(
-		sortOptions[0]
-	);
+	const [currentSortOption, setCurrentSortOption] =
+		useState<ISortOption | null>(sortOptions[0]);
 
 	const createNewApp = () => {
 		navigate(`/${EMAINROUTES.NEW_APP}`, {
@@ -62,7 +61,7 @@ export const MyAppList: FC = () => {
 		}
 	};
 
-	const handleChangeSort = (option: ISortOption) => {
+	const handleChangeSort = (option: ISortOption | null) => {
 		setCurrentSortOption(option);
 	};
 
@@ -75,6 +74,10 @@ export const MyAppList: FC = () => {
 	}, [applications]);
 
 	const sortedApps = useMemo(() => {
+		if (!currentSortOption) {
+			return filteredApps;
+		}
+
 		return sortApps(filteredApps, currentSortOption);
 	}, [filteredApps, currentSortOption]);
 
@@ -100,6 +103,7 @@ export const MyAppList: FC = () => {
 							options={sortOptions}
 							onChooseOption={handleChangeSort}
 							width='default'
+							withClear={false}
 						/>
 						<Button
 							text='Новая заявка'

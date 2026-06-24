@@ -32,6 +32,7 @@ export const TableColumn: FC<ITableColumnProps> = ({
 						active ? styles.table__text_active : '',
 						styles[`table__text_weight_${textWeight}`],
 						styles[`table__text_color_${textColor}`],
+						styles[`table__text_align_${alignType}`],
 					].join(' ')}
 					onClick={onClick && id ? () => onClick(id) : undefined}>
 					{text}

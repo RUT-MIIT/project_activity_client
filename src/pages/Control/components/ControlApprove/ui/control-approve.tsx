@@ -1,18 +1,23 @@
 import type { FC } from 'react';
-import type { IApproveUser } from '../../../../../store/control-approve/types';
+import type { IStatusOption } from '../types/types';
+import type { IApproveUser } from '../../../../../store/control/types';
+import type { IDepartment } from '../../../../../store/catalog/types';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { Preloader } from '../../../../../shared/components/Preloader/ui/preloader';
 import { Button } from '../../../../../shared/components/Button/ui/button';
 import { Modal } from '../../../../../shared/components/Modal/ui/modal';
+import { SearchInput } from '../../../../../shared/components/Search/ui/search-input';
+import { Select } from '../../../../../shared/components/Select/ui/select';
+import { SelectWithSearch } from '../../../../../shared/components/Select/ui/select-with-search';
 import { UserData } from './user-data';
 import { ApproveUserForm } from './approve-user-form';
 import { RejectUserForm } from './reject-user-form';
 import { DetailUserModal } from './detail-user-modal';
 
-import { getApproveUsersAction } from '../../../../../store/control-approve/actions';
+import { getApproveUsersAction } from '../../../../../store/control/actions';
 import {
 	getDepartmentsAction,
 	getRolesAction,
@@ -21,9 +26,10 @@ import {
 	setCurrentApproveUser,
 	openApproveModal,
 	openRejectModal,
-	openDetailModal,
+	openApproveDetailModal,
 	closeModals,
-} from '../../../../../store/control-approve/reducer';
+} from '../../../../../store/control/reducer';
+import { statusOptions } from '../../../lib/helpers';
 
 import styles from '../styles/control-approve.module.scss';
 
@@ -33,10 +39,21 @@ export const ControlApprove: FC = () => {
 		approveUsers,
 		isOpenApproveModal,
 		isOpenRejectModal,
-		isOpenDetailModal,
+		isOpenApproveDetailModal,
 		isLoadingApprove,
-	} = useSelector((state) => state.controlApprove);
-	const { isLoadingCatalog } = useSelector((state) => state.catalog);
+	} = useSelector((state) => state.control);
+	const { departments, isLoadingCatalog } = useSelector(
+		(state) => state.catalog
+	);
+
+	const [currentStatus, setCurrentStatus] = useState<
+		'submitted' | 'approved' | 'rejected'
+	>('submitted');
+
+	const [currentDepartment, setCurrentDepartment] =
+		useState<IDepartment | null>(null);
+
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const handleOpenApproveModal = (user: IApproveUser) => {
 		dispatch(setCurrentApproveUser(user));
@@ -50,12 +67,36 @@ export const ControlApprove: FC = () => {
 
 	const handleOpenDetailModal = (user: IApproveUser) => {
 		dispatch(setCurrentApproveUser(user));
-		dispatch(openDetailModal());
+		dispatch(openApproveDetailModal());
 	};
 
 	const handleCloseModals = () => {
 		dispatch(closeModals());
 	};
+
+	const handleChangeStatus = (option: IStatusOption | null) => {
+		setCurrentStatus(option?.id ?? 'submitted');
+	};
+
+	const filteredUsers = useMemo(() => {
+		let result = approveUsers;
+
+		if (searchQuery.trim()) {
+			result = result.filter((user) =>
+				user.last_name.toLowerCase().includes(searchQuery.toLowerCase())
+			);
+		}
+
+		result = result.filter((user) => user.status === currentStatus);
+
+		if (currentDepartment) {
+			result = result.filter(
+				(user) => user.department?.id === currentDepartment.id
+			);
+		}
+
+		return result;
+	}, [approveUsers, searchQuery, currentStatus, currentDepartment]);
 
 	useEffect(() => {
 		let timeoutId: ReturnType<typeof setTimeout>;
@@ -102,8 +143,30 @@ export const ControlApprove: FC = () => {
 
 	return (
 		<div className={styles.container}>
+			<div className={styles.header}>
+				<SearchInput
+					placeholder='Поиск по фамилии...'
+					value={searchQuery}
+					onChange={setSearchQuery}
+				/>
+				<SelectWithSearch
+					placeholder='Поиск по подразделению..'
+					currentOption={currentDepartment}
+					options={departments}
+					onChooseOption={setCurrentDepartment}
+				/>
+				<Select
+					currentOption={
+						statusOptions.find((option) => option.id === currentStatus) ?? null
+					}
+					options={statusOptions}
+					onChooseOption={handleChangeStatus}
+					width='default'
+					withClear={false}
+				/>
+			</div>
 			<ul className={styles.list}>
-				{approveUsers.map((user: IApproveUser) => (
+				{filteredUsers.map((user: IApproveUser) => (
 					<li className={styles.item} key={user.id}>
 						<UserData user={user} />
 						{user.status === 'submitted' ? (
@@ -153,9 +216,9 @@ export const ControlApprove: FC = () => {
 					<RejectUserForm />
 				</Modal>
 			)}
-			{isOpenDetailModal && (
+			{isOpenApproveDetailModal && (
 				<Modal
-					isOpen={isOpenDetailModal}
+					isOpen={isOpenApproveDetailModal}
 					onClose={handleCloseModals}
 					title='Информация о заявке'>
 					<DetailUserModal />

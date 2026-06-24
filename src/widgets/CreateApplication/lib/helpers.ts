@@ -74,10 +74,10 @@ export const initialAppValues: ICreateAppForm = {
 	author_role: { id: 0, name: 'Выберите категорию автора..' },
 	author_division: '',
 
-	company_type: { id: 0, name: 'Выберите тип заказчика..' },
+	company_type: null,
 	company: '',
 	company_contacts: '',
-	project_level: { id: 0, name: 'Выберите уровень..' },
+	project_level: null,
 	target_institutes: [],
 
 	problem_holder: '',
@@ -91,7 +91,7 @@ export const initialAppValues: ICreateAppForm = {
 	experts: '',
 
 	title: '',
-	tags: { id: 0, name: 'Выберите направление..' },
+	tags: null,
 	additional_materials: '',
 	needs_consultation: false,
 	privacy_person: false,
@@ -373,35 +373,52 @@ export const shouldBlockSubmit = (
 	requiredFields: (keyof ICreateAppForm)[],
 	errors: { [K in keyof ICreateAppForm]?: string }
 ): boolean => {
-	// Есть ли ошибки
-	const hasErrors = Object.values(errors).some((err) => Boolean(err));
+	// 1. есть ли ошибки
+	if (Object.values(errors).some(Boolean)) {
+		return true;
+	}
 
-	if (hasErrors) return true;
-
-	// Проверка обязательных полей
+	// 2. проверка обязательных полей
 	for (const field of requiredFields) {
 		const value = values[field];
 
-		// Проверка массива институтов
-		if (Array.isArray(value) && value.length === 0) {
+		// null / undefined — всегда невалидно
+		if (value === null || value === undefined) {
 			return true;
 		}
 
-		// Объект (Select)
-		if (typeof value === 'object' && value !== null && 'id' in value) {
-			if (value.id === 0) return true;
+		// строки
+		if (typeof value === 'string') {
+			if (value.trim().length === 0) {
+				return true;
+			}
 			continue;
 		}
 
-		// Строки
-		if (typeof value === 'string' && value.trim() === '') {
-			return true;
-		}
-
-		// Чекбоксы
+		// boolean (обязательные чекбоксы)
 		if (typeof value === 'boolean') {
-			if (!value) return true;
+			if (!value) {
+				return true;
+			}
 			continue;
+		}
+
+		// массивы
+		if (Array.isArray(value)) {
+			if (value.length === 0) {
+				return true;
+			}
+			continue;
+		}
+
+		// объекты селектов (IProjectLevel, ITag, ICompanyType и т.д.)
+		if (typeof value === 'object') {
+			// безопасный каст только для id-based объектов
+			const maybeWithId = value as { id?: unknown };
+
+			if (typeof maybeWithId.id === 'number' && maybeWithId.id === 0) {
+				return true;
+			}
 		}
 	}
 

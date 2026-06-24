@@ -1,5 +1,7 @@
 import type {
 	IApproveUser,
+	IControlApp,
+	IControlUser,
 	IApproveUserRequest,
 	IRejectUserRequest,
 } from './types';
@@ -7,21 +9,33 @@ import type {
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
 	getApproveUsers,
+	getControlApps,
+	getControlUsers,
 	approveUser,
 	rejectUser,
 } from '../../shared/api/control';
 
 export const getApproveUsersAction = createAsyncThunk<IApproveUser[]>(
-	'controlApprove/getApproveUsers',
+	'control/getApproveUsers',
 	getApproveUsers
 );
 
 export const approveUserAction = createAsyncThunk<
 	IApproveUser,
 	IApproveUserRequest
->('controlApprove/approveUser', approveUser);
+>('control/approveUser', approveUser);
 
 export const rejectUserAction = createAsyncThunk<
 	IApproveUser,
 	IRejectUserRequest
->('controlApprove/rejectUser', rejectUser);
+>('control/rejectUser', rejectUser);
+
+export const getControlAppsAction = createAsyncThunk<IControlApp[], number>(
+	'control/getControlApps',
+	getControlApps
+);
+
+export const getControlUsersAction = createAsyncThunk<IControlUser[]>(
+	'control/getControlUsers',
+	getControlUsers
+);

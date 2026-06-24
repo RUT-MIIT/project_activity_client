@@ -8,7 +8,7 @@ import { UserData } from './user-data';
 import styles from '../styles/control-approve.module.scss';
 
 export const DetailUserModal: FC = () => {
-	const { currentApproveUser } = useSelector((state) => state.controlApprove);
+	const { currentApproveUser } = useSelector((state) => state.control);
 
 	if (!currentApproveUser) {
 		return <p>Пользователь не найден!</p>;

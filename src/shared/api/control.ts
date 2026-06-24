@@ -1,7 +1,7 @@
 import type {
 	IApproveUserRequest,
 	IRejectUserRequest,
-} from '../../store/control-approve/types';
+} from '../../store/control/types';
 
 import { request } from './utils';
 
@@ -41,5 +41,27 @@ export const rejectUser = (data: IRejectUserRequest) => {
 			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
 		body: JSON.stringify({ reason: data.reason }),
+	});
+};
+
+export const getControlApps = (semesterId: number) => {
+	return request(`/showcase/projects/?semester_id=${semesterId}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const getControlUsers = () => {
+	return request('/accounts/users/', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
 	});
 };

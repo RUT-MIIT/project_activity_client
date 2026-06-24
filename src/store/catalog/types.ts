@@ -1,5 +1,8 @@
 export interface ICatalogStore {
 	institutes: IInstitute[];
+	directions: IDirection[];
+	courses: ICourse[];
+	groups: IGroup[];
 	departments: IDepartment[];
 	roles: IRole[];
 	tags: ITag[];
@@ -9,6 +12,24 @@ export interface ICatalogStore {
 
 export interface IInstitute {
 	code: string;
+	name: string;
+}
+
+export interface IDirection {
+	code: string;
+	name: string;
+	level: string;
+}
+
+export interface ICourse {
+	id: number;
+	name: string;
+}
+
+export interface IGroup {
+	id: number;
+	course_number: number;
+	direction_code: string;
 	name: string;
 }
 

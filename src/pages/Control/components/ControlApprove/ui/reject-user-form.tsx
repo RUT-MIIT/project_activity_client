@@ -12,14 +12,14 @@ import {
 import { Button } from '../../../../../shared/components/Button/ui/button';
 import { UserData } from './user-data';
 
-import { rejectUserAction } from '../../../../../store/control-approve/actions';
+import { rejectUserAction } from '../../../../../store/control/actions';
 
 import styles from '../styles/control-approve.module.scss';
 
 export const RejectUserForm: FC = () => {
 	const dispatch = useDispatch();
 	const { currentApproveUser, isLoadingRequest } = useSelector(
-		(state) => state.controlApprove
+		(state) => state.control
 	);
 
 	const [reason, setReason] = useState('');

@@ -51,7 +51,7 @@ export const Registration: FC = () => {
 
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
 
-	const handleChangeDepartment = (selected: IDepartment) => {
+	const handleChangeDepartment = (selected: IDepartment | null) => {
 		setDepartment(selected);
 	};
 

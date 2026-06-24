@@ -1,8 +1,17 @@
-import type { IInstitute, IDepartment, IRole, ITag } from './types';
+import type {
+	IInstitute,
+	IDirection,
+	IGroup,
+	IDepartment,
+	IRole,
+	ITag,
+} from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
 	getInstitutesCatalog,
+	getDirectionsCatalog,
+	getGroupsCatalog,
 	getDepartmentsCatalog,
 	getRolesCatalog,
 	getTagsCatalog,
@@ -12,6 +21,16 @@ import {
 export const getInstitutesAction = createAsyncThunk<IInstitute[]>(
 	'catalog/getInstitutes',
 	getInstitutesCatalog
+);
+
+export const getDirectionsAction = createAsyncThunk<IDirection[]>(
+	'catalog/getDirections',
+	getDirectionsCatalog
+);
+
+export const getGroupsAction = createAsyncThunk<IGroup[]>(
+	'catalog/getGroups',
+	getGroupsCatalog
 );
 
 export const getDepartmentsAction = createAsyncThunk<IDepartment[]>(

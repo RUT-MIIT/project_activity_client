@@ -2,10 +2,15 @@ import type { ICatalogStore } from './types';
 
 import { createSlice } from '@reduxjs/toolkit';
 
+import { courses } from './lib';
+
 import * as actions from './actions';
 
 const initialState: ICatalogStore = {
 	institutes: [],
+	directions: [],
+	courses: courses,
+	groups: [],
 	departments: [],
 	roles: [],
 	tags: [],
@@ -40,6 +45,30 @@ export const catalogSlice = createSlice({
 				state.departments = action.payload;
 			})
 			.addCase(actions.getDepartmentsAction.rejected, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.error = action.error?.message || 'Не удалось загрузить каталог';
+			})
+			.addCase(actions.getDirectionsAction.pending, (state) => {
+				state.isLoadingCatalog = true;
+				state.error = null;
+			})
+			.addCase(actions.getDirectionsAction.fulfilled, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.directions = action.payload;
+			})
+			.addCase(actions.getDirectionsAction.rejected, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.error = action.error?.message || 'Не удалось загрузить каталог';
+			})
+			.addCase(actions.getGroupsAction.pending, (state) => {
+				state.isLoadingCatalog = true;
+				state.error = null;
+			})
+			.addCase(actions.getGroupsAction.fulfilled, (state, action) => {
+				state.isLoadingCatalog = false;
+				state.groups = action.payload;
+			})
+			.addCase(actions.getGroupsAction.rejected, (state, action) => {
 				state.isLoadingCatalog = false;
 				state.error = action.error?.message || 'Не удалось загрузить каталог';
 			})

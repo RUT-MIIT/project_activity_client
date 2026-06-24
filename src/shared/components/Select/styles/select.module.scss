@@ -24,7 +24,9 @@
 	}
 
 	&_width_full {
-		width: 100%;
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
 	}
 
   &:hover {
@@ -48,7 +50,7 @@
 }
 
 .title {
-  margin: 0 22px 0 0;
+  margin: 0 12px 0 0;
   font-size: 14px;
   line-height: 18px;
   color: var(--main-black-color);
@@ -188,4 +190,38 @@
 	&::placeholder {
 		color: var(--main-grey-color);
 	}
+}
+
+.controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.clear {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+
+	font-size: 16px;
+	line-height: 1;
+
+	color: var(--main-grey-color);
+
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	&:hover {
+		color: var(--accent-grey-color);
+	}
+}
+
+.select:hover .clear {
+	opacity: 1;
 }

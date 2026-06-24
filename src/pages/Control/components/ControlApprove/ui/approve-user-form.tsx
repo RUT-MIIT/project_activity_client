@@ -14,14 +14,14 @@ import { Select } from '../../../../../shared/components/Select/ui/select';
 import { SelectWithSearch } from '../../../../../shared/components/Select/ui/select-with-search';
 import { UserData } from './user-data';
 
-import { approveUserAction } from '../../../../../store/control-approve/actions';
+import { approveUserAction } from '../../../../../store/control/actions';
 
 import styles from '../styles/control-approve.module.scss';
 
 export const ApproveUserForm: FC = () => {
 	const dispatch = useDispatch();
 	const { currentApproveUser, isLoadingRequest } = useSelector(
-		(state) => state.controlApprove
+		(state) => state.control
 	);
 	const { departments, roles } = useSelector((state) => state.catalog);
 	const [department, setDepartment] = useState<IDepartment | null>(
@@ -29,11 +29,11 @@ export const ApproveUserForm: FC = () => {
 	);
 	const [role, setRole] = useState<IRole | null>(null);
 
-	const handleChangeDepartment = (selected: IDepartment) => {
+	const handleChangeDepartment = (selected: IDepartment | null) => {
 		setDepartment(selected);
 	};
 
-	const handleChangeRole = (selected: IRole) => {
+	const handleChangeRole = (selected: IRole | null) => {
 		setRole(selected);
 	};
 

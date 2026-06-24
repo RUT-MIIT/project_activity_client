@@ -1,16 +1,23 @@
+import type {
+	IProjectLevel,
+	ICompanyType,
+	IAuthorCategory,
+} from '../../../shared/lib/lib';
+import type { ITag } from '../../../store/catalog/types';
+
 export interface ICreateAppForm {
 	author_lastname: string;
 	author_firstname: string;
 	author_middlename: string;
 	author_email: string;
 	author_phone: string;
-	author_role: { id: number; name: string };
+	author_role: IAuthorCategory;
 	author_division: string;
 
-	company_type: { id: number; name: string };
+	company_type: ICompanyType | null;
 	company: string;
 	company_contacts: string;
-	project_level: { id: number; name: string };
+	project_level: IProjectLevel | null;
 	target_institutes: { code: string; name: string }[];
 
 	problem_holder: string;
@@ -23,7 +30,7 @@ export interface ICreateAppForm {
 	stakeholders: string;
 	experts: string;
 
-	tags: { id: number; name: string };
+	tags: ITag | null;
 	title: string;
 	additional_materials: string;
 	needs_consultation: boolean;

@@ -88,12 +88,9 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		if (!isBlockSubmit && user && applicationDetail) {
 			const appData = {
 				...values,
-				project_level:
-					typeof values.project_level === 'object'
-						? values.project_level.name
-						: values.project_level,
+				project_level: values.project_level?.name ?? '',
 				target_institutes: values.target_institutes.map((elem) => elem.code),
-				tags: [values.tags.id],
+				tags: values.tags ? [values.tags.id] : [],
 			};
 
 			try {
@@ -264,11 +261,11 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		handleSelectChange('target_institutes', selected);
 	};
 
-	const handleChangeLevel = (selected: IProjectLevel) => {
+	const handleChangeLevel = (selected: IProjectLevel | null) => {
 		handleSelectChange('project_level', selected);
 	};
 
-	const handleChangeTags = (selected: ITag) => {
+	const handleChangeTags = (selected: ITag | null) => {
 		handleSelectChange('tags', selected);
 	};
 
@@ -603,6 +600,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 											getCommentCount={getCommentCount}
 											onSelectField={handleSelectField}>
 											<SelectWithSearch
+												placeholder='Выберите направление..'
 												options={tags}
 												currentOption={values.tags}
 												onChooseOption={handleChangeTags}

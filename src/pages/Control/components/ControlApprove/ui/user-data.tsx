@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { IUserDataProps } from '../types/types';
-import type { IApproveUser } from '../../../../../store/control-approve/types';
+import type { IApproveUser } from '../../../../../store/control/types';
 
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 

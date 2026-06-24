@@ -5,7 +5,8 @@ import { applicationSlice } from './application/reducer';
 import { coordinationSlice } from './coordination/reducer';
 import { structureSlice } from './structure/reducer';
 import { historySlice } from './history/reducer';
-import { controlApproveSlice } from './control-approve/reducer';
+import { trackSlice } from './track/reducer';
+import { controlSlice } from './control/reducer';
 
 export const rootReducer = combineSlices(
 	userSlice,
@@ -14,5 +15,6 @@ export const rootReducer = combineSlices(
 	coordinationSlice,
 	structureSlice,
 	historySlice,
-	controlApproveSlice
+	trackSlice,
+	controlSlice
 );

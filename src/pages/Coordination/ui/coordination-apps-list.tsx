@@ -25,13 +25,11 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 	const navigate = useNavigate();
 
 	const [searchQuery, setSearchQuery] = useState('');
-	const [currentSortOption, setCurrentSortOption] = useState<ISortOption>(
-		sortOptions[0]
+	const [currentSortOption, setCurrentSortOption] =
+		useState<ISortOption | null>(sortOptions[0]);
+	const [currentCompany, setCurrentCompany] = useState<ISortOption | null>(
+		null
 	);
-	const [currentCompany, setCurrentCompany] = useState<ISortOption>({
-		id: 0,
-		name: 'Все компании',
-	});
 	const [filteredApps, setFilteredApps] = useState(apps);
 	const [activeView, setActiveView] = useState<string>(() => {
 		const view = localStorage.getItem('coordinationView');
@@ -39,10 +37,6 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 	});
 
 	const companyOptions = useMemo<ISortOption[]>(() => {
-		setCurrentCompany({
-			id: 0,
-			name: 'Все компании',
-		});
 		const map = new Map<string, ISortOption>();
 		let counter = 1;
 
@@ -52,7 +46,7 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 			}
 		});
 
-		return [{ id: 0, name: 'Все компании' }, ...Array.from(map.values())];
+		return [...Array.from(map.values())];
 	}, [apps]);
 
 	const showHistoryApp = (id: number) => {
@@ -89,6 +83,9 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 	};
 
 	const sortedApps = useMemo(() => {
+		if (!currentSortOption) {
+			return filteredApps;
+		}
 		return sortApps(filteredApps, currentSortOption);
 	}, [filteredApps, currentSortOption]);
 
@@ -96,7 +93,7 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 		let result = apps;
 
 		// фильтр компании
-		if (currentCompany.id !== 0) {
+		if (currentCompany) {
 			const selected = companyOptions.find(
 				(opt) => opt.id === currentCompany.id
 			);
@@ -129,16 +126,19 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 					onFilter={setSearchQuery}
 				/>
 				<SelectWithSearch
+					placeholder='Выберите компанию..'
 					currentOption={currentCompany}
 					options={companyOptions}
 					onChooseOption={(opt) => setCurrentCompany(opt)}
 					width='medium'
 				/>
 				<Select
+					placeholder='Выберите компанию..'
 					currentOption={currentSortOption}
 					options={sortOptions}
 					onChooseOption={setCurrentSortOption}
 					width='default'
+					withClear={false}
 				/>
 
 				<ViewSwitcher

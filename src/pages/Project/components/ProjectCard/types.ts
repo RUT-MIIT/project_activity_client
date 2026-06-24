@@ -1,4 +1,4 @@
-import { IProject } from '../../../Track/lib/lib';
+import { IProject } from '../../../../store/track/types';
 
 export interface IProjectCardProps {
 	card: IProject;

@@ -68,6 +68,7 @@ export const CreateMainApplication: FC = () => {
 			const appMainData = {
 				author: user.id,
 				...values,
+
 				author_firstname: user.first_name,
 				author_middlename: user.middle_name,
 				author_lastname: user.last_name,
@@ -75,13 +76,14 @@ export const CreateMainApplication: FC = () => {
 				author_email: user.email,
 				author_role: user.role,
 				author_division: user.department.name,
-				is_internal_customer: values.company_type.id === 1 ? true : false,
-				project_level:
-					typeof values.project_level === 'object'
-						? values.project_level.name
-						: values.project_level,
+
+				is_internal_customer: values.company_type?.id === 1,
+
+				project_level: values.project_level?.name ?? '',
+
 				target_institutes: values.target_institutes.map((elem) => elem.code),
-				tags: [values.tags.id],
+
+				tags: values.tags ? [values.tags.id] : [],
 			};
 
 			try {
@@ -109,11 +111,14 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('target_institutes', selected);
 	};
 
-	const handleChangeLevel = (selected: IProjectLevel) => {
+	const handleChangeLevel = (selected: IProjectLevel | null) => {
 		handleSelectChange('project_level', selected);
 	};
 
-	const handleChangeCompanyType = (selected: ICompanyType) => {
+	const handleChangeCompanyType = (selected: ICompanyType | null) => {
+		if (!selected) {
+			return;
+		}
 		handleSelectChange('company_type', selected);
 		if (selected.id === 1) {
 			handleSelectChange('company', 'РУТ (МИИТ)');
@@ -122,7 +127,7 @@ export const CreateMainApplication: FC = () => {
 		}
 	};
 
-	const handleChangeTags = (selected: ITag) => {
+	const handleChangeTags = (selected: ITag | null) => {
 		handleSelectChange('tags', selected);
 	};
 
@@ -157,9 +162,11 @@ export const CreateMainApplication: FC = () => {
 						withInfo
 						infoText={formFieldMainData.company_type.info}>
 						<Select
+							placeholder='Выберите тип заказчика..'
 							options={companyTypes}
 							currentOption={values.company_type}
 							onChooseOption={handleChangeCompanyType}
+							withClear={false}
 						/>
 					</FormField>
 					<FormField
@@ -175,7 +182,7 @@ export const CreateMainApplication: FC = () => {
 							value={values.company}
 							onChange={handleChange}
 							placeholder={formFieldMainData.company.placeholder}
-							disabled={values.company_type.id === 1}
+							disabled={values.company_type?.id === 1}
 						/>
 					</FormField>
 					<FormField
@@ -198,9 +205,11 @@ export const CreateMainApplication: FC = () => {
 						withInfo
 						infoText={formFieldMainData.project_level.info}>
 						<Select
+							placeholder='Выберите уровень..'
 							options={projectLevels}
 							currentOption={values.project_level}
 							onChooseOption={handleChangeLevel}
+							withClear={false}
 						/>
 					</FormField>
 					<FormField
@@ -364,6 +373,7 @@ export const CreateMainApplication: FC = () => {
 						withInfo
 						infoText={formFieldMainData.tags.info}>
 						<SelectWithSearch
+							placeholder='Выберите направление..'
 							options={tags}
 							currentOption={values.tags}
 							onChooseOption={handleChangeTags}
@@ -416,7 +426,8 @@ export const CreateMainApplication: FC = () => {
 		{ title: 'Контактные данные заказчика*', value: values.company_contacts },
 		{
 			title: 'Уровень проекта*',
-			value: values.project_level.id === 0 ? '' : values.project_level.name,
+			value:
+				values.project_level?.id === 0 ? '' : values.project_level?.name ?? '',
 		},
 		{
 			title: 'Институт / академия',
@@ -438,7 +449,7 @@ export const CreateMainApplication: FC = () => {
 		{ title: 'Эксперты', value: values.experts },
 		{
 			title: 'Направление проекта',
-			value: values.tags.id === 0 ? '' : values.tags.name,
+			value: values.tags?.id === 0 ? '' : values.tags?.name ?? '',
 		},
 		{ title: 'Наименование проекта*', value: values.title },
 	];
