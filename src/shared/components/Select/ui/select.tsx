@@ -43,9 +43,9 @@ export const Select = <T,>({
 	return (
 		<div
 			ref={selectRef}
-			className={`${styles.select} ${
-				width === 'default' ? styles.select_width_default : ''
-			} ${isOpenSelectOptions ? styles.select_open : ''}`}
+			className={`${styles.select} ${styles[`select_width_${width}`]} ${
+				isOpenSelectOptions ? styles.select_open : ''
+			}`}
 			onClick={openSelectOptions}>
 			<div className={styles.main}>
 				<p

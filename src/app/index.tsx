@@ -100,7 +100,16 @@ export const App = () => {
 						/>
 						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
-						<Route path={`/${EMAINROUTES.CONTROL}/*`} element={<Control />} />
+						<Route
+							path={`/${EMAINROUTES.CONTROL}/*`}
+							element={
+								user?.role === 'admin' || user?.role === 'cpds' ? (
+									<Control />
+								) : (
+									<Navigate to='/home' replace />
+								)
+							}
+						/>
 					</Route>
 
 					{/* ---------- 404 ---------- */}

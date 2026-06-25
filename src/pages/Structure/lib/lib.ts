@@ -6,6 +6,10 @@ export const tabs: ITab[] = [
 		path: '/structure/tabs/norm',
 	},
 	{
+		label: 'Пользователи',
+		path: '/structure/tabs/users',
+	},
+	{
 		label: '#Хештеги',
 		path: '/structure/tabs/hashtag',
 	},

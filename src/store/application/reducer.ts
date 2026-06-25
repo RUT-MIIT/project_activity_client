@@ -24,10 +24,6 @@ export const applicationSlice = createSlice({
 
 			const app = state.applications.find((a) => a.id === appId);
 
-			console.log(state.applications);
-			console.log(appId);
-			console.log(app);
-
 			if (app && app.has_unseen_changes) {
 				app.has_unseen_changes = false;
 				state.unseenChangesCount -= 1;
@@ -44,10 +40,7 @@ export const applicationSlice = createSlice({
 				state.isLoading = false;
 				state.applications = action.payload;
 
-				state.unseenChangesCount = countUnseenChanges([
-					...action.payload,
-					...state.externalApplications,
-				]);
+				state.unseenChangesCount = countUnseenChanges([...action.payload]);
 			})
 			.addCase(actions.getAppsAction.rejected, (state, action) => {
 				state.isLoading = false;

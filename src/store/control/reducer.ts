@@ -1,4 +1,4 @@
-import type { IControlStore, IApproveUser } from './types';
+import type { IControlStore, IApproveUser, IControlUser } from './types';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -13,6 +13,7 @@ const initialState: IControlStore = {
 	isOpenApproveModal: false,
 	isOpenRejectModal: false,
 	isOpenApproveDetailModal: false,
+	isOpenEditModal: false,
 	isLoadingApprove: false,
 	isLoadingRequest: false,
 	isLoadingApps: false,
@@ -30,6 +31,12 @@ export const controlSlice = createSlice({
 		clearCurrentApproveUser(state) {
 			state.currentApproveUser = null;
 		},
+		setCurrentUser(state, action: PayloadAction<IControlUser>) {
+			state.currentUser = action.payload;
+		},
+		clearCurrentUser(state) {
+			state.currentUser = null;
+		},
 		openApproveModal(state) {
 			state.isOpenApproveModal = true;
 		},
@@ -39,10 +46,14 @@ export const controlSlice = createSlice({
 		openApproveDetailModal(state) {
 			state.isOpenApproveDetailModal = true;
 		},
+		openEditModal(state) {
+			state.isOpenEditModal = true;
+		},
 		closeModals(state) {
 			state.isOpenApproveModal = false;
 			state.isOpenRejectModal = false;
 			state.isOpenApproveDetailModal = false;
+			state.isOpenEditModal = false;
 		},
 	},
 	extraReducers: (builder) => {
@@ -101,7 +112,7 @@ export const controlSlice = createSlice({
 			.addCase(actions.approveUserAction.rejected, (state, action) => {
 				state.isLoadingRequest = false;
 				state.error =
-					action.error?.message || 'Не удалось загрузить пользователей';
+					action.error?.message || 'Не удалось подтвердить пользователя';
 			})
 			.addCase(actions.rejectUserAction.pending, (state) => {
 				state.isLoadingRequest = true;
@@ -119,7 +130,25 @@ export const controlSlice = createSlice({
 			.addCase(actions.rejectUserAction.rejected, (state, action) => {
 				state.isLoadingRequest = false;
 				state.error =
-					action.error?.message || 'Не удалось загрузить пользователей';
+					action.error?.message || 'Не удалось отклонить пользователя';
+			})
+			.addCase(actions.editUserAction.pending, (state) => {
+				state.isLoadingRequest = true;
+				state.error = null;
+			})
+			.addCase(actions.editUserAction.fulfilled, (state, action) => {
+				const updatedUser = action.payload;
+				state.users = state.users.map((user) =>
+					user.id === updatedUser.id ? updatedUser : user
+				);
+				state.isLoadingRequest = false;
+				state.currentUser = null;
+				state.isOpenEditModal = false;
+			})
+			.addCase(actions.editUserAction.rejected, (state, action) => {
+				state.isLoadingRequest = false;
+				state.error =
+					action.error?.message || 'Не удалось отредактировать данные';
 			});
 	},
 });
@@ -127,8 +156,11 @@ export const controlSlice = createSlice({
 export const {
 	setCurrentApproveUser,
 	clearCurrentApproveUser,
+	setCurrentUser,
+	clearCurrentUser,
 	openApproveModal,
 	openRejectModal,
 	openApproveDetailModal,
+	openEditModal,
 	closeModals,
 } = controlSlice.actions;

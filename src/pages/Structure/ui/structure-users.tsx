@@ -1,69 +1,45 @@
 import type { FC } from 'react';
-import type { IControlUser } from '../../../../../store/control/types';
-import type { TRoleOptions } from '../lib/lib';
+import type { IControlUser } from '../../../store/control/types';
+import type { TRoleOptions } from '../../Control/components/ControlUsers/lib/lib';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from '../../../../../store/store';
+import { useDispatch, useSelector } from '../../../store/store';
 
-import { Preloader } from '../../../../../shared/components/Preloader/ui/preloader';
-import { Select } from '../../../../../shared/components/Select/ui/select';
-import { SearchInput } from '../../../../../shared/components/Search/ui/search-input';
-import { Modal } from '../../../../../shared/components/Modal/ui/modal';
+import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
+import { Select } from '../../../shared/components/Select/ui/select';
+import { SearchInput } from '../../../shared/components/Search/ui/search-input';
 import {
 	Table,
 	TableHeader,
 	TableColumn,
 	TableRow,
 	TableMain,
-} from '../../../../../shared/components/Table/ui';
-import { Badge } from '../../../../../shared/components/Badge/ui/badge';
-import { EditUserForm } from './edit-user-form';
+} from '../../../shared/components/Table/ui';
+import { Badge } from '../../../shared/components/Badge/ui/badge';
 
-import { getControlUsersAction } from '../../../../../store/control/actions';
+import { getControlUsersAction } from '../../../store/control/actions';
 import {
-	getDepartmentsAction,
-	getRolesAction,
-} from '../../../../../store/catalog/actions';
-import {
-	setCurrentUser,
-	openEditModal,
-	closeModals,
-} from '../../../../../store/control/reducer';
-import { getRoleColor, getRoleText, roleOptions } from '../lib/lib';
+	getRoleColor,
+	getRoleText,
+	roleOptions,
+} from '../../Control/components/ControlUsers/lib/lib';
 
-import styles from '../styles/control-users.module.scss';
+import styles from '../styles/structure-users.module.scss';
 
-export const ControlUsers: FC = () => {
+export const StructureUsers: FC = () => {
 	const dispatch = useDispatch();
 
-	const { users, currentUser, isLoadingUsers, isOpenEditModal } = useSelector(
-		(state) => state.control
-	);
+	const { users, isLoadingUsers } = useSelector((state) => state.control);
 
 	const [searchQuery, setSearchQuery] = useState('');
 	const [roleOption, setRoleOption] = useState<TRoleOptions | null>(null);
 
 	useEffect(() => {
 		dispatch(getControlUsersAction());
-		dispatch(getDepartmentsAction());
-		dispatch(getRolesAction());
 	}, [dispatch]);
 
 	const handleChangeRole = (option: TRoleOptions | null) => {
 		setRoleOption(option);
-	};
-
-	const handleOpenEditModal = (id: number) => {
-		const user = users.find((elem) => elem.id === id);
-		console.log(user);
-		if (user) {
-			dispatch(setCurrentUser(user));
-			dispatch(openEditModal());
-		}
-	};
-
-	const handleCloseModals = () => {
-		dispatch(closeModals());
 	};
 
 	const filteredUsers = useMemo(() => {
@@ -130,7 +106,6 @@ export const ControlUsers: FC = () => {
 									textWeight='bold'
 									active
 									id={user.id}
-									onClick={handleOpenEditModal}
 								/>
 								<TableColumn columnSize='full' withChildren>
 									<Badge
@@ -150,15 +125,6 @@ export const ControlUsers: FC = () => {
 						))}
 					</TableMain>
 				</Table>
-				{isOpenEditModal && (
-					<Modal
-						isOpen={isOpenEditModal}
-						onClose={handleCloseModals}
-						title='Изменение данных'
-						description={`Пользователь - ${currentUser?.full_name}`}>
-						<EditUserForm />
-					</Modal>
-				)}
 			</div>
 		</>
 	);

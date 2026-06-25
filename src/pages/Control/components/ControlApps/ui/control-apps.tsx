@@ -17,6 +17,7 @@ import {
 	TableMain,
 } from '../../../../../shared/components/Table/ui';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
+import { ProjectDetailModal } from '../../../../Project/components/ProjectDetailModal/project-detail-modal';
 
 import { getControlAppsAction } from '../../../../../store/control/actions';
 import {
@@ -40,6 +41,10 @@ export const ControlApps: FC = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [semesterOption, setSemesterOption] = useState<ISemester | null>(null);
 	const [statusOption, setStatusOption] = useState<TStatusFilter | null>(null);
+	const [currentProjectId, setCurrentProjectId] = useState<number | null>(null);
+
+	const [isShowProjectDetail, setIsShowProjectDetail] =
+		useState<boolean>(false);
 
 	const handleChangeStatus = (option: ISemester | null) => {
 		setSemesterOption(option);
@@ -47,6 +52,16 @@ export const ControlApps: FC = () => {
 
 	const handleChangeStatusFilter = (option: TStatusFilter | null) => {
 		setStatusOption(option);
+	};
+
+	const handleShowDetail = (id: number) => {
+		setCurrentProjectId(id);
+		setIsShowProjectDetail(true);
+	};
+
+	const handleCloseDetail = () => {
+		setCurrentProjectId(null);
+		setIsShowProjectDetail(false);
 	};
 
 	const filteredApps = useMemo(() => {
@@ -142,6 +157,7 @@ export const ControlApps: FC = () => {
 									columnSize='full'
 									textWeight='bold'
 									active
+									onClick={handleShowDetail}
 								/>
 								<TableColumn
 									text={elem.main_department?.name || '-'}
@@ -158,6 +174,13 @@ export const ControlApps: FC = () => {
 						))}
 					</TableMain>
 				</Table>
+				{isShowProjectDetail && (
+					<ProjectDetailModal
+						id={currentProjectId}
+						isOpen={isShowProjectDetail}
+						onClose={handleCloseDetail}
+					/>
+				)}
 			</div>
 		</>
 	);

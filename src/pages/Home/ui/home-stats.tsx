@@ -10,7 +10,7 @@ import styles from '../styles/home-stats.module.scss';
 
 export const HomeStats: FC = () => {
 	const { myDivisionStats } = useSelector((state) => state.structure);
-	const { total, approved, active, returned } = useSelector(
+	const { total, approved, active, returned, rejected } = useSelector(
 		selectApplicationsSummary
 	);
 
@@ -30,15 +30,15 @@ export const HomeStats: FC = () => {
 			color: 'green',
 		},
 		{
-			title: 'На согласовании',
-			text: 'Ожидают одобрения и согласования',
-			count: active,
+			title: 'В работе',
+			text: 'Ожидают одобрения или доработки',
+			count: active + returned,
 			color: 'yellow',
 		},
 		{
-			title: 'На доработке',
-			text: 'Возвращены авторам для исправлений',
-			count: returned,
+			title: 'Отклонено',
+			text: 'Не прошли согласование',
+			count: rejected,
 			color: 'red',
 		},
 	];

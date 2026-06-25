@@ -3,6 +3,7 @@ import type { IDepartment, IRole } from '../../../../../store/catalog/types';
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
+import { useToast } from '../../../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { Form } from '../../../../../shared/components/Form/ui/form';
 import {
@@ -15,11 +16,13 @@ import { SelectWithSearch } from '../../../../../shared/components/Select/ui/sel
 import { UserData } from './user-data';
 
 import { approveUserAction } from '../../../../../store/control/actions';
+import { getErrorMessage } from '../../../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/control-approve.module.scss';
 
 export const ApproveUserForm: FC = () => {
 	const dispatch = useDispatch();
+	const { showToast } = useToast();
 	const { currentApproveUser, isLoadingRequest } = useSelector(
 		(state) => state.control
 	);
@@ -39,21 +42,35 @@ export const ApproveUserForm: FC = () => {
 
 	const isBlockSubmit = !department || !role;
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (isBlockSubmit) {
+		if (isBlockSubmit || !currentApproveUser) {
 			return;
 		}
 
-		if (currentApproveUser) {
-			const payload = {
-				userId: currentApproveUser.id,
-				role_id: role.code,
-				department_id: department.id,
-			};
+		const payload = {
+			userId: currentApproveUser.id,
+			role_id: role.code,
+			department_id: department.id,
+		};
 
-			dispatch(approveUserAction(payload));
+		try {
+			await dispatch(approveUserAction(payload)).unwrap();
+
+			showToast({
+				title: 'Пользователь успешно одобрен!',
+				text: 'Пользователь получил доступ к системе.',
+				type: 'success',
+			});
+		} catch (err) {
+			console.error(err);
+
+			showToast({
+				title: 'Не удалось одобрить пользователя',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
 		}
 	};
 

@@ -1,6 +1,7 @@
 import type {
 	IApproveUserRequest,
 	IRejectUserRequest,
+	IEditUserRequest,
 } from '../../store/control/types';
 
 import { request } from './utils';
@@ -63,5 +64,22 @@ export const getControlUsers = () => {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
+	});
+};
+
+export const editUser = (data: IEditUserRequest) => {
+	return request(`/accounts/users/${data.userId}/`, {
+		method: 'PATCH',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+		body: JSON.stringify({
+			role: data.role,
+			department_id: data.department_id,
+			email: data.email,
+			phone: data.phone,
+		}),
 	});
 };

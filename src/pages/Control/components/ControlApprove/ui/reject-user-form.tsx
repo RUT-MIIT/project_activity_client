@@ -2,6 +2,7 @@ import type { FC, FormEvent, ChangeEvent } from 'react';
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
+import { useToast } from '../../../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { Form } from '../../../../../shared/components/Form/ui/form';
 import {
@@ -13,11 +14,13 @@ import { Button } from '../../../../../shared/components/Button/ui/button';
 import { UserData } from './user-data';
 
 import { rejectUserAction } from '../../../../../store/control/actions';
+import { getErrorMessage } from '../../../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/control-approve.module.scss';
 
 export const RejectUserForm: FC = () => {
 	const dispatch = useDispatch();
+	const { showToast } = useToast();
 	const { currentApproveUser, isLoadingRequest } = useSelector(
 		(state) => state.control
 	);
@@ -34,7 +37,7 @@ export const RejectUserForm: FC = () => {
 
 	const isBlockSubmit = !reason.trim();
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (isBlockSubmit) {
@@ -42,13 +45,31 @@ export const RejectUserForm: FC = () => {
 			return;
 		}
 
-		if (currentApproveUser) {
-			const payload = {
-				userId: currentApproveUser.id,
-				reason,
-			};
+		if (!currentApproveUser) {
+			return;
+		}
 
-			dispatch(rejectUserAction(payload));
+		try {
+			await dispatch(
+				rejectUserAction({
+					userId: currentApproveUser.id,
+					reason,
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Пользователь отклонён',
+				text: 'Пользователь получил уведомление об отказе.',
+				type: 'success',
+			});
+		} catch (err) {
+			console.error(err);
+
+			showToast({
+				title: 'Не удалось отклонить пользователя',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
 		}
 	};
 

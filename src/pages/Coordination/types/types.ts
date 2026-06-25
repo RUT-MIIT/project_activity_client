@@ -19,3 +19,8 @@ export interface ICoordinationAppsTableProps {
 	onShowDetail: (id: number) => void;
 	onShowHistory: (id: number) => void;
 }
+
+export interface IStatusOption {
+	id: string;
+	name: string;
+}

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { IApplicationItem } from '../../../store/application/types';
-import type { ICoordinationAppsListProps } from '../types/types';
+import type { ICoordinationAppsListProps, IStatusOption } from '../types/types';
 
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
@@ -28,6 +28,9 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 	const [currentSortOption, setCurrentSortOption] =
 		useState<ISortOption | null>(sortOptions[0]);
 	const [currentCompany, setCurrentCompany] = useState<ISortOption | null>(
+		null
+	);
+	const [currentStatus, setCurrentStatus] = useState<IStatusOption | null>(
 		null
 	);
 	const [filteredApps, setFilteredApps] = useState(apps);
@@ -89,6 +92,21 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 		return sortApps(filteredApps, currentSortOption);
 	}, [filteredApps, currentSortOption]);
 
+	const statusOptions = useMemo<IStatusOption[]>(() => {
+		const map = new Map<string, IStatusOption>();
+
+		apps.forEach((app) => {
+			if (!map.has(app.status.code)) {
+				map.set(app.status.code, {
+					id: app.status.code,
+					name: app.status.name,
+				});
+			}
+		});
+
+		return Array.from(map.values());
+	}, [apps]);
+
 	useEffect(() => {
 		let result = apps;
 
@@ -109,8 +127,12 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 			);
 		}
 
+		if (currentStatus) {
+			result = result.filter((app) => app.status.code === currentStatus.id);
+		}
+
 		setFilteredApps(result);
-	}, [apps, currentCompany, searchQuery, companyOptions]);
+	}, [apps, currentCompany, searchQuery, companyOptions, currentStatus]);
 
 	if (apps.length < 1) {
 		return <Text text='Заявки не найдены.' color='grey' withMarginTop />;
@@ -133,14 +155,19 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 					width='medium'
 				/>
 				<Select
-					placeholder='Выберите компанию..'
+					placeholder='Выберите статус..'
+					currentOption={currentStatus}
+					options={statusOptions}
+					onChooseOption={setCurrentStatus}
+					width='medium'
+				/>
+				<Select
 					currentOption={currentSortOption}
 					options={sortOptions}
 					onChooseOption={setCurrentSortOption}
-					width='default'
+					width='small'
 					withClear={false}
 				/>
-
 				<ViewSwitcher
 					defaultView={activeView}
 					storageKey='coordinationView'

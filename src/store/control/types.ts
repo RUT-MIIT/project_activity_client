@@ -9,6 +9,7 @@ export interface IControlStore {
 	isOpenApproveModal: boolean;
 	isOpenRejectModal: boolean;
 	isOpenApproveDetailModal: boolean;
+	isOpenEditModal: boolean;
 	isLoadingApprove: boolean;
 	isLoadingApps: boolean;
 	isLoadingUsers: boolean;
@@ -65,4 +66,12 @@ export interface IControlUser {
 	role: IRole;
 	department: IDepartment;
 	authored_projects_count: number;
+}
+
+export interface IEditUserRequest {
+	userId: number;
+	department_id: number;
+	role: string;
+	email: string;
+	phone: string;
 }
