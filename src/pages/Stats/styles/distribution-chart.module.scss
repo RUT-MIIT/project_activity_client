@@ -1,0 +1,82 @@
+.chart {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--main-grey-light-color);
+  background-color: var(--main-white-color);
+
+  display: flex;
+  flex-direction: column;
+	overflow: hidden;
+	&__header {
+		margin: 0;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	&__title {
+		margin: 0;
+		font-size: 20px;
+		font-weight: bold;
+		line-height: 1;
+		color: var(--main-black-color);
+	}
+	&__subtitle {
+		margin: 0;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 1;
+		color: var(--main-black-color);
+	}
+}
+
+.chart__content {
+	margin: 12px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  align-items: center;
+  aspect-ratio: 2 / 1;
+  gap: 24px;
+}
+
+.chart__pie {
+  flex: 1 1 auto;
+  min-width: 220px;
+
+  height: 100%;
+}
+
+.chart__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.legendItem {
+  font-size: 14px;
+  color: var(--main-black-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dotBlue {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #0575E6;
+}
+
+.dotPurple {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #7C3AED;
+}

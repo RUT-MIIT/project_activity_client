@@ -7,6 +7,7 @@ import { structureSlice } from './structure/reducer';
 import { historySlice } from './history/reducer';
 import { trackSlice } from './track/reducer';
 import { controlSlice } from './control/reducer';
+import { statsSlice } from './stats/reducer';
 
 export const rootReducer = combineSlices(
 	userSlice,
@@ -16,5 +17,6 @@ export const rootReducer = combineSlices(
 	structureSlice,
 	historySlice,
 	trackSlice,
-	controlSlice
+	controlSlice,
+	statsSlice
 );
