@@ -1,13 +1,21 @@
-import { FC, useMemo } from 'react';
-import { ResponsiveBar } from '@nivo/bar';
+import type { FC } from 'react';
+import type { IInstituteOption } from '../../../store/stats/types';
 
+import { useMemo, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from '../../../store/store';
+
+import { Select } from '../../../shared/components/Select/ui/select';
+import { ResponsiveBar } from '@nivo/bar';
 import { IRatingChart } from '../../../store/stats/types';
+
+import { setInstitute } from '../../../store/stats/reducer';
+import { getStatsAction } from '../../../store/stats/actions';
 
 import styles from '../styles/rating-chart.module.scss';
 
 interface Props {
 	chart: IRatingChart;
-	onInstituteClick?: (code: string) => void;
+	isLoading: boolean;
 }
 
 const colors: Record<string, string> = {
@@ -16,7 +24,21 @@ const colors: Record<string, string> = {
 	rejected: '#E53E3E',
 };
 
-export const RatingChart: FC<Props> = ({ chart, onInstituteClick }) => {
+export const RatingChart: FC<Props> = ({ chart, isLoading }) => {
+	const dispatch = useDispatch();
+
+	const { institutes, selectedInstitute } = useSelector((state) => state.stats);
+	const { user } = useSelector((state) => state.user);
+
+	const [showLabels, setShowLabels] = useState(true);
+
+	const handleSelectInstitute = (option: IInstituteOption | null) => {
+		dispatch(setInstitute(option));
+		dispatch(
+			getStatsAction(option ? { institute_code: option.code } : undefined)
+		);
+	};
+
 	const data = useMemo(() => {
 		return chart.categories.map((category, index) => {
 			const row: Record<string, string | number> = {
@@ -51,14 +73,38 @@ export const RatingChart: FC<Props> = ({ chart, onInstituteClick }) => {
 		return chart.categories.length * ROW_HEIGHT + HEADER_HEIGHT + PADDING;
 	}, [chart.categories.length]);
 
+	const isDepartmentValidator = user?.role === 'institute_validator';
+	const showInstituteSelect = !isDepartmentValidator;
+	const canClickBars = !isDepartmentValidator && !selectedInstitute;
+
+	useEffect(() => {
+		if (isLoading) {
+			setShowLabels(false);
+		} else {
+			const timer = setTimeout(() => setShowLabels(true), 700);
+			return () => clearTimeout(timer);
+		}
+	}, [isLoading]);
+
 	return (
 		<div className={styles.chart}>
 			<div className={styles.chart__header}>
-				<h2 className={styles.chart__title}>Рейтинг по институтам</h2>
-				<p className={styles.chart__subtitle}>
-					Накопительная шкала по статусам. При выборе подразделения — рейтинг по
-					подразделениям.
-				</p>
+				<div className={styles.chart__info}>
+					<h2 className={styles.chart__title}>Рейтинг по институтам</h2>
+					<p className={styles.chart__subtitle}>
+						Накопительная шкала по статусам. При выборе подразделения — рейтинг
+						по подразделениям
+					</p>
+				</div>
+				{showInstituteSelect && (
+					<Select
+						currentOption={selectedInstitute}
+						options={institutes}
+						onChooseOption={handleSelectInstitute}
+						placeholder='Выберите институт..'
+						width='medium'
+					/>
+				)}
 			</div>
 			<div className={styles.chart__content} style={{ height: chartHeight }}>
 				<ResponsiveBar
@@ -71,7 +117,7 @@ export const RatingChart: FC<Props> = ({ chart, onInstituteClick }) => {
 						top: 40,
 						right: 20,
 						bottom: 40,
-						left: 60,
+						left: 100,
 					}}
 					padding={0.3}
 					valueScale={{ type: 'linear' }}
@@ -98,29 +144,15 @@ export const RatingChart: FC<Props> = ({ chart, onInstituteClick }) => {
 									textAnchor='end'
 									dominantBaseline='middle'
 									fontSize={12}
-									fill='#333333'>
+									fill='#333333'
+									opacity={!showLabels ? 0 : 1}
+									style={{ transition: 'opacity .2s' }}>
 									<title>{instituteMap[String(tick.value)]}</title>
 									{tick.value}
 								</text>
 							</g>
 						),
 					}}
-					legends={[
-						{
-							dataFrom: 'keys',
-							anchor: 'top-right',
-							direction: 'row',
-							translateY: -40,
-							itemWidth: 120,
-							itemHeight: 20,
-							symbolSize: 12,
-							data: chart.series.map((s) => ({
-								id: s.id,
-								label: s.name,
-								color: colors[s.id],
-							})),
-						},
-					]}
 					tooltip={({ id, value, indexValue }) => (
 						<div
 							style={{
@@ -137,8 +169,17 @@ export const RatingChart: FC<Props> = ({ chart, onInstituteClick }) => {
 						</div>
 					)}
 					onClick={(bar) => {
+						if (!canClickBars) {
+							return;
+						}
+
 						const code = (bar.data as any).institute_code;
-						onInstituteClick?.(code);
+
+						const institute = institutes.find((i) => i.code === code);
+
+						if (institute) {
+							handleSelectInstitute(institute);
+						}
 					}}
 				/>
 			</div>

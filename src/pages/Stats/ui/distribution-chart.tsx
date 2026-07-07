@@ -94,6 +94,7 @@ export const DistributionChart: FC<Props> = ({ chart }) => {
 						tooltip={({ datum }) => (
 							<div
 								style={{
+									minWidth: '90px',
 									background: '#fff',
 									padding: '8px 12px',
 									border: '1px solid #ddd',

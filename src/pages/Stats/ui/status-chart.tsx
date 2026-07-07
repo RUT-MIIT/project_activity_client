@@ -56,6 +56,7 @@ export const StatusChart: FC<Props> = ({ chart }) => {
 					labelTextColor='#fff'
 					borderWidth={4}
 					borderColor='#fff'
+					valueFormat={(value) => `${value}%`}
 					axisTop={null}
 					axisRight={null}
 					axisBottom={null}

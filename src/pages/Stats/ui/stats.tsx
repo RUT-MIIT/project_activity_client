@@ -8,26 +8,29 @@ import { Section } from '../../../shared/components/Section';
 import { StatsCards } from './stats-cards';
 import { RatingChart } from './rating-chart';
 import { DistributionChart } from './distribution-chart';
+import { ExternalChart } from './external-chart';
 import { StatusChart } from './status-chart';
-import { Card } from '../../../shared/components/Card/ui';
 
 import { getStatsAction } from '../../../store/stats/actions';
-import { setInstitute } from '../../../store/stats/reducer';
 
 import styles from '../styles/stats.module.scss';
 
 export const Stats: FC = () => {
 	const dispatch = useDispatch();
-	const { stats } = useSelector((state) => state.stats);
+	const { user } = useSelector((state) => state.user);
+	const { stats, isLoading } = useSelector((state) => state.stats);
 
 	useEffect(() => {
-		dispatch(getStatsAction());
-	}, [dispatch]);
+		if (!user) return;
 
-	const handleInstituteClick = (code: string) => {
-		dispatch(setInstitute(code));
-		dispatch(getStatsAction({ institute_code: code }));
-	};
+		dispatch(
+			getStatsAction(
+				user.role === 'institute_validator'
+					? { department_id: String(user.department.id) }
+					: undefined
+			)
+		);
+	}, [dispatch, user]);
 
 	if (!stats) {
 		return <Preloader />;
@@ -36,14 +39,11 @@ export const Stats: FC = () => {
 	return (
 		<Section sectionWidth='full'>
 			<div className={styles.container}>
-				<Card>Фильтры</Card>
 				<StatsCards />
-				<RatingChart
-					chart={stats.rating_chart}
-					onInstituteClick={handleInstituteClick}
-				/>
+				<RatingChart isLoading={isLoading} chart={stats.rating_chart} />
 				<div className={styles.container__row}>
 					<DistributionChart chart={stats.application_type_distribution} />
+					<ExternalChart chart={stats.external_share_chart} />
 				</div>
 				<StatusChart chart={stats.status_distribution} />
 			</div>

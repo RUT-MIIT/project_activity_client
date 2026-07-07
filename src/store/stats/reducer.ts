@@ -6,6 +6,7 @@ import * as actions from './actions';
 
 const initialState: IStatsStore = {
 	stats: null,
+	institutes: [],
 	selectedInstitute: null,
 	isLoading: false,
 	error: null,
@@ -28,6 +29,10 @@ export const statsSlice = createSlice({
 			.addCase(actions.getStatsAction.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.stats = action.payload;
+
+				if (state.institutes.length === 0) {
+					state.institutes = action.payload.rating_chart.categories;
+				}
 			})
 			.addCase(actions.getStatsAction.rejected, (state, action) => {
 				state.isLoading = false;
