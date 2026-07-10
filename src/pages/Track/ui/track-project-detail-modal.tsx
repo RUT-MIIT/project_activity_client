@@ -14,46 +14,49 @@ import {
 import { Text } from '../../../shared/components/Typography';
 
 import {
-	getTrackGroupDetailAction,
+	getTrackProjectDetailAction,
 	getTrackStatsAction,
 	removeLinkAction,
 } from '../../../store/track/actions';
 
 import styles from '../styles/track.module.scss';
 
-export const TrackDetailModal: FC<ITrackDetailModal> = ({
+export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 	id,
 	isOpen,
 	onClose,
 }) => {
 	const dispatch = useDispatch();
-	const { trackGroupDetail, isLoadingDetail } = useSelector(
+
+	const { trackProjectDetail, isLoadingDetail } = useSelector(
 		(state) => state.track
 	);
-	const { user } = useSelector((state) => state.user);
-	const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
 
-	const handleRemoveLink = async (projectId: number) => {
-		if (!trackGroupDetail || !user?.institute_code) return;
+	const { user } = useSelector((state) => state.user);
+
+	const [deleteGroupId, setDeleteGroupId] = useState<number | null>(null);
+
+	const handleRemoveLink = async (groupId: number) => {
+		if (!trackProjectDetail || !user?.institute_code) return;
 
 		await dispatch(
 			removeLinkAction({
 				semester_id: 'actual',
-				group_id: trackGroupDetail.id,
-				project_application_id: projectId,
+				group_id: groupId,
+				project_application_id: trackProjectDetail.id,
 			})
 		).unwrap();
 
 		dispatch(getTrackStatsAction(user.institute_code));
 
-		setDeleteProjectId(null);
+		setDeleteGroupId(null);
 	};
 
 	useEffect(() => {
 		if (id && user?.institute_code) {
 			dispatch(
-				getTrackGroupDetailAction({
-					groupId: id,
+				getTrackProjectDetailAction({
+					projectId: id,
 					instituteCode: user.institute_code,
 				})
 			);
@@ -62,41 +65,40 @@ export const TrackDetailModal: FC<ITrackDetailModal> = ({
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={onClose} title='Проектный трек группы'>
+			<Modal isOpen={isOpen} onClose={onClose} title='Проектный трек проекта'>
 				{isLoadingDetail ? (
 					<Preloader />
 				) : (
 					<>
-						{trackGroupDetail && (
+						{trackProjectDetail && (
 							<>
-								<FormField title='Наименование группы'>
-									<FormInputStub value={trackGroupDetail.name} />
+								<FormField title='Название проекта'>
+									<FormInputStub value={trackProjectDetail.title} />
 								</FormField>
-								<FormField title='Направление'>
-									<FormInputStub
-										value={`${trackGroupDetail.direction.name} (${trackGroupDetail.direction.code})`}
-									/>
+
+								<FormField title='Номер заявки'>
+									<FormInputStub value={trackProjectDetail.print_number} />
 								</FormField>
-								<FormField title='Уровень'>
-									<FormInputStub value={trackGroupDetail.direction.level} />
+
+								<FormField title='Автор'>
+									<FormInputStub value={trackProjectDetail.author_name} />
 								</FormField>
-								<FormField title='Список проектов'>
-									{trackGroupDetail.projects.length > 0 ? (
+
+								<FormField title='Список групп'>
+									{trackProjectDetail.groups.length > 0 ? (
 										<ul className={styles.list}>
-											{trackGroupDetail.projects.map((project) => (
-												<li key={project.id} className={styles.item}>
+											{trackProjectDetail.groups.map((group) => (
+												<li key={group.id} className={styles.item}>
 													<div className={styles.item__content}>
-														<h4 className={styles.item__title}>
-															{project.title}
-														</h4>
+														<h4 className={styles.item__title}>{group.name}</h4>
 
 														<div className={styles.item__info}>
 															<span>
-																<b>№ заявки:</b> {project.print_number}
+																<b>Направление:</b> {group.direction.name}
 															</span>
 
 															<span>
-																<b>Автор:</b> {project.author_name}
+																<b>Курс:</b> {group.course_number}
 															</span>
 														</div>
 													</div>
@@ -104,15 +106,18 @@ export const TrackDetailModal: FC<ITrackDetailModal> = ({
 													<button
 														type='button'
 														className={styles.item__remove}
-														onClick={() => setDeleteProjectId(project.id)}
-														aria-label='Удалить проект'>
+														onClick={() => setDeleteGroupId(group.id)}
+														aria-label='Удалить группу'>
 														✕
 													</button>
 												</li>
 											))}
 										</ul>
 									) : (
-										<Text text='Список проектов пока пуст.' color='grey' />
+										<Text
+											text='Проект пока не привязан ни к одной группе.'
+											color='grey'
+										/>
 									)}
 								</FormField>
 							</>
@@ -120,11 +125,12 @@ export const TrackDetailModal: FC<ITrackDetailModal> = ({
 					</>
 				)}
 			</Modal>
-			{deleteProjectId && (
+
+			{deleteGroupId && (
 				<ConfirmDelete
-					isOpen={deleteProjectId !== null}
-					id={deleteProjectId}
-					onClose={() => setDeleteProjectId(null)}
+					isOpen={deleteGroupId !== null}
+					id={deleteGroupId}
+					onClose={() => setDeleteGroupId(null)}
 					onSubmit={handleRemoveLink}
 				/>
 			)}

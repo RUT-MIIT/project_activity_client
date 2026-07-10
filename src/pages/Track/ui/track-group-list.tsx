@@ -12,6 +12,7 @@ import { FormField } from '../../../shared/components/Form/components';
 import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { ProgressBar } from '../../../shared/components/ProgressBar/ui/progress-bar';
+import { TrackNorms } from './track-norms';
 import { TrackDetailModal } from './track-detail-modal';
 import {
 	Table,
@@ -25,11 +26,14 @@ import {
 	getDirectionsAction,
 	getGroupsAction,
 } from '../../../store/catalog/actions';
-import { getTrackGroupsAction } from '../../../store/track/actions';
+import {
+	getTrackGroupsAction,
+	getTrackStatsAction,
+} from '../../../store/track/actions';
 
 import styles from '../styles/track.module.scss';
 
-export const TrackList: FC = () => {
+export const TrackGroupList: FC = () => {
 	const dispatch = useDispatch();
 	const { directions, courses, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
@@ -37,6 +41,7 @@ export const TrackList: FC = () => {
 	const { trackGroups, isLoadingTrackGroups } = useSelector(
 		(state) => state.track
 	);
+	const { user } = useSelector((state) => state.user);
 
 	const [currentDirection, setCurrentDirection] = useState<IDirection | null>(
 		null
@@ -69,7 +74,6 @@ export const TrackList: FC = () => {
 	};
 
 	const handleShowDetail = (id: number) => {
-		console.log('work');
 		setCurrentGroupId(id);
 		setIsShowTrackDetail(true);
 	};
@@ -101,46 +105,19 @@ export const TrackList: FC = () => {
 	}, [trackGroups, currentDirection, currentCourse, currentGroup]);
 
 	useEffect(() => {
-		dispatch(getDirectionsAction());
-		dispatch(getGroupsAction());
-		dispatch(getTrackGroupsAction());
-	}, [dispatch]);
+		if (user?.institute_code) {
+			dispatch(getDirectionsAction());
+			dispatch(getGroupsAction());
+			dispatch(getTrackGroupsAction(user.institute_code));
+			dispatch(getTrackStatsAction(user.institute_code));
+		}
+	}, [dispatch, user]);
 
 	if (isLoadingCatalog || isLoadingTrackGroups) return <Preloader />;
 
 	return (
 		<>
-			<div className={styles.norms}>
-				<div className={`${styles.card} ${styles.card_color_blue}`}>
-					<h5 className={styles.card__title}>Распределено проектов</h5>
-					<span className={styles.card__count}>66,5%</span>
-					<p className={styles.card__text}>
-						Число уникальных проектов на витринах групп
-					</p>
-				</div>
-				<div className={`${styles.card} ${styles.card_color_blue}`}>
-					<h5 className={styles.card__title}>
-						Среднее количество проектов на витринах
-					</h5>
-					<span className={styles.card__count}>13,88</span>
-					<p className={styles.card__text}>
-						Колиечтсво проектов, в среднем назначенных для групп
-					</p>
-				</div>
-				<div className={`${styles.card} ${styles.card_color_blue}`}>
-					<h5 className={styles.card__title}>Групп без проектов</h5>
-					<span className={styles.card__count}>128</span>
-					<p className={styles.card__text}>
-						Фактическое количество групп, для которых не назначенны проекты
-					</p>
-				</div>
-				<div className={`${styles.card} ${styles.card_color_blue}`}>
-					<h5 className={styles.card__title}>Минимальное количество проекто</h5>
-					<span className={styles.card__count}>???</span>
-					<p className={styles.card__text}>Не понимаю что это</p>
-				</div>
-			</div>
-
+			<TrackNorms />
 			<div className={styles.container}>
 				<div className={styles.column}>
 					<div className={styles.table}>
