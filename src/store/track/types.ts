@@ -7,6 +7,8 @@ export interface ITrackStore {
 	trackProjects: ITrackProject[];
 	trackProjectDetail: ITrackProjectDetail | null;
 	trackStats: ITrackStats | null;
+	subdivisionStats: ISubdivisionStats | null;
+	selectedInstitute: string | null;
 
 	isLoadingProjects: boolean;
 	isLoadingTrackGroups: boolean;
@@ -35,6 +37,16 @@ export interface ITrackStats {
 	distributed_projects: number;
 	average_projects_per_group: number;
 	groups_without_projects: number;
+}
+
+export interface IInstituteTrackStats extends ITrackStats {
+	institute_code: string;
+	institute_name: string;
+}
+
+export interface ISubdivisionStats {
+	overall: ITrackStats;
+	by_institute: IInstituteTrackStats[];
 }
 
 export interface ICreateTrack {

@@ -98,8 +98,8 @@ export const App = () => {
 							path={`/${EMAINROUTES.STRUCTURE}/*`}
 							element={<Structure />}
 						/>
-						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
+						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route
 							path={`/${EMAINROUTES.CONTROL}/*`}
 							element={

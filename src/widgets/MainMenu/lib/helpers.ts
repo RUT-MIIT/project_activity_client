@@ -74,6 +74,11 @@ export const cpdsLinks = [
 		icon: 'stats',
 	},
 	{ name: 'Статистика', url: EMAINROUTES.STATS, icon: 'graph' },
+	{
+		name: 'Проектные треки',
+		url: EMAINROUTES.TRACK,
+		icon: 'control',
+	},
 	{ name: 'Управление', url: EMAINROUTES.CONTROL, icon: 'control' },
 ];
 

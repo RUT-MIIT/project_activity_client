@@ -38,10 +38,11 @@ export const TrackGroupList: FC = () => {
 	const { directions, courses, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
-	const { trackGroups, isLoadingTrackGroups } = useSelector(
-		(state) => state.track
-	);
+	const { trackGroups, trackStats, selectedInstitute, isLoadingTrackGroups } =
+		useSelector((state) => state.track);
 	const { user } = useSelector((state) => state.user);
+	const isCpds = user?.role === 'cpds';
+	const instituteCode = isCpds ? selectedInstitute : user?.institute_code;
 
 	const [currentDirection, setCurrentDirection] = useState<IDirection | null>(
 		null
@@ -105,19 +106,25 @@ export const TrackGroupList: FC = () => {
 	}, [trackGroups, currentDirection, currentCourse, currentGroup]);
 
 	useEffect(() => {
-		if (user?.institute_code) {
-			dispatch(getDirectionsAction());
-			dispatch(getGroupsAction());
-			dispatch(getTrackGroupsAction(user.institute_code));
-			dispatch(getTrackStatsAction(user.institute_code));
-		}
-	}, [dispatch, user]);
+		if (!instituteCode) return;
+
+		dispatch(getDirectionsAction());
+		dispatch(getGroupsAction());
+		dispatch(getTrackGroupsAction(instituteCode));
+		dispatch(getTrackStatsAction(instituteCode));
+	}, [dispatch, instituteCode]);
+
+	useEffect(() => {
+		setCurrentDirection(null);
+		setCurrentCourse(null);
+		setCurrentGroup(null);
+	}, [selectedInstitute]);
 
 	if (isLoadingCatalog || isLoadingTrackGroups) return <Preloader />;
 
 	return (
 		<>
-			<TrackNorms />
+			{trackStats && <TrackNorms stats={trackStats} />}
 			<div className={styles.container}>
 				<div className={styles.column}>
 					<div className={styles.table}>
@@ -214,9 +221,10 @@ export const TrackGroupList: FC = () => {
 					</Card>
 				</div>
 			</div>
-			{isShowTrackDetail && (
+			{isShowTrackDetail && instituteCode && (
 				<TrackDetailModal
 					id={currentGroupId}
+					instituteCode={instituteCode}
 					isOpen={isShowTrackDetail}
 					onClose={handleCloseDetail}
 				/>

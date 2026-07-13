@@ -25,16 +25,16 @@ export const TrackDetailModal: FC<ITrackDetailModal> = ({
 	id,
 	isOpen,
 	onClose,
+	instituteCode,
 }) => {
 	const dispatch = useDispatch();
 	const { trackGroupDetail, isLoadingDetail } = useSelector(
 		(state) => state.track
 	);
-	const { user } = useSelector((state) => state.user);
 	const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
 
 	const handleRemoveLink = async (projectId: number) => {
-		if (!trackGroupDetail || !user?.institute_code) return;
+		if (!trackGroupDetail) return;
 
 		await dispatch(
 			removeLinkAction({
@@ -44,21 +44,21 @@ export const TrackDetailModal: FC<ITrackDetailModal> = ({
 			})
 		).unwrap();
 
-		dispatch(getTrackStatsAction(user.institute_code));
+		dispatch(getTrackStatsAction(instituteCode));
 
 		setDeleteProjectId(null);
 	};
 
 	useEffect(() => {
-		if (id && user?.institute_code) {
+		if (id && instituteCode) {
 			dispatch(
 				getTrackGroupDetailAction({
 					groupId: id,
-					instituteCode: user.institute_code,
+					instituteCode,
 				})
 			);
 		}
-	}, [dispatch, id, user]);
+	}, [dispatch, id, instituteCode]);
 
 	return (
 		<>

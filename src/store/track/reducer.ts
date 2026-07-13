@@ -1,6 +1,6 @@
 import type { ITrackStore } from './types';
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import * as actions from './actions';
 
@@ -11,6 +11,8 @@ const initialState: ITrackStore = {
 	trackProjects: [],
 	trackProjectDetail: null,
 	trackStats: null,
+	subdivisionStats: null,
+	selectedInstitute: null,
 	isLoadingProjects: false,
 	isLoadingTrackGroups: false,
 	isLoadingTrackProjects: false,
@@ -24,7 +26,14 @@ const initialState: ITrackStore = {
 export const trackSlice = createSlice({
 	name: 'track',
 	initialState,
-	reducers: {},
+	reducers: {
+		setSelectedInstitute: (state, action: PayloadAction<string>) => {
+			state.selectedInstitute = action.payload;
+		},
+		clearSelectedInstitute: (state) => {
+			state.selectedInstitute = null;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(actions.getTrackProjectsAction.pending, (state) => {
@@ -100,6 +109,19 @@ export const trackSlice = createSlice({
 				state.error =
 					action.error?.message || 'Не удалось загрузить статистику';
 			})
+			.addCase(actions.getSubdivisionStatsAction.pending, (state) => {
+				state.isLoadingStats = true;
+				state.error = null;
+			})
+			.addCase(actions.getSubdivisionStatsAction.fulfilled, (state, action) => {
+				state.isLoadingStats = false;
+				state.subdivisionStats = action.payload;
+			})
+			.addCase(actions.getSubdivisionStatsAction.rejected, (state, action) => {
+				state.isLoadingStats = false;
+				state.error =
+					action.error?.message || 'Не удалось загрузить статистику';
+			})
 			.addCase(actions.getTrackGroupDetailAction.pending, (state) => {
 				state.isLoadingDetail = true;
 				state.error = null;
@@ -171,3 +193,6 @@ export const trackSlice = createSlice({
 			});
 	},
 });
+
+export const { setSelectedInstitute, clearSelectedInstitute } =
+	trackSlice.actions;

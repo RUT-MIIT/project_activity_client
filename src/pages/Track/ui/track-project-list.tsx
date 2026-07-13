@@ -30,11 +30,16 @@ import styles from '../styles/track.module.scss';
 export const TrackProjectList: FC = () => {
 	const dispatch = useDispatch();
 
-	const { trackProjects, isLoadingTrackProjects } = useSelector(
-		(state) => state.track
-	);
+	const {
+		trackProjects,
+		trackStats,
+		selectedInstitute,
+		isLoadingTrackProjects,
+	} = useSelector((state) => state.track);
 
 	const { user } = useSelector((state) => state.user);
+	const isCpds = user?.role === 'cpds';
+	const instituteCode = isCpds ? selectedInstitute : user?.institute_code;
 
 	const [currentProject, setCurrentProject] = useState<ITrackProject | null>(
 		null
@@ -99,11 +104,17 @@ export const TrackProjectList: FC = () => {
 	}, [trackProjects, currentAuthor, currentProject]);
 
 	useEffect(() => {
-		if (user?.institute_code) {
-			dispatch(getTrackStatsAction(user.institute_code));
-			dispatch(getTrackProjectsListAction(user.institute_code));
+		if (instituteCode) {
+			dispatch(getTrackStatsAction(instituteCode));
+			dispatch(getTrackProjectsListAction(instituteCode));
 		}
-	}, [dispatch, user]);
+	}, [dispatch, instituteCode]);
+
+	useEffect(() => {
+		setCurrentProject(null);
+		setCurrentAuthor(null);
+		setCurrentProjectId(null);
+	}, [instituteCode]);
 
 	if (isLoadingTrackProjects) {
 		return <Preloader />;
@@ -111,8 +122,7 @@ export const TrackProjectList: FC = () => {
 
 	return (
 		<>
-			<TrackNorms />
-
+			{trackStats && <TrackNorms stats={trackStats} />}
 			<div className={styles.container}>
 				<div className={styles.column}>
 					<div className={styles.table}>
@@ -200,9 +210,10 @@ export const TrackProjectList: FC = () => {
 				</div>
 			</div>
 
-			{isShowProjectDetail && (
+			{isShowProjectDetail && instituteCode && (
 				<TrackProjectDetailModal
 					id={currentProjectId}
+					instituteCode={instituteCode}
 					isOpen={isShowProjectDetail}
 					onClose={handleCloseDetail}
 				/>

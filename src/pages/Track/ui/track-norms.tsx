@@ -1,29 +1,25 @@
 import type { FC } from 'react';
-
-import { useSelector } from '../../../store/store';
+import type { ITrackStats } from '../../../store/track/types';
 
 import styles from '../styles/track.module.scss';
 
-export const TrackNorms: FC = () => {
-	const { trackStats } = useSelector((state) => state.track);
+interface ITrackNormsProps {
+	stats: ITrackStats;
+}
 
-	if (!trackStats) {
-		return;
-	}
-
+export const TrackNorms: FC<ITrackNormsProps> = ({ stats }) => {
 	const distributionPercent =
-		trackStats.total_projects === 0
+		stats.total_projects === 0
 			? 0
-			: (
-					(trackStats.distributed_projects / trackStats.total_projects) *
-					100
-			  ).toFixed(2);
+			: Number(
+					((stats.distributed_projects / stats.total_projects) * 100).toFixed(2)
+			  );
 
 	return (
 		<div className={styles.norms}>
 			<div className={`${styles.card} ${styles.card_color_green}`}>
 				<h5 className={styles.card__title}>Всего проектов</h5>
-				<span className={styles.card__count}>{trackStats.total_projects}</span>
+				<span className={styles.card__count}>{stats.total_projects}</span>
 				<p className={styles.card__text}>
 					Общее количество проектов, доступных для распределения
 				</p>
@@ -33,24 +29,24 @@ export const TrackNorms: FC = () => {
 				<h5 className={styles.card__title}>Процент распределения</h5>
 				<span className={styles.card__count}>{distributionPercent}%</span>
 				<p className={styles.card__text}>
-					Процент проектов, назначенных проектным группам
+					Процент проектов, назначенных учебным группам
 				</p>
 			</div>
 
 			<div className={`${styles.card} ${styles.card_color_yellow}`}>
 				<h5 className={styles.card__title}>Среднее число проектов</h5>
 				<span className={styles.card__count}>
-					{trackStats.average_projects_per_group.toFixed(1)}
+					{stats.average_projects_per_group.toFixed(1)}
 				</span>
 				<p className={styles.card__text}>
-					Среднее количество проектов на одну проектную группу
+					Среднее количество проектов на одну учебную группу
 				</p>
 			</div>
 
 			<div className={`${styles.card} ${styles.card_color_red}`}>
 				<h5 className={styles.card__title}>Группы без проектов</h5>
 				<span className={styles.card__count}>
-					{trackStats.groups_without_projects}
+					{stats.groups_without_projects}
 				</span>
 				<p className={styles.card__text}>
 					Количество групп, для которых ещё не назначены проекты

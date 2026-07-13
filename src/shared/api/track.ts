@@ -95,6 +95,17 @@ export const getTrackStats = (instituteCode: string) => {
 	);
 };
 
+export const getSubdivisionStats = () => {
+	return request('/showcase/project-tracks/statistics/?semester_id=actual', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
 export const createTrack = (data: ICreateTrack) => {
 	return request('/showcase/project-tracks/', {
 		method: 'POST',

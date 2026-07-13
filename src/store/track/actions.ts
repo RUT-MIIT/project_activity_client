@@ -5,6 +5,7 @@ import type {
 	ITrackProject,
 	ITrackProjectDetail,
 	ITrackStats,
+	ISubdivisionStats,
 	ICreateTrack,
 } from './types';
 
@@ -16,6 +17,7 @@ import {
 	getTrackProjectDetail,
 	getTrackGroups,
 	getTrackStats,
+	getSubdivisionStats,
 	getTrackGroupDetail,
 	createTrack,
 	removeLink,
@@ -55,6 +57,11 @@ export const getTrackProjectDetailAction = createAsyncThunk<
 export const getTrackStatsAction = createAsyncThunk<ITrackStats, string>(
 	'track/getTrackStats',
 	getTrackStats
+);
+
+export const getSubdivisionStatsAction = createAsyncThunk<ISubdivisionStats>(
+	'track/getSubdivisionStats',
+	getSubdivisionStats
 );
 
 export const createTrackAction = createAsyncThunk<number, ICreateTrack>(

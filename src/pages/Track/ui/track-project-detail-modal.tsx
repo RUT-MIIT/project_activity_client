@@ -15,7 +15,6 @@ import { Text } from '../../../shared/components/Typography';
 
 import {
 	getTrackProjectDetailAction,
-	getTrackStatsAction,
 	removeLinkAction,
 } from '../../../store/track/actions';
 
@@ -25,6 +24,7 @@ export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 	id,
 	isOpen,
 	onClose,
+	instituteCode,
 }) => {
 	const dispatch = useDispatch();
 
@@ -32,12 +32,10 @@ export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 		(state) => state.track
 	);
 
-	const { user } = useSelector((state) => state.user);
-
 	const [deleteGroupId, setDeleteGroupId] = useState<number | null>(null);
 
 	const handleRemoveLink = async (groupId: number) => {
-		if (!trackProjectDetail || !user?.institute_code) return;
+		if (!trackProjectDetail) return;
 
 		await dispatch(
 			removeLinkAction({
@@ -47,21 +45,19 @@ export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 			})
 		).unwrap();
 
-		dispatch(getTrackStatsAction(user.institute_code));
-
 		setDeleteGroupId(null);
 	};
 
 	useEffect(() => {
-		if (id && user?.institute_code) {
+		if (id && instituteCode) {
 			dispatch(
 				getTrackProjectDetailAction({
 					projectId: id,
-					instituteCode: user.institute_code,
+					instituteCode,
 				})
 			);
 		}
-	}, [dispatch, id, user]);
+	}, [dispatch, id, instituteCode]);
 
 	return (
 		<>
