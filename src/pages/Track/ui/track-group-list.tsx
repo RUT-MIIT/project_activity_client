@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { ITrackGroup } from '../../../store/track/types';
 import type { IDirection, ICourse } from '../../../store/catalog/types';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../store/store';
 
 import { Select } from '../../../shared/components/Select/ui/select';
@@ -13,7 +13,7 @@ import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { ProgressBar } from '../../../shared/components/ProgressBar/ui/progress-bar';
 import { TrackNorms } from './track-norms';
-import { TrackDetailModal } from './track-detail-modal';
+import { TrackGroupDetailModal } from './track-group-detail-modal';
 import {
 	Table,
 	TableColumn,
@@ -120,6 +120,12 @@ export const TrackGroupList: FC = () => {
 		setCurrentGroup(null);
 	}, [selectedInstitute]);
 
+	const sortedGroups = useMemo(() => {
+		return [...filteredGroups].sort(
+			(a, b) => b.assigned_projects_count - a.assigned_projects_count
+		);
+	}, [filteredGroups]);
+
 	if (isLoadingCatalog || isLoadingTrackGroups) return <Preloader />;
 
 	return (
@@ -147,7 +153,7 @@ export const TrackGroupList: FC = () => {
 								/>
 							</TableHeader>
 							<TableMain>
-								{filteredGroups.map((group) => (
+								{sortedGroups.map((group) => (
 									<TableRow key={group.id}>
 										<TableColumn
 											text={group.name}
@@ -222,7 +228,7 @@ export const TrackGroupList: FC = () => {
 				</div>
 			</div>
 			{isShowTrackDetail && instituteCode && (
-				<TrackDetailModal
+				<TrackGroupDetailModal
 					id={currentGroupId}
 					instituteCode={instituteCode}
 					isOpen={isShowTrackDetail}

@@ -4,3 +4,8 @@ export interface ITrackDetailModal {
 	onClose: () => void;
 	instituteCode: string;
 }
+
+export interface ICreateTrackData {
+	name: string;
+	maxTeams?: number;
+}

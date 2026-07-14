@@ -5,6 +5,7 @@ import type {
 	ICourse,
 	IGroup,
 } from '../../../store/catalog/types';
+import type { ICreateTrackData } from '../types/types';
 
 import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../store/store';
@@ -19,10 +20,10 @@ import { Select } from '../../../shared/components/Select/ui/select';
 import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
-import { ViewSwitcher } from '../../../shared/components/ViewSwitcher/ui/view-switcher';
 import { Filter } from '../../../shared/components/Filter/ui/filter';
 import { Text } from '../../../shared/components/Typography';
 import { ProjectCard } from '../../Project/components/ProjectCard/project-card';
+import { CreateTrackModal } from './create-track-modal';
 import { ProjectDetailModal } from '../../Project/components/ProjectDetailModal/project-detail-modal';
 
 import {
@@ -31,7 +32,7 @@ import {
 } from '../../../store/catalog/actions';
 import {
 	getTrackProjectsAction,
-	createTrackAction,
+	createFullTrackAction,
 } from '../../../store/track/actions';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
@@ -43,6 +44,7 @@ export const CreateTrackForm: FC = () => {
 	const { directions, courses, groups, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
+	const { user } = useSelector((state) => state.user);
 	const { projects, isLoadingProjects } = useSelector((state) => state.track);
 	const { currentSemester } = useSelector((state) => state.structure);
 	const [currentDirection, setCurrentDirection] = useState<IDirection | null>(
@@ -60,38 +62,57 @@ export const CreateTrackForm: FC = () => {
 
 	const [isShowProjectDetail, setIsShowProjectDetail] =
 		useState<boolean>(false);
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
-	const [activeView, setActiveView] = useState<string>(() => {
-		const view = localStorage.getItem('createTrackView');
-		return view ?? 'cards';
-	});
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (currentSemester) {
-			const data = {
-				semester_id: currentSemester.id,
-				group_ids: selectedGroups.map((group) => group.id),
-				project_application_ids: selectedProjectIds,
-			};
-			try {
-				await dispatch(createTrackAction(data)).unwrap();
-				showToast({
-					title: 'Проектный трек успешно создан!',
-					text: 'Вы можете увидеть его на вкладке «Просмотр».',
-					type: 'success',
-				});
-				setSelectedGroups([]);
-				setSelectedProjectIds([]);
-			} catch (err) {
-				console.log(err);
-				showToast({
-					title: 'Произошла ошибка при отправке заявки!',
-					text: getErrorMessage(err),
-					type: 'error',
-				});
-			}
+
+		if (!currentSemester) {
+			return;
+		}
+
+		setIsCreateModalOpen(true);
+	};
+
+	const handleCreateTrack = async (data: ICreateTrackData) => {
+		if (!currentSemester || !user) {
+			return;
+		}
+
+		try {
+			await dispatch(
+				createFullTrackAction({
+					track: {
+						name: data.name,
+						description: '',
+						...(data.maxTeams !== undefined && {
+							max_teams: data.maxTeams,
+						}),
+						semester_id: currentSemester.id,
+						department_id: user.department.id,
+					},
+					group_ids: selectedGroups.map((group) => group.id),
+					application_ids: selectedProjectIds,
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Проектный трек успешно создан!',
+				text: 'Вы можете увидеть его на вкладке «Список треков».',
+				type: 'success',
+			});
+
+			setSelectedGroups([]);
+			setSelectedProjectIds([]);
+			setIsCreateModalOpen(false);
+		} catch (err) {
+			showToast({
+				title: 'Произошла ошибка при создании трека!',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
 		}
 	};
 
@@ -191,6 +212,12 @@ export const CreateTrackForm: FC = () => {
 		setSelectedGroups((prev) => prev.filter((group) => group.id !== id));
 	};
 
+	const handleRemoveProject = (id: number) => {
+		setSelectedProjectIds((prev) =>
+			prev.filter((projectId) => projectId !== id)
+		);
+	};
+
 	useEffect(() => {
 		if (!currentDirection && !currentCourse && !currentGroup) {
 			setIsBlockAddGroupButton(true);
@@ -280,11 +307,6 @@ export const CreateTrackForm: FC = () => {
 							placeholder='Выберите хэштег..'
 							onChange={handleChangeTags}
 						/>
-						<ViewSwitcher
-							defaultView={activeView}
-							storageKey='createTrackView'
-							onChange={(view) => setActiveView(view)}
-						/>
 					</div>
 					<TagList
 						items={selectedTags}
@@ -292,21 +314,17 @@ export const CreateTrackForm: FC = () => {
 						onRemove={handleRemoveTag}
 					/>
 					{filteredProjects.length > 0 ? (
-						activeView === 'cards' ? (
-							<ul className={styles.cards}>
-								{filteredProjects.map((elem) => (
-									<ProjectCard
-										card={elem}
-										key={elem.id}
-										onShowDetail={handleShowDetail}
-										onSelect={handleSelectProject}
-										isSelect={selectedProjectIds.includes(elem.id)}
-									/>
-								))}
-							</ul>
-						) : (
-							<div></div>
-						)
+						<ul className={styles.cards}>
+							{filteredProjects.map((elem) => (
+								<ProjectCard
+									card={elem}
+									key={elem.id}
+									onShowDetail={handleShowDetail}
+									onSelect={handleSelectProject}
+									isSelect={selectedProjectIds.includes(elem.id)}
+								/>
+							))}
+						</ul>
 					) : (
 						<Text text='Проекты не найдены.' color='grey' withMarginTop />
 					)}
@@ -392,6 +410,19 @@ export const CreateTrackForm: FC = () => {
 					id={currentProjectId}
 					isOpen={isShowProjectDetail}
 					onClose={handleCloseDetail}
+				/>
+			)}
+			{isCreateModalOpen && (
+				<CreateTrackModal
+					isOpen={isCreateModalOpen}
+					onClose={() => setIsCreateModalOpen(false)}
+					onSubmit={handleCreateTrack}
+					groups={selectedGroups}
+					projects={projects.filter((project) =>
+						selectedProjectIds.includes(project.id)
+					)}
+					onRemoveGroup={handleRemoveGroup}
+					onRemoveProject={handleRemoveProject}
 				/>
 			)}
 		</Form>

@@ -9,7 +9,6 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { FormField } from '../../../shared/components/Form/components';
 import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
-import { ProgressBar } from '../../../shared/components/ProgressBar/ui/progress-bar';
 import { TrackNorms } from './track-norms';
 import { TrackProjectDetailModal } from './track-project-detail-modal';
 import {
@@ -116,6 +115,12 @@ export const TrackProjectList: FC = () => {
 		setCurrentProjectId(null);
 	}, [instituteCode]);
 
+	const sortedProjects = useMemo(() => {
+		return [...filteredProjects].sort(
+			(a, b) => b.assigned_groups_count - a.assigned_groups_count
+		);
+	}, [filteredProjects]);
+
 	if (isLoadingTrackProjects) {
 		return <Preloader />;
 	}
@@ -138,13 +143,13 @@ export const TrackProjectList: FC = () => {
 
 								<TableColumn
 									text='Групп'
-									columnSize='progress'
+									columnSize='medium'
 									textWeight='bold'
 								/>
 							</TableHeader>
 
 							<TableMain>
-								{filteredProjects.map((project) => (
+								{sortedProjects.map((project) => (
 									<TableRow key={project.id}>
 										<TableColumn
 											text={project.title}
@@ -157,14 +162,10 @@ export const TrackProjectList: FC = () => {
 
 										<TableColumn text={project.author_name} columnSize='full' />
 
-										<TableColumn withChildren columnSize='progress'>
-											<ProgressBar
-												value={project.assigned_groups_count}
-												max={15}
-												withInfo
-												caption={`Количество: ${project.assigned_groups_count}`}
-											/>
-										</TableColumn>
+										<TableColumn
+											text={project.assigned_groups_count}
+											columnSize='medium'
+										/>
 									</TableRow>
 								))}
 							</TableMain>

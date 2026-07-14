@@ -3,6 +3,7 @@ import type { ITrackDetailModal } from '../types/types';
 
 import { useDispatch, useSelector } from '../../../store/store';
 import { useState, useEffect } from 'react';
+import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { ConfirmDelete } from '../../../features/ConfirmDelete/ui/confirm-delete';
@@ -15,8 +16,10 @@ import { Text } from '../../../shared/components/Typography';
 
 import {
 	getTrackProjectDetailAction,
+	getTrackStatsAction,
 	removeLinkAction,
 } from '../../../store/track/actions';
+import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/track.module.scss';
 
@@ -27,7 +30,7 @@ export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 	instituteCode,
 }) => {
 	const dispatch = useDispatch();
-
+	const { showToast } = useToast();
 	const { trackProjectDetail, isLoadingDetail } = useSelector(
 		(state) => state.track
 	);
@@ -37,15 +40,31 @@ export const TrackProjectDetailModal: FC<ITrackDetailModal> = ({
 	const handleRemoveLink = async (groupId: number) => {
 		if (!trackProjectDetail) return;
 
-		await dispatch(
-			removeLinkAction({
-				semester_id: 'actual',
-				group_id: groupId,
-				project_application_id: trackProjectDetail.id,
-			})
-		).unwrap();
+		try {
+			await dispatch(
+				removeLinkAction({
+					semester_id: 'actual',
+					group_id: groupId,
+					project_application_id: trackProjectDetail.id,
+				})
+			).unwrap();
 
-		setDeleteGroupId(null);
+			dispatch(getTrackStatsAction(instituteCode));
+
+			showToast({
+				title: 'Связь успешно удалена!',
+				text: 'Группа была отвязана от проекта.',
+				type: 'success',
+			});
+
+			setDeleteGroupId(null);
+		} catch (err) {
+			showToast({
+				title: 'Не удалось удалить связь',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
 	};
 
 	useEffect(() => {

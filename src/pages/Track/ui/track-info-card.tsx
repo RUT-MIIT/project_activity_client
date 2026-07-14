@@ -22,7 +22,7 @@ export const TrackInfoCard: FC<ITrackInfoCardProps> = ({ stats }) => {
 	const handleSelectInstitute = (code: string) => {
 		dispatch(setSelectedInstitute(code));
 
-		navigate('/track/tabs/group');
+		navigate('/track/tabs/list');
 	};
 
 	return (

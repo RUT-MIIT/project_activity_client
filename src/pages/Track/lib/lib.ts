@@ -4,6 +4,10 @@ export const getTrackTabs = (role?: string): ITab[] => {
 	if (role === 'cpds') {
 		return [
 			{
+				label: 'Список треков',
+				path: '/track/tabs/list',
+			},
+			{
 				label: 'Треки по группам',
 				path: '/track/tabs/group',
 			},
@@ -18,6 +22,10 @@ export const getTrackTabs = (role?: string): ITab[] => {
 		{
 			label: 'Создание трека',
 			path: '/track/tabs/create',
+		},
+		{
+			label: 'Список треков',
+			path: '/track/tabs/list',
 		},
 		{
 			label: 'Треки по группам',

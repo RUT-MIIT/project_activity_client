@@ -6,6 +6,7 @@ import * as actions from './actions';
 
 const initialState: ITrackStore = {
 	projects: [],
+	trackList: [],
 	trackGroups: [],
 	trackGroupDetail: null,
 	trackProjects: [],
@@ -36,6 +37,18 @@ export const trackSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
+			.addCase(actions.getTrackListAction.pending, (state) => {
+				state.isLoading = true;
+				state.error = null;
+			})
+			.addCase(actions.getTrackListAction.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.trackList = action.payload;
+			})
+			.addCase(actions.getTrackListAction.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.error?.message || 'Не удалось загрузить треки';
+			})
 			.addCase(actions.getTrackProjectsAction.pending, (state) => {
 				state.isLoadingProjects = true;
 				state.error = null;
@@ -134,16 +147,19 @@ export const trackSlice = createSlice({
 				state.isLoadingDetail = false;
 				state.error = action.error?.message || 'Не удалось загрузить данные';
 			})
-			.addCase(actions.createTrackAction.pending, (state) => {
+			.addCase(actions.createFullTrackAction.pending, (state) => {
 				state.isLoading = true;
 				state.error = null;
 			})
-			.addCase(actions.createTrackAction.fulfilled, (state, action) => {
+
+			.addCase(actions.createFullTrackAction.fulfilled, (state, action) => {
 				state.isLoading = false;
-				console.log(action.payload);
+				console.log('Создан трек:', action.payload);
 			})
-			.addCase(actions.createTrackAction.rejected, (state, action) => {
+
+			.addCase(actions.createFullTrackAction.rejected, (state, action) => {
 				state.isLoading = false;
+
 				state.error = action.error?.message || 'Не удалось создать трек';
 			})
 			.addCase(actions.removeLinkAction.pending, (state) => {

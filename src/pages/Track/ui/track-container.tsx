@@ -10,7 +10,7 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { getTrackTabs } from '../lib/lib';
 import { clearSelectedInstitute } from '../../../store/track/reducer';
 
-import styles from '../styles/track-conteiner.module.scss';
+import styles from '../styles/track-container.module.scss';
 
 export const TrackContainer: FC = () => {
 	const navigate = useNavigate();
@@ -40,7 +40,6 @@ export const TrackContainer: FC = () => {
 					/>
 				)}
 			</div>
-
 			<Outlet />
 		</Section>
 	);

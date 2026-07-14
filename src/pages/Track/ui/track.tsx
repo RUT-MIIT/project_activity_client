@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from '../../../store/store';
 
 import { TrackContainer } from './track-container';
+import { TrackList } from './track-list';
 import { CreateTrackForm } from './create-track-form';
 import { TrackInfoList } from './track-info-list';
 import { TrackGroupList } from './track-group-list';
@@ -36,6 +37,8 @@ export const Track: FC = () => {
 				}>
 				{isCpds ? (
 					<>
+						<Route path='list' element={<TrackList />} />
+
 						<Route path='group' element={<TrackGroupList />} />
 
 						<Route path='project' element={<TrackProjectList />} />
@@ -45,6 +48,8 @@ export const Track: FC = () => {
 				) : (
 					<>
 						<Route path='create' element={<CreateTrackForm />} />
+
+						<Route path='list' element={<TrackList />} />
 
 						<Route path='group' element={<TrackGroupList />} />
 

@@ -1,4 +1,5 @@
 import type {
+	ITrack,
 	IProject,
 	ITrackGroup,
 	ITrackGroupDetail,
@@ -7,11 +8,14 @@ import type {
 	ITrackStats,
 	ISubdivisionStats,
 	ICreateTrack,
+	IAddGroupsToTrack,
+	IAddProjectsToTrack,
 } from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
+	getTrackList,
 	getTrackProjects,
 	getTrackProjectsList,
 	getTrackProjectDetail,
@@ -20,8 +24,15 @@ import {
 	getSubdivisionStats,
 	getTrackGroupDetail,
 	createTrack,
+	addGroupsToTrack,
+	addProjectsToTrack,
 	removeLink,
 } from '../../shared/api/track';
+
+export const getTrackListAction = createAsyncThunk<ITrack[], string>(
+	'track/getTrackList',
+	getTrackList
+);
 
 export const getTrackProjectsAction = createAsyncThunk<IProject[]>(
 	'track/getProjects',
@@ -64,10 +75,53 @@ export const getSubdivisionStatsAction = createAsyncThunk<ISubdivisionStats>(
 	getSubdivisionStats
 );
 
-export const createTrackAction = createAsyncThunk<number, ICreateTrack>(
+export const createTrackAction = createAsyncThunk<ITrack, ICreateTrack>(
 	'track/createTrack',
 	createTrack
 );
+
+export const addGroupsToTrackAction = createAsyncThunk<
+	ITrack,
+	IAddGroupsToTrack
+>('track/addGroupsToTrack', addGroupsToTrack);
+
+export const addProjectsToTrackAction = createAsyncThunk<
+	ITrack,
+	IAddProjectsToTrack
+>('track/addProjectsToTrack', addProjectsToTrack);
+
+export const createFullTrackAction = createAsyncThunk<
+	ITrack,
+	{
+		track: ICreateTrack;
+		group_ids: number[];
+		application_ids: number[];
+	}
+>('track/createFullTrack', async (data, { dispatch }) => {
+	const track = await dispatch(createTrackAction(data.track)).unwrap();
+
+	const trackId = track.id;
+
+	if (data.group_ids.length > 0) {
+		await dispatch(
+			addGroupsToTrackAction({
+				trackId,
+				group_ids: data.group_ids,
+			})
+		).unwrap();
+	}
+
+	if (data.application_ids.length > 0) {
+		await dispatch(
+			addProjectsToTrackAction({
+				trackId,
+				application_ids: data.application_ids,
+			})
+		).unwrap();
+	}
+
+	return track;
+});
 
 export const removeLinkAction = createAsyncThunk<
 	void,

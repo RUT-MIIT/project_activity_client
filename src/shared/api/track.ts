@@ -1,4 +1,8 @@
-import type { ICreateTrack } from '../../store/track/types';
+import type {
+	ICreateTrack,
+	IAddGroupsToTrack,
+	IAddProjectsToTrack,
+} from '../../store/track/types';
 
 import { request } from './utils';
 
@@ -11,6 +15,20 @@ export const getTrackProjects = () => {
 			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
 	});
+};
+
+export const getTrackList = (instituteCode: string) => {
+	return request(
+		`/showcase/project-tracks/?institute_code=${instituteCode}&semester_id=actual`,
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
 };
 
 export const getTrackGroups = (instituteCode: string) => {
@@ -115,6 +133,30 @@ export const createTrack = (data: ICreateTrack) => {
 			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
 		body: JSON.stringify(data),
+	});
+};
+
+export const addGroupsToTrack = (data: IAddGroupsToTrack) => {
+	return request(`/showcase/project-tracks/${data.trackId}/groups/`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+		body: JSON.stringify({ group_ids: data.group_ids }),
+	});
+};
+
+export const addProjectsToTrack = (data: IAddProjectsToTrack) => {
+	return request(`/showcase/project-tracks/${data.trackId}/applications/`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+		body: JSON.stringify({ application_ids: data.application_ids }),
 	});
 };
 

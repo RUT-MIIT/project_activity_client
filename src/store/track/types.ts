@@ -2,6 +2,7 @@ import type { ITag, IDirection } from '../catalog/types';
 
 export interface ITrackStore {
 	projects: IProject[];
+	trackList: ITrack[];
 	trackGroups: ITrackGroup[];
 	trackGroupDetail: ITrackGroupDetail | null;
 	trackProjects: ITrackProject[];
@@ -19,6 +20,26 @@ export interface ITrackStore {
 	isLoadingStats: boolean;
 
 	error: string | null;
+}
+
+export interface ITrack {
+	id: number;
+	author_id: number;
+	department_id: number;
+	description: string;
+	max_teams: number;
+	name: string;
+	semester_id: number;
+	applications: {
+		id: number;
+		print_number: string;
+		title: string;
+	}[];
+	groups: {
+		id: number;
+		course_number: number;
+		name: string;
+	}[];
 }
 
 export interface IProject {
@@ -50,9 +71,21 @@ export interface ISubdivisionStats {
 }
 
 export interface ICreateTrack {
+	name: string;
+	description?: string;
+	max_teams?: number;
 	semester_id: number;
+	department_id: number;
+}
+
+export interface IAddGroupsToTrack {
+	trackId: number;
 	group_ids: number[];
-	project_application_ids: number[];
+}
+
+export interface IAddProjectsToTrack {
+	trackId: number;
+	application_ids: number[];
 }
 
 export interface ITrackGroup {
