@@ -118,6 +118,7 @@ export const TrackGroupDetailModal: FC<ITrackDetailModal> = ({
 														</div>
 													</div>
 
+													{/*
 													<button
 														type='button'
 														className={styles.item__remove}
@@ -125,6 +126,8 @@ export const TrackGroupDetailModal: FC<ITrackDetailModal> = ({
 														aria-label='Удалить проект'>
 														✕
 													</button>
+
+														*/}
 												</li>
 											))}
 										</ul>

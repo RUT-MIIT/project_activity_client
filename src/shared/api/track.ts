@@ -160,6 +160,45 @@ export const addProjectsToTrack = (data: IAddProjectsToTrack) => {
 	});
 };
 
+export const removeTrack = (trackId: number) => {
+	return request(`/showcase/project-tracks/${trackId}/`, {
+		method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const removeGroupFromTrack = (trackId: number, groupId: number) => {
+	return request(`/showcase/project-tracks/${trackId}/groups/${groupId}/`, {
+		method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const removeProjectFromTrack = (
+	trackId: number,
+	applicationId: number
+) => {
+	return request(
+		`/showcase/project-tracks/${trackId}/applications/${applicationId}/`,
+		{
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};
+
 export const removeLink = (data: {
 	semester_id: string;
 	group_id: number;

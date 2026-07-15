@@ -19,6 +19,10 @@ const normalizeErrorToString = (data: any): string => {
 };
 
 const checkResponse = async (res: Response) => {
+	if (res.status === 204) {
+		return null;
+	}
+
 	let data: any;
 
 	try {
@@ -27,7 +31,9 @@ const checkResponse = async (res: Response) => {
 		data = await res.text();
 	}
 
-	if (res.ok) return data;
+	if (res.ok) {
+		return data;
+	}
 
 	const message = normalizeErrorToString(data);
 

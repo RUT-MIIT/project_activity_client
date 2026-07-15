@@ -14,8 +14,9 @@ interface ITrackCardProps {
 	onDelete?: (id: number) => void;
 
 	onRemoveGroup?: (trackId: number, groupId: number) => void;
-	onRemoveProject?: (trackId: number, projectId: number) => void;
+	onRemoveProject?: (trackId: number, applicationId: number) => void;
 }
+
 export const TrackCard: FC<ITrackCardProps> = ({
 	track,
 	onDelete,
@@ -41,7 +42,6 @@ export const TrackCard: FC<ITrackCardProps> = ({
 
 				<div className={styles.controls}>
 					{/*
-					}
 					<button
 						type='button'
 						className={`${styles.button} ${styles.button_edit}`}
@@ -50,7 +50,6 @@ export const TrackCard: FC<ITrackCardProps> = ({
 						✎
 					</button>
 					*/}
-
 					<button
 						type='button'
 						className={`${styles.button} ${styles.button_delete}`}

@@ -162,6 +162,70 @@ export const trackSlice = createSlice({
 
 				state.error = action.error?.message || 'Не удалось создать трек';
 			})
+			.addCase(actions.removeTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.removeTrackAction.fulfilled, (state, action) => {
+				state.isLoadingAction = false;
+
+				state.trackList = state.trackList.filter(
+					(track) => track.id !== action.payload
+				);
+			})
+			.addCase(actions.removeTrackAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error.message || 'Не удалось удалить трек';
+			})
+			.addCase(actions.removeGroupFromTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(
+				actions.removeGroupFromTrackAction.fulfilled,
+				(state, action) => {
+					state.isLoadingAction = false;
+
+					const { trackId, groupId } = action.payload;
+
+					const track = state.trackList.find((t) => t.id === trackId);
+
+					if (track) {
+						track.groups = track.groups.filter((group) => group.id !== groupId);
+					}
+				}
+			)
+			.addCase(actions.removeGroupFromTrackAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error.message || 'Не удалось удалить группу';
+			})
+			.addCase(actions.removeProjectFromTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(
+				actions.removeProjectFromTrackAction.fulfilled,
+				(state, action) => {
+					state.isLoadingAction = false;
+
+					const { trackId, projectId } = action.payload;
+
+					const track = state.trackList.find((t) => t.id === trackId);
+
+					if (track) {
+						track.applications = track.applications.filter(
+							(project) => project.id !== projectId
+						);
+					}
+				}
+			)
+			.addCase(
+				actions.removeProjectFromTrackAction.rejected,
+				(state, action) => {
+					state.isLoadingAction = false;
+					state.error = action.error.message || 'Не удалось удалить проект';
+				}
+			)
 			.addCase(actions.removeLinkAction.pending, (state) => {
 				state.isLoadingAction = true;
 				state.error = null;

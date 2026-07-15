@@ -133,3 +133,13 @@ export interface ITrackProjectDetailGroup {
 	course_number: number;
 	direction: IDirection;
 }
+
+export interface IRemoveGroupFromTrack {
+	trackId: number;
+	groupId: number;
+}
+
+export interface IRemoveProjectFromTrack {
+	trackId: number;
+	projectId: number;
+}

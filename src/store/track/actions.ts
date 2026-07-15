@@ -10,6 +10,8 @@ import type {
 	ICreateTrack,
 	IAddGroupsToTrack,
 	IAddProjectsToTrack,
+	IRemoveGroupFromTrack,
+	IRemoveProjectFromTrack,
 } from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -26,6 +28,9 @@ import {
 	createTrack,
 	addGroupsToTrack,
 	addProjectsToTrack,
+	removeTrack,
+	removeGroupFromTrack,
+	removeProjectFromTrack,
 	removeLink,
 } from '../../shared/api/track';
 
@@ -121,6 +126,32 @@ export const createFullTrackAction = createAsyncThunk<
 	}
 
 	return track;
+});
+
+export const removeTrackAction = createAsyncThunk<number, number>(
+	'track/removeTrack',
+	async (trackId) => {
+		await removeTrack(trackId);
+		return trackId;
+	}
+);
+
+export const removeGroupFromTrackAction = createAsyncThunk<
+	IRemoveGroupFromTrack,
+	IRemoveGroupFromTrack
+>('track/removeGroupFromTrack', async (data) => {
+	await removeGroupFromTrack(data.trackId, data.groupId);
+
+	return data;
+});
+
+export const removeProjectFromTrackAction = createAsyncThunk<
+	IRemoveProjectFromTrack,
+	IRemoveProjectFromTrack
+>('track/removeProjectFromTrack', async (data) => {
+	await removeProjectFromTrack(data.trackId, data.projectId);
+
+	return data;
 });
 
 export const removeLinkAction = createAsyncThunk<
