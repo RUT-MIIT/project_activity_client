@@ -11,11 +11,13 @@ import { EPAGESROUTES } from '../../../shared/utils/routes';
 
 export const links = [
 	{ label: 'Уже есть аккаунт?', text: 'Войти', url: EPAGESROUTES.LOGIN },
+	/*
 	{
 		label: 'Вы не сотрудник РУТ (МИИТ)?',
 		text: 'Подать заявку',
 		url: EPAGESROUTES.APPLY,
 	},
+	*/
 ];
 
 export const validationSchema = {

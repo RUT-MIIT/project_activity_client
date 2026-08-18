@@ -26,7 +26,7 @@ export const Stats: FC = () => {
 		dispatch(
 			getStatsAction(
 				user.role === 'institute_validator'
-					? { department_id: String(user.department.id) }
+					? { institute_code: String(user.institute_code) }
 					: undefined
 			)
 		);
