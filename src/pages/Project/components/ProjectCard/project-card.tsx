@@ -3,6 +3,7 @@ import type { IProjectCardProps } from './types';
 
 import { Badge } from '../../../../shared/components/Badge/ui/badge';
 import { Button } from '../../../../shared/components/Button/ui/button';
+import { Tooltip } from '../../../../shared/components/Tooltip/ui/tooltip';
 
 import styles from './project-card.module.scss';
 
@@ -44,12 +45,24 @@ export const ProjectCard: FC<IProjectCardProps> = ({
 				</div>
 			</div>
 			<div className={styles.card__control}>
+				<div className={styles.tooltip}>
+					{card.track_composer_comment && (
+						<Tooltip
+							content={
+								<p className={styles.tooltip__text}>
+									В заявке есть комментарий для составителя трека
+								</p>
+							}>
+							<div
+								className={`${styles.tooltip__icon} ${styles.tooltip__icon_comment}`}></div>
+						</Tooltip>
+					)}
+				</div>
 				{onShowDetail && (
 					<Button
 						text='Подробнее'
 						color='cancel'
 						onClick={() => onShowDetail(card.id)}
-						style={{ margin: '0 auto 0 0' }}
 					/>
 				)}
 				{isSelect ? (

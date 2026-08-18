@@ -156,7 +156,7 @@ export const addProjectsToTrack = (data: IAddProjectsToTrack) => {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
 		},
-		body: JSON.stringify({ application_ids: data.application_ids }),
+		body: JSON.stringify(data.projects),
 	});
 };
 

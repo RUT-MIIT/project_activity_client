@@ -3,7 +3,8 @@ import type { IGroup } from '../../../store/catalog/types';
 import type { IProject } from '../../../store/track/types';
 import type { ICreateTrackData } from '../types/types';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from '../../../store/store';
 
 import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { Button } from '../../../shared/components/Button/ui/button';
@@ -15,6 +16,7 @@ import {
 	FormInput,
 	FormInputNumber,
 	FormButtons,
+	FormInputStub,
 } from '../../../shared/components/Form/components';
 
 import styles from '../styles/create-track-modal.module.scss';
@@ -40,17 +42,61 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 	onRemoveGroup,
 	onRemoveProject,
 }) => {
+	const { trackList } = useSelector((state) => state.track);
+	const [projectTeams, setProjectTeams] = useState<
+		Record<number, number | null>
+	>({});
 	const [trackName, setTrackName] = useState<string>('');
 	const [trackNameError, setTrackNameError] = useState({
 		isShow: false,
 		text: '',
 	});
-	const [maxTeams, setMaxTeams] = useState<number | null>(null);
+	const [projectTeamsTouched, setProjectTeamsTouched] = useState<
+		Record<number, boolean>
+	>({});
+
+	const maxTeams = projects.reduce(
+		(sum, project) => sum + (projectTeams[project.id] ?? 0),
+		0
+	);
+
+	const hasEmptyProjectTeams = projects.some(
+		(project) => projectTeams[project.id] === null
+	);
 
 	const isSubmitBlocked =
 		trackName.trim().length === 0 ||
 		groups.length === 0 ||
-		projects.length === 0;
+		projects.length === 0 ||
+		hasEmptyProjectTeams;
+
+	const getGroupTrack = (groupId: number) => {
+		return trackList.find((track) =>
+			track.groups.some((group) => group.id === groupId)
+		);
+	};
+
+	const getProjectTrack = (projectId: number) => {
+		return trackList.find((track) =>
+			track.applications.some((project) => project.id === projectId)
+		);
+	};
+
+	const getProjectTeamsError = (projectId: number) => {
+		const value = projectTeams[projectId];
+
+		if (projectTeamsTouched[projectId] && value === null) {
+			return {
+				isShow: true,
+				text: 'Обязательное поле',
+			};
+		}
+
+		return {
+			isShow: false,
+			text: '',
+		};
+	};
 
 	const handleChangeTrackName = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
@@ -71,22 +117,35 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 		});
 	};
 
-	const handleChangeMaxTeams = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleChangeProjectTeams = (
+		projectId: number,
+		e: ChangeEvent<HTMLInputElement>
+	) => {
 		const rawValue = e.target.value;
 
+		setProjectTeamsTouched((prev) => ({
+			...prev,
+			[projectId]: true,
+		}));
+
 		if (rawValue === '') {
-			setMaxTeams(null);
+			setProjectTeams((prev) => ({
+				...prev,
+				[projectId]: null,
+			}));
 			return;
 		}
 
 		const value = Number(rawValue);
 
 		if (Number.isNaN(value) || value < 1) {
-			setMaxTeams(null);
 			return;
 		}
 
-		setMaxTeams(value);
+		setProjectTeams((prev) => ({
+			...prev,
+			[projectId]: value,
+		}));
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -102,9 +161,11 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 		const data: ICreateTrackData = {
 			name: trackName.trim(),
-			...(maxTeams !== null && {
-				maxTeams,
-			}),
+			maxTeams,
+			projects: projects.map((project) => ({
+				id: project.id,
+				teamsCount: projectTeams[project.id] ?? 0,
+			})),
 		};
 
 		onSubmit(data);
@@ -112,17 +173,34 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 	const handleClose = () => {
 		setTrackName('');
-		setMaxTeams(null);
+		setProjectTeams({});
+		setProjectTeamsTouched({});
+		setTrackNameError({
+			isShow: false,
+			text: '',
+		});
 		onClose();
 	};
+
+	useEffect(() => {
+		setProjectTeams((prev) => {
+			const next: Record<number, number | null> = {};
+
+			projects.forEach((project) => {
+				next[project.id] = prev[project.id] ?? project.recommended_teams_count;
+			});
+
+			return next;
+		});
+	}, [projects]);
 
 	return (
 		<Modal
 			isOpen={isOpen}
 			onClose={handleClose}
-			title='Cоздания трека'
+			title='Cоздание трека'
 			description='Проверьте выбранные группы и проекты перед созданием'
-			modalWidth='large'>
+			modalWidth='full'>
 			<Form
 				name='create-track-modal-form'
 				onSubmit={handleSubmit}
@@ -136,16 +214,10 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 					/>
 				</FormField>
 				<FormField
-					title='Максимальное количество команд'
+					title='Максимальное количество команд в треке'
 					withInfo={true}
-					infoText='Максимальное количество команд которое может записаться на данный трек. Если оставить поле пустым количество команд будет 100.'>
-					<FormInputNumber
-						name='max-teams'
-						type='number'
-						placeholder='Введите максимальное количество команд'
-						value={maxTeams ?? null}
-						onChange={handleChangeMaxTeams}
-					/>
+					infoText='Максимальное количество команд рассчитывается автоматически как сумма рекомендуемого количества команд для всех проектов, добавленных в трек.'>
+					<FormInputStub value={maxTeams.toString()} />
 				</FormField>
 				<div className={styles.columns}>
 					<div className={styles.column}>
@@ -153,31 +225,40 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 						{groups.length ? (
 							<ul className={styles.list}>
-								{groups.map((group) => (
-									<li key={group.id} className={styles.item}>
-										<div className={styles.item__content}>
-											<h4 className={styles.item__title}>{group.name}</h4>
+								{groups.map((group) => {
+									const existingTrack = getGroupTrack(group.id);
+									return (
+										<li key={group.id} className={styles.item}>
+											<div className={styles.item__content}>
+												<h4 className={styles.item__title}>{group.name}</h4>
 
-											<div className={styles.item__info}>
-												<span>
-													<b>Направление:</b> {group.direction_code}
-												</span>
+												<div className={styles.item__info}>
+													<span>
+														<b>Направление:</b> {group.direction_code}
+													</span>
 
-												<span>
-													<b>Курс:</b> {group.course_number}
-												</span>
+													<span>
+														<b>Курс:</b> {group.course_number}
+													</span>
+												</div>
+												{existingTrack && (
+													<Badge
+														text={`Группа в треке «${existingTrack.name}»`}
+														color='yellow'
+													/>
+												)}
 											</div>
-										</div>
 
-										<button
-											type='button'
-											className={styles.item__remove}
-											onClick={() => onRemoveGroup(group.id)}
-											aria-label='Удалить группу'>
-											✕
-										</button>
-									</li>
-								))}
+											<button
+												type='button'
+												className={styles.item__remove}
+												onClick={() => onRemoveGroup(group.id)}
+												aria-label='Удалить группу'>
+												✕
+											</button>
+										</li>
+									);
+								})}
 							</ul>
 						) : (
 							<Text text='Группы не выбраны' color='grey' />
@@ -191,36 +272,59 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 						{projects.length ? (
 							<ul className={styles.list}>
-								{projects.map((project) => (
-									<li key={project.id} className={styles.item}>
-										<div className={styles.item__content}>
-											<h4 className={styles.item__title}>{project.title}</h4>
+								{projects.map((project) => {
+									const existingTrack = getProjectTrack(project.id);
+									return (
+										<li key={project.id} className={styles.item}>
+											<div className={styles.item__content}>
+												<div className={styles.item__tags}>
+													{project.tags.map((tag) => (
+														<Badge key={tag.id} text={tag.name} />
+													))}
+												</div>
+												<h4 className={styles.item__title}>{project.title}</h4>
 
-											<div className={styles.item__info}>
-												<span>
-													<b>№ заявки:</b> {project.print_number}
-												</span>
+												<div className={styles.item__info}>
+													<span>
+														<b>№ заявки:</b> {project.print_number}
+													</span>
 
-												<span>
-													<b>Автор:</b> {project.author_name}
-												</span>
+													<span>
+														<b>Автор:</b> {project.author_name}
+													</span>
+												</div>
+
+												{existingTrack && (
+													<Badge
+														text={`Проект уже добавлен в трек «${existingTrack.name}»`}
+														color='yellow'
+													/>
+												)}
+
+												<FormField
+													title='Количество команд на проект*'
+													fieldError={getProjectTeamsError(project.id)}>
+													<FormInputNumber
+														name={`project-teams-${project.id}`}
+														placeholder='Введите количество команд'
+														value={projectTeams[project.id] ?? null}
+														onChange={(e) =>
+															handleChangeProjectTeams(project.id, e)
+														}
+													/>
+												</FormField>
 											</div>
-											<div className={styles.item__tags}>
-												{project.tags.map((tag) => (
-													<Badge key={tag.id} text={tag.name} />
-												))}
-											</div>
-										</div>
 
-										<button
-											type='button'
-											className={styles.item__remove}
-											onClick={() => onRemoveProject(project.id)}
-											aria-label='Удалить проект'>
-											✕
-										</button>
-									</li>
-								))}
+											<button
+												type='button'
+												className={styles.item__remove}
+												onClick={() => onRemoveProject(project.id)}
+												aria-label='Удалить проект'>
+												✕
+											</button>
+										</li>
+									);
+								})}
 							</ul>
 						) : (
 							<Text text='Проекты не выбраны' color='grey' />

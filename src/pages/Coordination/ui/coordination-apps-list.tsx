@@ -183,6 +183,8 @@ export const CoordinationAppsList: FC<ICoordinationAppsListProps> = ({
 								card={app}
 								key={app.id}
 								withAuthor
+								withStage
+								withComment
 								onShowHistory={showHistoryApp}
 								onShowDetail={showDetailApp}
 							/>

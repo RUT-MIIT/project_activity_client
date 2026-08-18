@@ -98,3 +98,11 @@ export const maxLength = (
 	validate: (value: string) => value.length <= length,
 	errorMessage,
 });
+
+export const minValue = (
+	value: number,
+	errorMessage = `Минимальное значение: ${value}`
+) => ({
+	validate: (currentValue: string) => Number(currentValue) >= value,
+	errorMessage,
+});

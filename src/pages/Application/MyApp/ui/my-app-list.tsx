@@ -125,6 +125,8 @@ export const MyAppList: FC = () => {
 									key={item.id}
 									onShowHistory={showHistoryApp}
 									onShowDetail={showDetailApp}
+									withStage
+									withComment
 									isAuthor={true}
 								/>
 							))}

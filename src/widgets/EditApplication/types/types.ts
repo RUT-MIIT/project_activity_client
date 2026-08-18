@@ -29,6 +29,8 @@ export interface IEditAppForm {
 	experts: string;
 	tags: ITag | null;
 	additional_materials: string;
+	track_composer_comment: string;
+	recommended_teams_count: number;
 }
 
 export interface IApplicationFieldProps extends PropsWithChildren {

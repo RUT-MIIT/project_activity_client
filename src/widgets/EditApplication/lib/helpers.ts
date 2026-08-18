@@ -42,6 +42,8 @@ export const initialAppValues: IEditAppForm = {
 	experts: '',
 	tags: null,
 	additional_materials: '',
+	track_composer_comment: '',
+	recommended_teams_count: 3,
 };
 
 export const shouldBlockSubmit = (
@@ -54,6 +56,8 @@ export const shouldBlockSubmit = (
 		!values.company.trim() ||
 		!!errors.company ||
 		!values.company_contacts.trim() ||
-		!!errors.company_contacts
+		!!errors.company_contacts ||
+		values.recommended_teams_count < 1 ||
+		!!errors.recommended_teams_count
 	);
 };

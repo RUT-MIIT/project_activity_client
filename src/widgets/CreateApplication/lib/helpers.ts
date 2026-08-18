@@ -6,6 +6,7 @@ import {
 	phoneFormat,
 	minLength,
 	maxLength,
+	minValue,
 } from '../../../shared/lib/validationRules';
 
 export const validationSchema = {
@@ -63,6 +64,10 @@ export const validationSchema = {
 		maxLength(50),
 	],
 	additional_materials: [maxLength(1000)],
+	track_composer_comment: [maxLength(500)],
+	recommended_teams_count: [
+		minValue(1, 'Количество команд должно быть больше 0'),
+	],
 };
 
 export const initialAppValues: ICreateAppForm = {
@@ -93,7 +98,10 @@ export const initialAppValues: ICreateAppForm = {
 	title: '',
 	tags: null,
 	additional_materials: '',
+	track_composer_comment: '',
+	recommended_teams_count: 3,
 	needs_consultation: false,
+	is_continuing: false,
 	privacy_person: false,
 	privacy_org: false,
 };
@@ -195,11 +203,29 @@ export const formFieldMainData = {
 		info: 'Ссылки на дополнительные материалы – что будет полезно почитать, посмотреть, изучить участникам, ваши дополнительные комментарии в произвольной форме. Это поможет студенческой команде лучше подготовиться к проведению интервью.',
 		placeholder: 'Введите дополнительные материалы',
 	},
+	track_composer_comment: {
+		name: 'track_composer_comment',
+		title: 'Комментарий для составителя трека',
+		info: 'Укажите дополнительную информацию или комментарий, который поможет составителю трека учесть ваши пожелания.',
+		placeholder: 'Введите комментарий',
+	},
+	recommended_teams_count: {
+		name: 'recommended_teams_count',
+		title: 'Рекомендуемое число команд на проект',
+		info: '',
+		placeholder: 'Введите число команд',
+	},
 	needs_consultation: {
 		name: 'needs_consultation',
 		title: 'Консультация',
 		info: '',
 		placeholder: 'Хочу, чтобы мне помогли заполнить заявку',
+	},
+	is_continuing: {
+		name: 'is_continuing',
+		title: 'Продолжающийся проект',
+		info: '',
+		placeholder: 'Выберите, если проект продолжается',
 	},
 };
 
@@ -343,6 +369,7 @@ export const requiredFieldsMain: (keyof ICreateAppForm)[] = [
 	'context',
 
 	'title',
+	'recommended_teams_count',
 ];
 
 export const requiredFieldsPublic: (keyof ICreateAppForm)[] = [
@@ -392,6 +419,14 @@ export const shouldBlockSubmit = (
 			if (value.trim().length === 0) {
 				return true;
 			}
+			continue;
+		}
+
+		if (field === 'recommended_teams_count') {
+			if (typeof value !== 'number' || value < 1) {
+				return true;
+			}
+
 			continue;
 		}
 

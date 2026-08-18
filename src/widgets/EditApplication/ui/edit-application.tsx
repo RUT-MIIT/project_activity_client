@@ -20,6 +20,7 @@ import { Form } from '../../../shared/components/Form/ui/form';
 import {
 	FormField,
 	FormInput,
+	FormInputNumber,
 	FormTextarea,
 } from '../../../shared/components/Form/components';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
@@ -311,6 +312,8 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				tags: applicationDetail.tags[0],
 				title: applicationDetail.title || '',
 				additional_materials: applicationDetail.additional_materials || '',
+				track_composer_comment: applicationDetail.track_composer_comment || '',
+				recommended_teams_count: applicationDetail.recommended_teams_count || 3,
 			});
 		}
 	}, [applicationDetail, setValues]);
@@ -632,6 +635,32 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 												placeholder='Введите дополнительные материалы'
 											/>
 										</ApplicationField>
+										<ApplicationField
+											title='Комментарий для составителя трека'
+											fieldCode='track_composer_comment'
+											currentField={currentField}
+											getCommentCount={getCommentCount}
+											onSelectField={handleSelectField}>
+											<FormTextarea
+												name='track_composer_comment'
+												value={values.track_composer_comment}
+												onChange={handleChange}
+												placeholder='Введите комментарий'
+											/>
+										</ApplicationField>
+										<ApplicationField
+											title='Рекомендуемое число команд на проект'
+											fieldCode='recommended_teams_count'
+											currentField={currentField}
+											getCommentCount={getCommentCount}
+											onSelectField={handleSelectField}>
+											<FormInputNumber
+												name='recommended_teams_count'
+												value={values.recommended_teams_count}
+												onChange={handleChange}
+												placeholder='Введите число команд'
+											/>
+										</ApplicationField>
 									</>
 								)}
 							</div>
@@ -651,7 +680,7 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 										type='submit'
 										color='green'
 										withIcon={{ type: 'check', color: 'white' }}
-										isBlock={isLoadingAction}
+										isBlock={isLoadingAction || isBlockSubmit}
 									/>
 								)}
 								{hasAction('approve') && (

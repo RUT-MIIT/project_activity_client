@@ -5,6 +5,7 @@ import { useSelector } from '../../../../../store/store';
 
 import { Button } from '../../../../../shared/components/Button/ui/button';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
+import { Tooltip } from '../../../../../shared/components/Tooltip/ui/tooltip';
 
 import {
 	getStatusColor,
@@ -34,9 +35,6 @@ export const AppCard: FC<IAppCardProps> = ({
 
 	return (
 		<li className={styles.card} key={card.id}>
-			{card.has_unseen_changes && isAuthor && (
-				<div className={styles.card__attention}></div>
-			)}
 			<div className={styles.card__header}>
 				<Badge text={statusText} color={statusColor} />
 				{withComment && (
@@ -87,13 +85,46 @@ export const AppCard: FC<IAppCardProps> = ({
 				)}
 			</div>
 			<div className={styles.card__footer}>
-				{card.needs_consultation && (
-					<span className={styles.card__help}>Нужна помощь!</span>
-				)}
+				<div className={styles.tooltip}>
+					{card.has_unseen_changes && isAuthor && (
+						<Tooltip
+							content={
+								<p className={styles.tooltip__text}>
+									В заявке есть новые изменения
+								</p>
+							}>
+							<div
+								className={`${styles.tooltip__icon} ${styles.tooltip__icon_attention}`}></div>
+						</Tooltip>
+					)}
+					{card.needs_consultation && (
+						<Tooltip
+							content={
+								<p className={styles.tooltip__text}>
+									Нужна консультация специалиста по заполнению заявки
+								</p>
+							}>
+							<div
+								className={`${styles.tooltip__icon} ${styles.tooltip__icon_consultation}`}></div>
+						</Tooltip>
+					)}
+
+					{card.is_continuing && (
+						<Tooltip
+							content={
+								<p className={styles.tooltip__text}>
+									Проект является продолжением предыдущего проекта
+								</p>
+							}>
+							<div
+								className={`${styles.tooltip__icon} ${styles.tooltip__icon_continue}`}></div>
+						</Tooltip>
+					)}
+				</div>
 
 				{onShowHistory && (
 					<Button
-						text='История изменения'
+						text='История изменений'
 						color='cancel'
 						onClick={() => onShowHistory(card.id)}
 					/>

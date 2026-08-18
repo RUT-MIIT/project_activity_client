@@ -100,7 +100,10 @@ export const createFullTrackAction = createAsyncThunk<
 	{
 		track: ICreateTrack;
 		group_ids: number[];
-		application_ids: number[];
+		projects: {
+			id: number;
+			teamsCount: number;
+		}[];
 	}
 >('track/createFullTrack', async (data, { dispatch }) => {
 	const track = await dispatch(createTrackAction(data.track)).unwrap();
@@ -116,11 +119,11 @@ export const createFullTrackAction = createAsyncThunk<
 		).unwrap();
 	}
 
-	if (data.application_ids.length > 0) {
+	if (data.projects.length > 0) {
 		await dispatch(
 			addProjectsToTrackAction({
 				trackId,
-				application_ids: data.application_ids,
+				projects: data.projects,
 			})
 		).unwrap();
 	}

@@ -114,7 +114,7 @@
 		}
 	}
 	&__footer {
-		margin: auto 0 0 0;
+		margin: 0;
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -137,16 +137,42 @@
 		flex-direction: column;
 		gap: 4px;
 	}
-	&__help {
-		margin: 0 auto 0 0;
-		font-size: 14px;
-		line-height: 18px;
-		font-style: normal;
-		font-weight: 500;
-		text-align: left;
-		color: var(--main-blue-color);
-		user-select: none;
-		pointer-events: none;
+}
+
+.tooltip {
+	margin: 0 auto 0 0;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.tooltip__icon {
+	margin: 0;
+	width: 20px;
+	height: 20px;
+	&_attention {
+		background-image: url('../../../../../shared/images/icons/has_unseen_changes.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	&_consultation {
+		background-image: url('../../../../../shared/images/icons/needs_consultation.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	&_continue {
+		background-image: url('../../../../../shared/images/icons/is_continuing.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
 	}
 }
 
+.tooltip__text {
+	margin: 0;
+	color: var(--main-black-color);
+	font-size: 14px;
+	line-height: 18px;
+}

@@ -14,6 +14,7 @@ import { Form } from '../../../shared/components/Form/ui/form';
 import {
 	FormField,
 	FormInput,
+	FormInputNumber,
 	FormTextarea,
 	FormButtons,
 } from '../../../shared/components/Form/components';
@@ -131,8 +132,8 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('tags', selected);
 	};
 
-	const handleChangeConsultation = () => {
-		handleCheckboxToggle('needs_consultation');
+	const handleChangeCheckBox = (name: keyof ICreateAppForm) => {
+		handleCheckboxToggle(name);
 	};
 
 	const handleNextStep = () => setCurrentStep((prev) => prev + 1);
@@ -409,11 +410,50 @@ export const CreateMainApplication: FC = () => {
 							placeholder={formFieldMainData.additional_materials.placeholder}
 						/>
 					</FormField>
+					<FormField
+						title={formFieldMainData.track_composer_comment.title}
+						withInfo
+						infoText={formFieldMainData.track_composer_comment.info}
+						fieldError={{
+							text: errors.track_composer_comment || '',
+							isShow: !!errors.track_composer_comment,
+						}}>
+						<FormTextarea
+							name={formFieldMainData.track_composer_comment.name}
+							value={values.track_composer_comment}
+							onChange={handleChange}
+							placeholder={formFieldMainData.track_composer_comment.placeholder}
+						/>
+					</FormField>
+					<FormField
+						title={formFieldMainData.recommended_teams_count.title}
+						withInfo
+						infoText={formFieldMainData.recommended_teams_count.info}
+						fieldError={{
+							text: errors.recommended_teams_count || '',
+							isShow: !!errors.recommended_teams_count,
+						}}>
+						<FormInputNumber
+							name={formFieldMainData.recommended_teams_count.name}
+							value={values.recommended_teams_count}
+							onChange={handleChange}
+							placeholder={
+								formFieldMainData.recommended_teams_count.placeholder
+							}
+						/>
+					</FormField>
+					<FormField title={formFieldMainData.is_continuing.title}>
+						<Checkbox
+							checked={values.is_continuing}
+							label={formFieldMainData.is_continuing.placeholder}
+							onChange={() => handleChangeCheckBox('is_continuing')}
+						/>
+					</FormField>
 					<FormField title={formFieldMainData.needs_consultation.title}>
 						<Checkbox
 							checked={values.needs_consultation}
 							label={formFieldMainData.needs_consultation.placeholder}
-							onChange={handleChangeConsultation}
+							onChange={() => handleChangeCheckBox('needs_consultation')}
 						/>
 					</FormField>
 				</>
@@ -452,6 +492,10 @@ export const CreateMainApplication: FC = () => {
 			value: values.tags?.id === 0 ? '' : values.tags?.name ?? '',
 		},
 		{ title: 'Наименование проекта*', value: values.title },
+		{
+			title: 'Рекомндуемое число команд на проект*',
+			value: values.recommended_teams_count,
+		},
 	];
 
 	const isLastStep = currentStep === steps.length;
@@ -522,11 +566,6 @@ export const CreateMainApplication: FC = () => {
 											color='blue'
 											isBlock={isBlockSubmit || isLoading}
 											style={{ margin: '0 0 0 auto' }}
-											withIcon={{
-												type: 'send',
-												position: 'left',
-												color: 'white',
-											}}
 										/>
 									)}
 								</FormButtons>
@@ -540,7 +579,9 @@ export const CreateMainApplication: FC = () => {
 							{summaryFields.map(({ title, value }) => (
 								<li key={title} className={styles.summary__item}>
 									<h5 className={styles.summary__title}>{title}</h5>
-									<p className={styles.summary__text}>{value?.trim() || '—'}</p>
+									<p className={styles.summary__text}>
+										{value?.toString().trim() || '—'}
+									</p>
 								</li>
 							))}
 						</ul>

@@ -127,41 +127,43 @@ export const StructureNormsList: FC = () => {
 							/>
 						</TableHeader>
 						<TableMain>
-							{divisionsPlans.map((elem: IDivisionStats) => (
-								<TableRow key={elem.department_id}>
-									<TableColumn
-										text={elem.department_name}
-										id={elem.department_id}
-										columnSize='full'
-										textWeight='bold'
-										active
-										onClick={() => handleOpenSetDivisionPlanModal(elem)}
-									/>
-									<TableColumn
-										text={elem.plan}
-										textColor={elem.plan === 0 ? 'red' : 'default'}
-										id={elem.department_id}
-										columnSize='small'
-									/>
-									<TableColumn
-										text={getApprovedCount(elem.applications_by_status)}
-										textColor={elem.plan === 0 ? 'grey' : 'blue'}
-										id={elem.department_id}
-										columnSize='small'
-									/>
-									<TableColumn
-										withChildren
-										id={elem.department_id}
-										columnSize='progress'>
-										<ProgressBar
-											value={getApprovedCount(elem.applications_by_status)}
-											max={elem.plan}
-											withInfo
-											caption='Выполнение'
+							{divisionsPlans
+								.filter((elem) => elem.department_name !== 'ЦПДС')
+								.map((elem: IDivisionStats) => (
+									<TableRow key={elem.department_id}>
+										<TableColumn
+											text={elem.department_name}
+											id={elem.department_id}
+											columnSize='full'
+											textWeight='bold'
+											active
+											onClick={() => handleOpenSetDivisionPlanModal(elem)}
 										/>
-									</TableColumn>
-								</TableRow>
-							))}
+										<TableColumn
+											text={elem.plan}
+											textColor={elem.plan === 0 ? 'red' : 'default'}
+											id={elem.department_id}
+											columnSize='small'
+										/>
+										<TableColumn
+											text={getApprovedCount(elem.applications_by_status)}
+											textColor={elem.plan === 0 ? 'grey' : 'blue'}
+											id={elem.department_id}
+											columnSize='small'
+										/>
+										<TableColumn
+											withChildren
+											id={elem.department_id}
+											columnSize='progress'>
+											<ProgressBar
+												value={getApprovedCount(elem.applications_by_status)}
+												max={elem.plan}
+												withInfo
+												caption='Выполнение'
+											/>
+										</TableColumn>
+									</TableRow>
+								))}
 						</TableMain>
 					</Table>
 					{isOpenSetDivisionPlanModal && currentDivision && (

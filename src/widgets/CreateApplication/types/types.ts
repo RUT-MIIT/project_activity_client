@@ -33,7 +33,10 @@ export interface ICreateAppForm {
 	tags: ITag | null;
 	title: string;
 	additional_materials: string;
+	track_composer_comment: string;
+	recommended_teams_count: number;
 	needs_consultation: boolean;
+	is_continuing: boolean;
 	privacy_person: boolean;
 	privacy_org: boolean;
 }

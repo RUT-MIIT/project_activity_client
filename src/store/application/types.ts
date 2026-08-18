@@ -38,7 +38,10 @@ export interface ICreateAppMain {
 	title: string;
 	tags: number[];
 	additional_materials: string;
+	track_composer_comment: string;
+	recommended_teams_count: number;
 	needs_consultation: boolean;
+	is_continuing: boolean;
 }
 
 export interface ICreateAppPublic {
@@ -133,6 +136,7 @@ export interface IApplicationItem {
 	application_year: number;
 	is_external: boolean;
 	is_internal_customer: boolean;
+	is_continuing: boolean;
 	has_unseen_changes: boolean;
 }
 

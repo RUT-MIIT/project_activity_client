@@ -5,7 +5,13 @@ export interface ITrackDetailModal {
 	instituteCode: string;
 }
 
+export interface ICreateTrackProject {
+	id: number;
+	teamsCount: number;
+}
+
 export interface ICreateTrackData {
 	name: string;
-	maxTeams?: number;
+	maxTeams: number;
+	projects: ICreateTrackProject[];
 }

@@ -11,6 +11,7 @@ import { SelectWithSearch } from '../../../shared/components/Select/ui/select-wi
 import { Button } from '../../../shared/components/Button/ui/button';
 import { ConfirmDelete } from '../../../features/ConfirmDelete/ui/confirm-delete';
 import { TrackCard } from './track-card';
+import { Text } from '../../../shared/components/Typography';
 
 import {
 	getTrackListAction,
@@ -219,6 +220,10 @@ export const TrackList: FC = () => {
 
 	if (isLoading) {
 		return <Preloader />;
+	}
+
+	if (trackList.length < 1) {
+		return <Text text='Проектные треки не найдены.' color='grey' />;
 	}
 
 	return (

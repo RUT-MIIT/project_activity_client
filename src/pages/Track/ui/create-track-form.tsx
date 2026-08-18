@@ -32,6 +32,7 @@ import {
 } from '../../../store/catalog/actions';
 import {
 	getTrackProjectsAction,
+	getTrackListAction,
 	createFullTrackAction,
 } from '../../../store/track/actions';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
@@ -87,16 +88,18 @@ export const CreateTrackForm: FC = () => {
 					track: {
 						name: data.name,
 						description: '',
-						...(data.maxTeams !== undefined && {
-							max_teams: data.maxTeams,
-						}),
+						max_teams: data.maxTeams,
 						semester_id: currentSemester.id,
 						department_id: user.department.id,
 					},
 					group_ids: selectedGroups.map((group) => group.id),
-					application_ids: selectedProjectIds,
+					projects: data.projects,
 				})
 			).unwrap();
+
+			if (user.institute_code) {
+				await dispatch(getTrackListAction(user.institute_code)).unwrap();
+			}
 
 			showToast({
 				title: 'Проектный трек успешно создан!',
@@ -282,7 +285,10 @@ export const CreateTrackForm: FC = () => {
 		dispatch(getDirectionsAction());
 		dispatch(getGroupsAction());
 		dispatch(getTrackProjectsAction());
-	}, [dispatch]);
+		if (user?.institute_code) {
+			dispatch(getTrackListAction(user.institute_code));
+		}
+	}, [dispatch, user]);
 
 	if (isLoadingCatalog || isLoadingProjects) return <Preloader />;
 

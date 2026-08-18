@@ -51,6 +51,8 @@ export interface IProject {
 	tags: ITag[];
 	print_number: string;
 	img: string;
+	track_composer_comment: string;
+	recommended_teams_count: number;
 }
 
 export interface ITrackStats {
@@ -83,11 +85,15 @@ export interface IAddGroupsToTrack {
 	group_ids: number[];
 }
 
-export interface IAddProjectsToTrack {
-	trackId: number;
-	application_ids: number[];
+export interface ITrackProjectToAdd {
+	id: number;
+	teamsCount: number;
 }
 
+export interface IAddProjectsToTrack {
+	trackId: number;
+	projects: ITrackProjectToAdd[];
+}
 export interface ITrackGroup {
 	id: number;
 	name: string;

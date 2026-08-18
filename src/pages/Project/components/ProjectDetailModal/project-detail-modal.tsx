@@ -27,6 +27,10 @@ const tabs = [
 		path: 'context',
 		label: 'Контекст',
 	},
+	{
+		path: 'additional',
+		label: 'Дополнительно',
+	},
 ];
 
 export const ProjectDetailModal: FC<IProjectDetailModal> = ({
@@ -62,9 +66,6 @@ export const ProjectDetailModal: FC<IProjectDetailModal> = ({
 						<>
 							{activeTab === 'main' && (
 								<>
-									<FormField title='Наименование проекта'>
-										<FormInputStub value={applicationDetail.title} />
-									</FormField>
 									<FormField title='Уровень проекта'>
 										<FormInputStub value={applicationDetail.project_level} />
 									</FormField>
@@ -117,6 +118,23 @@ export const ProjectDetailModal: FC<IProjectDetailModal> = ({
 									</FormField>
 									<FormField title='Эксперты'>
 										<FormInputStub value={applicationDetail.experts} />
+									</FormField>
+								</>
+							)}
+							{activeTab === 'additional' && (
+								<>
+									<FormField title='Наименование проекта'>
+										<FormInputStub value={applicationDetail.title} />
+									</FormField>
+									<FormField title='Комментарий для составителя трека'>
+										<FormInputStub
+											value={applicationDetail.track_composer_comment}
+										/>
+									</FormField>
+									<FormField title='Рекомендуемое число команд на проект'>
+										<FormInputStub
+											value={applicationDetail.recommended_teams_count}
+										/>
 									</FormField>
 								</>
 							)}
