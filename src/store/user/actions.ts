@@ -4,6 +4,9 @@ import type {
 	IAuthResponse,
 	IUser,
 	IMessageResponse,
+	IPreRegisteredStudent,
+	IPreRegistrationLookupRequest,
+	IStudentRegistrationRequest,
 } from './types';
 
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
@@ -14,6 +17,9 @@ import {
 	changePassword,
 	forgotPassword,
 	resetPassword,
+	registerStudent,
+	lookupPreRegisteredStudent,
+	reportStudentMismatch,
 } from '../../shared/api/user';
 
 import { setIsAuthChecked } from './reducer';
@@ -27,6 +33,33 @@ export const registerUser = createAsyncThunk<
 	IAuthResponse,
 	IRegistrationRequest
 >('user/registration', registration);
+
+export const lookupStudentAction = createAsyncThunk<
+	IPreRegisteredStudent,
+	IPreRegistrationLookupRequest
+>('user/lookupStudent', lookupPreRegisteredStudent);
+
+export const registerStudentAction = createAsyncThunk<
+	IAuthResponse,
+	IStudentRegistrationRequest
+>('user/registerStudent', registerStudent);
+
+export const reportStudentMismatchAction = createAsyncThunk(
+	'user/reportStudentMismatch',
+	async (
+		data: {
+			id: number;
+			comment: string;
+		},
+		{ rejectWithValue }
+	) => {
+		try {
+			return await reportStudentMismatch(data);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
 
 export const setUser = createAction<IUser | null>('auth/setUser');
 

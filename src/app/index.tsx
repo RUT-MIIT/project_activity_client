@@ -9,6 +9,7 @@ import {
 
 import { Login } from '../pages/Login/ui/login';
 import { Registration } from '../pages/Registration/ui/registration';
+import { RegistrationStudent } from '../pages/Registration/ui/registration-student';
 import { ForgotPassword } from '../pages/ForgotPassword/ui/forgot-password';
 import { ResetPassword } from '../pages/ResetPassword/reset-password';
 import { Apply } from '../pages/Apply/ui/apply';
@@ -56,6 +57,10 @@ export const App = () => {
 					<Route
 						path={EPAGESROUTES.LOGIN}
 						element={<OnlyUnAuth component={<Login />} />}
+					/>
+					<Route
+						path={EPAGESROUTES.REGISTRATION_STUDENT}
+						element={<OnlyUnAuth component={<RegistrationStudent />} />}
 					/>
 					<Route
 						path={EPAGESROUTES.REGISTRATION}

@@ -1,4 +1,4 @@
-import type { IRegistrationForm } from '../types/types';
+import type { IRegistrationForm, IAuthMethodOption } from '../types/types';
 import type { TFormValidationErrors } from '../../../shared/components/Form/types/types';
 import type { IDepartment } from '../../../store/catalog/types';
 
@@ -11,13 +11,15 @@ import { EPAGESROUTES } from '../../../shared/utils/routes';
 
 export const links = [
 	{ label: 'Уже есть аккаунт?', text: 'Войти', url: EPAGESROUTES.LOGIN },
-	/*
 	{
 		label: 'Вы не сотрудник РУТ (МИИТ)?',
 		text: 'Подать заявку',
 		url: EPAGESROUTES.APPLY,
 	},
-	*/
+];
+
+export const studentLinks = [
+	{ label: 'Уже есть аккаунт?', text: 'Войти', url: EPAGESROUTES.LOGIN },
 ];
 
 export const validationSchema = {
@@ -63,3 +65,24 @@ export const shouldBlockSubmit = (
 		!department
 	);
 };
+
+export const authMethods: IAuthMethodOption[] = [
+	{
+		value: 'student_card',
+		label: 'Студенческий билет',
+		placeholder: 'Введите номер студенческого билета',
+		info: 'Номер указан в вашем студенческом билете. Введите 8 цифр без пробелов',
+	},
+	{
+		value: 'personnel_number',
+		label: 'Табельный номер',
+		placeholder: 'Введите табельный номер',
+		info: 'Табельный номер указан в личном кабенете на сайте РУТ (МИИТ) в разделе «Обо мне»',
+	},
+	{
+		value: 'snils',
+		label: 'СНИЛС',
+		placeholder: 'Введите СНИЛС',
+		info: 'Номер вашего СНИЛС. Введите 11 цифр без пробелов и тире',
+	},
+];

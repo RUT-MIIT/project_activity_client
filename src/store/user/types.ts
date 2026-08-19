@@ -1,3 +1,11 @@
+export interface IUserStore {
+	user: IUser | null;
+	isAuthChecked: boolean;
+	isLoading: boolean;
+	isLoadingRequest: boolean;
+	error: string | null;
+}
+
 export interface ILoginRequest {
 	email: string;
 	password: string;
@@ -35,12 +43,31 @@ export interface IUser {
 	institute_code: string | null;
 }
 
-export interface IUserStore {
-	user: IUser | null;
-	isAuthChecked: boolean;
-	isLoading: boolean;
-	isLoadingRequest: boolean;
-	error: string | null;
+export interface IPreRegisteredStudent {
+	id: number;
+	last_name: string;
+	first_name: string;
+	middle_name: string;
+	group_name: string;
+	student_card: string;
+	is_registered: boolean;
+}
+
+export type IPreRegistrationLookupRequest =
+	| {
+			student_card: string;
+	  }
+	| {
+			personnel_number: string;
+	  }
+	| {
+			snils: string;
+	  };
+
+export interface IStudentRegistrationRequest {
+	id: number;
+	email: string;
+	password: string;
 }
 
 export interface ITokenRequest {

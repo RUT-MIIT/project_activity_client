@@ -2,6 +2,8 @@ import type {
 	ILoginRequest,
 	IRegistrationRequest,
 	IAuthResponse,
+	IStudentRegistrationRequest,
+	IPreRegistrationLookupRequest,
 } from '../../store/user/types';
 
 import { request } from './utils';
@@ -39,6 +41,44 @@ export const registration = (data: IRegistrationRequest) => {
 			setTokens(res.access);
 		}
 		return res;
+	});
+};
+
+export const lookupPreRegisteredStudent = (
+	data: IPreRegistrationLookupRequest
+) => {
+	return request('/accounts/pre-registered-students/lookup/', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+};
+
+export const registerStudent = (data: IStudentRegistrationRequest) => {
+	return request('/accounts/pre-registered-students/register/', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+};
+
+export const reportStudentMismatch = (data: {
+	id: number;
+	comment: string;
+}) => {
+	return request('/accounts/pre-registered-students/report-mismatch/', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
 	});
 };
 
