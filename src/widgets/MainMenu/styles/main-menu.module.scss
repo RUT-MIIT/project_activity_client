@@ -179,6 +179,24 @@
 		background-repeat: no-repeat;
 		background-size: contain;
 	}
+	&_type_team {
+		background-image: url('../../../shared/images/icons/new/team-grey.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	&_type_group {
+		background-image: url('../../../shared/images/icons/new/group-grey.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	&_type_showcase {
+		background-image: url('../../../shared/images/icons/new/showcase-grey.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
 }
 
 .link_active {
@@ -221,6 +239,19 @@
 	background-image: url('../../../shared/images/icons/new/control-blue.svg');
 }
 
+.link_active .icon_type_team {
+	background-image: url('../../../shared/images/icons/new/team-blue.png');
+}
+
+.link_active .icon_type_group {
+	background-image: url('../../../shared/images/icons/new/group-blue.png');
+}
+
+.link_active .icon_type_showcase {
+	background-image: url('../../../shared/images/icons/new/showcase-blue.png');
+}
+
+
 .link:hover .icon__text {
   color: var(--main-blue-color);
 }
@@ -259,4 +290,16 @@
 
 .link:hover .icon_type_logout {
 	background-image: url('../../../shared/images/icons/new/logout-blue.svg');
+}
+
+.link:hover .icon_type_team {
+	background-image: url('../../../shared/images/icons/new/team-blue.png');
+}
+
+.link:hover .icon_type_group {
+	background-image: url('../../../shared/images/icons/new/group-blue.png');
+}
+
+.link:hover .icon_type_showcase {
+	background-image: url('../../../shared/images/icons/new/showcase-blue.png');
 }

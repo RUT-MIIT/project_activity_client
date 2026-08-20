@@ -43,7 +43,7 @@ export const UserEditForm: FC = () => {
 				<FormInputStub value={user.phone} />
 			</FormField>
 			<FormField title='Подразделение'>
-				<FormInputStub value={user.department.name} />
+				<FormInputStub value={user.department?.name || ''} />
 			</FormField>
 			<FormField title='Роль в системе'>
 				<FormInputStub value={convertRole(user.role)} />
@@ -51,9 +51,11 @@ export const UserEditForm: FC = () => {
 			<FormField title='Статус учетной записи'>
 				<FormInputStub value='Активна' />
 			</FormField>
-			<FormButtons>
-				<Button type='submit' text='Сохранить' isBlock={isBlockSubmit} />
-			</FormButtons>
+			{/*
+				<FormButtons>
+					<Button type='submit' text='Сохранить' isBlock={isBlockSubmit} />
+				</FormButtons>
+			*/}
 		</Form>
 	);
 };

@@ -19,4 +19,7 @@ export enum EMAINROUTES {
 	TRACK = 'track',
 	STATS = 'stats',
 	CONTROL = 'control',
+	GROUP = 'group',
+	TEAM = 'team',
+	SHOWCASE = 'showcase',
 }

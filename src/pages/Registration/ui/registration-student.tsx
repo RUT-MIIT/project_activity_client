@@ -45,6 +45,7 @@ export const RegistrationStudent: FC = () => {
 	const dispatch = useDispatch();
 
 	const [isLookupLoading, setIsLookupLoading] = useState(false);
+	const [isRegistrationLoading, setIsRegistrationLoading] = useState(false);
 	const [isReportingError, setIsReportingError] = useState(false);
 	const [reportComment, setReportComment] = useState('');
 	const [isReportLoading, setIsReportLoading] = useState(false);
@@ -275,6 +276,7 @@ export const RegistrationStudent: FC = () => {
 		e.preventDefault();
 
 		setEmailTouched(true);
+		setPasswordTouched(true);
 
 		if (isStepThreeBlocked) {
 			showToast({
@@ -295,6 +297,8 @@ export const RegistrationStudent: FC = () => {
 
 			return;
 		}
+
+		setIsRegistrationLoading(true);
 
 		try {
 			await dispatch(
@@ -318,9 +322,10 @@ export const RegistrationStudent: FC = () => {
 				text: getErrorMessage(error),
 				type: 'error',
 			});
+		} finally {
+			setIsRegistrationLoading(false);
 		}
 	};
-
 	const handleBackToStepOne = () => {
 		setStudent(null);
 		setStep(1);
@@ -568,9 +573,13 @@ export const RegistrationStudent: FC = () => {
 
 							<Button
 								type='submit'
-								text='Зарегистрироваться'
+								text={
+									isRegistrationLoading
+										? 'Регистрация...'
+										: 'Зарегистрироваться'
+								}
 								color='blue'
-								isBlock={isStepThreeBlocked}
+								isBlock={isStepThreeBlocked || isRegistrationLoading}
 							/>
 						</FormButtons>
 					</Form>

@@ -14,6 +14,7 @@ import { getUser } from '../../../store/user/reducer';
 import { getMyDivisionStatsAction } from '../../../store/structure/actions';
 
 import { EMAINROUTES } from '../../../shared/utils/routes';
+import { EROLES } from '../../../shared/utils/roles';
 
 import styles from '../styles/home.module.scss';
 
@@ -31,11 +32,19 @@ export const Home: FC = () => {
 		});
 	};
 
+	const openShowCase = () => {
+		navigate(`/${EMAINROUTES.SHOWCASE}`, {
+			replace: true,
+		});
+	};
+
 	useEffect(() => {
-		if (currentSemester) {
-			dispatch(getMyDivisionStatsAction(currentSemester.id));
+		if (user?.role) {
+			if (currentSemester && user.role !== EROLES.STUDENT) {
+				dispatch(getMyDivisionStatsAction(currentSemester.id));
+			}
 		}
-	}, [dispatch, currentSemester]);
+	}, [dispatch, user, currentSemester]);
 
 	if (isLoadingStats) {
 		<Preloader />;
@@ -53,12 +62,21 @@ export const Home: FC = () => {
 							Вот что актуально на сегодня
 						</p>
 					</div>
-					<Button
-						text='Новая заявка'
-						color='white'
-						withIcon={{ type: 'add', position: 'left', color: 'blue' }}
-						onClick={createNewApp}
-					/>
+					{user.role === EROLES.STUDENT ? (
+						<Button
+							text='Витрина проектов'
+							color='white'
+							withIcon={{ type: 'showcase', position: 'left', color: 'blue' }}
+							onClick={openShowCase}
+						/>
+					) : (
+						<Button
+							text='Новая заявка'
+							color='white'
+							withIcon={{ type: 'add', position: 'left', color: 'blue' }}
+							onClick={createNewApp}
+						/>
+					)}
 				</div>
 				<div className={styles.container}>
 					<div className={styles.row}>

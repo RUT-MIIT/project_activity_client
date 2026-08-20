@@ -23,6 +23,9 @@ import { Structure } from '../pages/Structure/ui/structure';
 import { Track } from '../pages/Track/ui/track';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
+import { Group } from '../pages/Group/ui/group';
+import { Team } from '../pages/Team/ui/team';
+import { Showcase } from '../pages/Showcase/ui/showcase';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
 import { Privacy } from '../pages/Privacy/ui/privacy';
 
@@ -31,6 +34,7 @@ import { getSemestersAction } from '../store/structure/actions';
 import { getAppsAction } from '../store/application/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
 import { EPAGESROUTES, EMAINROUTES } from '../shared/utils/routes';
+import { EROLES } from '../shared/utils/roles';
 
 import styles from './app.module.scss';
 
@@ -44,8 +48,10 @@ export const App = () => {
 
 	useEffect(() => {
 		if (isAuthChecked && user) {
-			dispatch(getSemestersAction());
-			dispatch(getAppsAction());
+			if (user.role !== EROLES.STUDENT) {
+				dispatch(getSemestersAction());
+				dispatch(getAppsAction());
+			}
 		}
 	}, [dispatch, isAuthChecked, user]);
 
@@ -83,7 +89,11 @@ export const App = () => {
 					{/* ---------- Авторизованный редирект для / ---------- */}
 					<Route
 						path='/'
-						element={<OnlyAuth component={<Navigate to='/home' replace />} />}
+						element={
+							<OnlyAuth
+								component={<Navigate to={`/${EMAINROUTES.HOME}`} replace />}
+							/>
+						}
 					/>
 
 					{/* ---------- Авторизованные страницы в MainLayout ---------- */}
@@ -105,13 +115,16 @@ export const App = () => {
 						/>
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
 						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
+						<Route path={`/${EMAINROUTES.GROUP}/*`} element={<Group />} />
+						<Route path={`/${EMAINROUTES.TEAM}/*`} element={<Team />} />
+						<Route path={`/${EMAINROUTES.SHOWCASE}/*`} element={<Showcase />} />
 						<Route
 							path={`/${EMAINROUTES.CONTROL}/*`}
 							element={
-								user?.role === 'admin' || user?.role === 'cpds' ? (
+								user?.role === EROLES.ADMIN || user?.role === EROLES.CPDS ? (
 									<Control />
 								) : (
-									<Navigate to='/home' replace />
+									<Navigate to={`/${EMAINROUTES.HOME}`} replace />
 								)
 							}
 						/>

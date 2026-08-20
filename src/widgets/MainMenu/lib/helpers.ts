@@ -82,6 +82,17 @@ export const cpdsLinks = [
 	{ name: 'Управление', url: EMAINROUTES.CONTROL, icon: 'control' },
 ];
 
+export const studentLinks = [
+	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
+	{ name: 'Моя группа', url: EMAINROUTES.GROUP, icon: 'group' },
+	{ name: 'Моя команда', url: EMAINROUTES.TEAM, icon: 'team' },
+	{
+		name: 'Витрина проектов',
+		url: EMAINROUTES.SHOWCASE,
+		icon: 'showcase',
+	},
+];
+
 export const getLinksByRole = (role?: string) => {
 	switch (role) {
 		case 'admin':
@@ -94,6 +105,8 @@ export const getLinksByRole = (role?: string) => {
 			return instituteValidatorLinks;
 		case 'cpds':
 			return cpdsLinks;
+		case 'student':
+			return studentLinks;
 		default:
 			return [];
 	}

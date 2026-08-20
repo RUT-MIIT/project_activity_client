@@ -26,6 +26,7 @@ export interface IButtonProps {
 			| 'back'
 			| 'return'
 			| 'cancel'
+			| 'showcase'
 			| 'info';
 		position?: 'left' | 'right';
 		color?: 'black' | 'white' | 'blue' | 'grey';
