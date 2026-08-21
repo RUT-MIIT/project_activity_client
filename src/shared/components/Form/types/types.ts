@@ -39,6 +39,7 @@ export interface IFormInputProps {
 
 export interface IFormInputStubProps {
 	value: string;
+	color?: string;
 }
 
 export interface IFormInputNumberProps {

@@ -103,6 +103,8 @@ export const createFullTrackAction = createAsyncThunk<
 		projects: {
 			id: number;
 			teamsCount: number;
+			minTeamMembers: number;
+			maxTeamMembers: number;
 		}[];
 	}
 >('track/createFullTrack', async (data, { dispatch }) => {

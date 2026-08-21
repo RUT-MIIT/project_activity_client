@@ -132,7 +132,7 @@ export const StructureNormsList: FC = () => {
 								.map((elem: IDivisionStats) => (
 									<TableRow key={elem.department_id}>
 										<TableColumn
-											text={elem.department_name}
+											text={`${elem.department_name} (${elem.department_short_name})`}
 											id={elem.department_id}
 											columnSize='full'
 											textWeight='bold'

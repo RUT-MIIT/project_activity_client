@@ -10,6 +10,7 @@ import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { Button } from '../../../shared/components/Button/ui/button';
 import { Text } from '../../../shared/components/Typography';
 import { Badge } from '../../../shared/components/Badge/ui/badge';
+import { Tooltip } from '../../../shared/components/Tooltip/ui/tooltip';
 import { Form } from '../../../shared/components/Form/ui/form';
 import {
 	FormField,
@@ -42,10 +43,14 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 	onRemoveGroup,
 	onRemoveProject,
 }) => {
-	const { trackList } = useSelector((state) => state.track);
+	const { trackList, isLoading } = useSelector((state) => state.track);
 	const [projectTeams, setProjectTeams] = useState<
 		Record<number, number | null>
 	>({});
+	const [teamSizeRange, setTeamSizeRange] = useState({
+		min: 4,
+		max: 7,
+	});
 	const [trackName, setTrackName] = useState<string>('');
 	const [trackNameError, setTrackNameError] = useState({
 		isShow: false,
@@ -60,15 +65,69 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 		0
 	);
 
-	const hasEmptyProjectTeams = projects.some(
-		(project) => projectTeams[project.id] === null
+	const totalStudents = groups.reduce(
+		(sum, group) => sum + (group.students_count ?? 0),
+		0
 	);
+
+	const averageTeamSize = (teamSizeRange.min + teamSizeRange.max) / 2;
+
+	const totalTeamCapacity = maxTeams * averageTeamSize;
+
+	const choiceIndex = totalStudents > 0 ? totalTeamCapacity / totalStudents : 0;
+
+	const getChoiceIndexStatus = (value: number) => {
+		if (value < 1.1) {
+			return {
+				level: 'red' as const,
+				title: 'Недостаточный выбор',
+				text: 'Доступных мест в командах недостаточно. Часть студентов может не получить возможность выбрать подходящий проект. Рекомендуется увеличить количество проектов.',
+			};
+		}
+
+		if (value < 1.4) {
+			return {
+				level: 'yellow' as const,
+				title: 'Небольшой выбор',
+				text: 'У студентов есть выбор проектов, но количество доступных мест ограничено. Можно рассмотреть небольшое увеличение количества проектов.',
+			};
+		}
+
+		if (value <= 1.8) {
+			return {
+				level: 'green' as const,
+				title: 'Хороший выбор',
+				text: 'Оптимальное соотношение количества мест и студентов. У студентов есть хороший выбор проектов без существенного избытка.',
+			};
+		}
+
+		if (value <= 2.2) {
+			return {
+				level: 'yellow' as const,
+				title: 'Избыточный выбор',
+				text: 'Доступных мест больше, чем необходимо для комфортного выбора. Некоторые проекты могут быть не выбраны.',
+			};
+		}
+
+		return {
+			level: 'red' as const,
+			title: 'Слишком много мест',
+			text: 'Количество доступных мест значительно превышает количество студентов. Это может привести к большому числу невыбранных проектов.',
+		};
+	};
+	const choiceIndexStatus = getChoiceIndexStatus(choiceIndex);
+
+	const hasInvalidProjectTeams = projects.some((project) => {
+		const value = projectTeams[project.id];
+
+		return value === null || value < 1 || value > 3;
+	});
 
 	const isSubmitBlocked =
 		trackName.trim().length === 0 ||
 		groups.length === 0 ||
 		projects.length === 0 ||
-		hasEmptyProjectTeams;
+		hasInvalidProjectTeams;
 
 	const getGroupTrack = (groupId: number) => {
 		return trackList.find((track) =>
@@ -85,10 +144,31 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 	const getProjectTeamsError = (projectId: number) => {
 		const value = projectTeams[projectId];
 
-		if (projectTeamsTouched[projectId] && value === null) {
+		if (!projectTeamsTouched[projectId]) {
+			return {
+				isShow: false,
+				text: '',
+			};
+		}
+
+		if (value === null) {
 			return {
 				isShow: true,
 				text: 'Обязательное поле',
+			};
+		}
+
+		if (value < 1) {
+			return {
+				isShow: true,
+				text: 'Минимальное количество команд — 1',
+			};
+		}
+
+		if (value > 3) {
+			return {
+				isShow: true,
+				text: 'Максимальное количество команд — 3',
 			};
 		}
 
@@ -138,13 +218,31 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 		const value = Number(rawValue);
 
-		if (Number.isNaN(value) || value < 1) {
+		if (Number.isNaN(value)) {
 			return;
 		}
 
 		setProjectTeams((prev) => ({
 			...prev,
 			[projectId]: value,
+		}));
+	};
+
+	const handleMinTeamSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const value = Number(e.target.value);
+
+		setTeamSizeRange((prev) => ({
+			...prev,
+			min: Math.min(value, prev.max),
+		}));
+	};
+
+	const handleMaxTeamSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const value = Number(e.target.value);
+
+		setTeamSizeRange((prev) => ({
+			...prev,
+			max: Math.max(value, prev.min),
 		}));
 	};
 
@@ -165,6 +263,8 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 			projects: projects.map((project) => ({
 				id: project.id,
 				teamsCount: projectTeams[project.id] ?? 0,
+				minTeamMembers: teamSizeRange.min,
+				maxTeamMembers: teamSizeRange.max,
 			})),
 		};
 
@@ -175,6 +275,10 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 		setTrackName('');
 		setProjectTeams({});
 		setProjectTeamsTouched({});
+		setTeamSizeRange({
+			min: 4,
+			max: 7,
+		});
 		setTrackNameError({
 			isShow: false,
 			text: '',
@@ -213,12 +317,101 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 						onChange={handleChangeTrackName}
 					/>
 				</FormField>
-				<FormField
-					title='Максимальное количество команд в треке'
-					withInfo={true}
-					infoText='Максимальное количество команд рассчитывается автоматически как сумма рекомендуемого количества команд для всех проектов, добавленных в трек.'>
-					<FormInputStub value={maxTeams.toString()} />
-				</FormField>
+
+				<div className={styles.field__row}>
+					<FormField
+						title='Максимальное количество команд в треке'
+						withInfo={true}
+						infoText='Максимальное количество команд рассчитывается автоматически как сумма рекомендуемого количества команд для всех проектов, добавленных в трек.'>
+						<FormInputStub value={maxTeams.toString()} />
+					</FormField>
+
+					<FormField
+						title='Количество студентов в треке'
+						withInfo
+						infoText='Общее количество студентов рассчитывается автоматически как сумма студентов во всех выбранных группах.'>
+						<FormInputStub value={totalStudents.toString()} />
+					</FormField>
+				</div>
+
+				<div className={styles.field__row}>
+					<FormField
+						title='Количество человек в команде'
+						withInfo
+						infoText='Укажите допустимый диапазон количества участников в одной команде. Можно выбрать от 3 до 10 человек.'>
+						<div className={styles.teamSize}>
+							<div className={styles.teamSize__slider}>
+								<div
+									className={styles.teamSize__range}
+									style={{
+										left: `${((teamSizeRange.min - 3) / 7) * 100}%`,
+										right: `${100 - ((teamSizeRange.max - 3) / 7) * 100}%`,
+									}}
+								/>
+
+								<input
+									type='range'
+									min={3}
+									max={10}
+									step={1}
+									value={teamSizeRange.min}
+									onChange={handleMinTeamSizeChange}
+									className={styles.teamSize__input}
+								/>
+
+								<input
+									type='range'
+									min={3}
+									max={10}
+									step={1}
+									value={teamSizeRange.max}
+									onChange={handleMaxTeamSizeChange}
+									className={styles.teamSize__input}
+								/>
+							</div>
+
+							<div className={styles.teamSize__labels}>
+								<span>3</span>
+								<span>4</span>
+								<span>5</span>
+								<span>6</span>
+								<span>7</span>
+								<span>8</span>
+								<span>9</span>
+								<span>10</span>
+							</div>
+						</div>
+					</FormField>
+
+					<FormField
+						title='Индекс выбора проектов'
+						withInfo
+						infoText='Показатель соотношения доступных мест в командах и общего количества студентов. Чем выше значение, тем больше возможностей выбора проектов у студентов.'>
+						<Tooltip
+							placement='top'
+							content={
+								<div className={styles.choiceIndex__tooltip}>
+									<div className={styles.choiceIndex__tooltipTitle}>
+										{choiceIndexStatus.title}
+									</div>
+
+									<div className={styles.choiceIndex__tooltipText}>
+										{choiceIndexStatus.text}
+									</div>
+								</div>
+							}>
+							<FormInputStub
+								value={
+									choiceIndex > 0
+										? `${choiceIndex.toFixed(2)} — ${choiceIndexStatus.title}`
+										: '—'
+								}
+								color={choiceIndex > 0 ? choiceIndexStatus.level : 'default'}
+							/>
+						</Tooltip>
+					</FormField>
+				</div>
+
 				<div className={styles.columns}>
 					<div className={styles.column}>
 						<h3 className={styles.column__title}>Группы ({groups.length})</h3>
@@ -239,6 +432,10 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 													<span>
 														<b>Курс:</b> {group.course_number}
+													</span>
+
+													<span>
+														<b>Студентов:</b> {group.students_count}
 													</span>
 												</div>
 												{existingTrack && (
@@ -344,7 +541,7 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 						text='Сохранить'
 						type='submit'
 						color='blue'
-						isBlock={isSubmitBlocked}
+						isBlock={isSubmitBlocked || isLoading}
 					/>
 				</FormButtons>
 			</Form>

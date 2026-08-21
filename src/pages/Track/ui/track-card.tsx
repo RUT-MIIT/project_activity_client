@@ -25,6 +25,11 @@ export const TrackCard: FC<ITrackCardProps> = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const maxTeams = track.applications.reduce(
+		(sum, application) => sum + application.teamsCount,
+		0
+	);
+
 	return (
 		<div className={styles.item}>
 			<div className={styles.main}>
@@ -34,9 +39,7 @@ export const TrackCard: FC<ITrackCardProps> = ({
 					<div className={styles.item__info}>
 						<Badge text={`Групп: ${track.groups.length} `} />
 						<Badge text={`Проектов: ${track.applications.length}`} />
-						<Badge
-							text={`Максимальное количество команд: ${track.max_teams || '∞'}`}
-						/>
+						<Badge text={`Максимальное количество команд: ${maxTeams}`} />
 					</div>
 				</div>
 
@@ -92,6 +95,10 @@ export const TrackCard: FC<ITrackCardProps> = ({
 
 														<span>
 															<b>Курс:</b> {group.course_number}
+														</span>
+
+														<span>
+															<b>Студентов:</b> {group.students_count}
 														</span>
 													</div>
 												</div>

@@ -27,18 +27,21 @@ export interface ITrack {
 	author_id: number;
 	department_id: number;
 	description: string;
-	max_teams: number;
 	name: string;
 	semester_id: number;
 	applications: {
 		id: number;
 		print_number: string;
 		title: string;
+		maxTeamMembers: number;
+		minTeamMembers: number;
+		teamsCount: number;
 	}[];
 	groups: {
 		id: number;
 		course_number: number;
 		name: string;
+		students_count: number;
 	}[];
 }
 
@@ -88,6 +91,8 @@ export interface IAddGroupsToTrack {
 export interface ITrackProjectToAdd {
 	id: number;
 	teamsCount: number;
+	minTeamMembers: number;
+	maxTeamMembers: number;
 }
 
 export interface IAddProjectsToTrack {

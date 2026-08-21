@@ -31,6 +31,7 @@ export interface IGroup {
 	course_number: number;
 	direction_code: string;
 	name: string;
+	students_count: number;
 }
 
 export interface IDepartment {

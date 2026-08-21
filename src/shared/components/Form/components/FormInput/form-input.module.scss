@@ -98,16 +98,40 @@
 
 .stub {
 	margin: 0;
-  width: 100%;
-  padding: 9px 16px 9px 16px;
-  box-sizing: border-box;
-  border: 1px solid var(--main-grey-light-color);
-  border-radius: var(--border-radius);
-  font-size: 14px;
-  line-height: 18px;
-  color: var(--main-black-color);
+	width: 100%;
+	padding: 9px 16px;
+	box-sizing: border-box;
+
+	border: 1px solid var(--main-grey-light-color);
+	border-radius: var(--border-radius);
+
+	font-size: 14px;
+	line-height: 18px;
+	color: var(--main-black-color);
+
 	outline: none;
-  transition: border-color .3s ease-in-out;
+	transition:
+		border-color 0.3s ease-in-out,
+		background-color 0.3s ease-in-out;
+
 	background: var(--background-color);
 	cursor: default;
+}
+
+.stub_green {
+	color: var(--accent-green-color);
+	background: var(--background-green-color);
+	border-color: var(--accent-green-light-color);
+}
+
+.stub_yellow {
+	color: var(--accent-yellow-color);
+	background: var(--background-yellow-color);
+	border-color: #fde7c7;
+}
+
+.stub_red {
+	color: var(--accent-red-color);
+	background: var(--background-red-color);
+	border-color: var(--accent-red-light-color);
 }

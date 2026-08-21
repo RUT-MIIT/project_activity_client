@@ -289,7 +289,6 @@ export const TrackList: FC = () => {
 					}
 				/>
 			)}
-
 			{deleteProject && (
 				<ConfirmDelete
 					isOpen

@@ -8,6 +8,8 @@ export interface ITrackDetailModal {
 export interface ICreateTrackProject {
 	id: number;
 	teamsCount: number;
+	minTeamMembers: number;
+	maxTeamMembers: number;
 }
 
 export interface ICreateTrackData {
