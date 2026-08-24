@@ -8,6 +8,7 @@ import type {
 	ITrackStats,
 	ISubdivisionStats,
 	ICreateTrack,
+	IUpdateTrack,
 	IAddGroupsToTrack,
 	IAddProjectsToTrack,
 	IRemoveGroupFromTrack,
@@ -26,6 +27,7 @@ import {
 	getSubdivisionStats,
 	getTrackGroupDetail,
 	createTrack,
+	updateTrack,
 	addGroupsToTrack,
 	addProjectsToTrack,
 	removeTrack,
@@ -83,6 +85,11 @@ export const getSubdivisionStatsAction = createAsyncThunk<ISubdivisionStats>(
 export const createTrackAction = createAsyncThunk<ITrack, ICreateTrack>(
 	'track/createTrack',
 	createTrack
+);
+
+export const updateTrackAction = createAsyncThunk<ITrack, IUpdateTrack>(
+	'track/updateTrack',
+	updateTrack
 );
 
 export const addGroupsToTrackAction = createAsyncThunk<

@@ -1,5 +1,6 @@
 import type {
 	ICreateTrack,
+	IUpdateTrack,
 	IAddGroupsToTrack,
 	IAddProjectsToTrack,
 } from '../../store/track/types';
@@ -127,6 +128,18 @@ export const getSubdivisionStats = () => {
 export const createTrack = (data: ICreateTrack) => {
 	return request('/showcase/project-tracks/', {
 		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+		body: JSON.stringify(data),
+	});
+};
+
+export const updateTrack = ({ id, ...data }: IUpdateTrack) => {
+	return request(`/showcase/project-tracks/${id}/`, {
+		method: 'PATCH',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',

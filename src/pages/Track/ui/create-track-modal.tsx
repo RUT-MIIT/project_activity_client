@@ -320,17 +320,17 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 
 				<div className={styles.field__row}>
 					<FormField
-						title='Максимальное количество команд в треке'
-						withInfo={true}
-						infoText='Максимальное количество команд рассчитывается автоматически как сумма рекомендуемого количества команд для всех проектов, добавленных в трек.'>
-						<FormInputStub value={maxTeams.toString()} />
-					</FormField>
-
-					<FormField
 						title='Количество студентов в треке'
 						withInfo
 						infoText='Общее количество студентов рассчитывается автоматически как сумма студентов во всех выбранных группах.'>
 						<FormInputStub value={totalStudents.toString()} />
+					</FormField>
+
+					<FormField
+						title='Максимальное количество команд в треке'
+						withInfo={true}
+						infoText='Максимальное количество команд рассчитывается автоматически как сумма рекомендуемого количества команд для всех проектов, добавленных в трек.'>
+						<FormInputStub value={maxTeams.toString()} />
 					</FormField>
 				</div>
 

@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import type { ITrack, ITrackProjectToAdd } from '../../../store/track/types';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../store/store';
@@ -9,12 +10,20 @@ import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { FormField } from '../../../shared/components/Form/components';
 import { SelectWithSearch } from '../../../shared/components/Select/ui/select-with-search';
 import { Button } from '../../../shared/components/Button/ui/button';
-import { ConfirmDelete } from '../../../features/ConfirmDelete/ui/confirm-delete';
 import { TrackCard } from './track-card';
 import { Text } from '../../../shared/components/Typography';
+import { EditTrackModal } from './edit-track-modal';
+import { AddGroupModal } from './add-group-modal';
+import { AddProjectModal } from './add-project-modal';
+import { ConfirmDelete } from '../../../features/ConfirmDelete/ui/confirm-delete';
 
+import { getGroupsAction } from '../../../store/catalog/actions';
 import {
+	getTrackProjectsAction,
 	getTrackListAction,
+	updateTrackAction,
+	addGroupsToTrackAction,
+	addProjectsToTrackAction,
 	removeTrackAction,
 	removeGroupFromTrackAction,
 	removeProjectFromTrackAction,
@@ -27,8 +36,13 @@ export const TrackList: FC = () => {
 	const dispatch = useDispatch();
 	const { showToast } = useToast();
 
-	const { trackList, isLoading } = useSelector((state) => state.track);
+	const { isLoadingCatalog } = useSelector((state) => state.catalog);
+	const { trackList, selectedInstitute, isLoading } = useSelector(
+		(state) => state.track
+	);
 	const { user } = useSelector((state) => state.user);
+
+	const [selectedTrack, setSelectedTrack] = useState<ITrack | null>(null);
 
 	const [currentGroup, setCurrentGroup] = useState<{
 		id: number;
@@ -52,6 +66,10 @@ export const TrackList: FC = () => {
 		applicationId: number;
 	} | null>(null);
 
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [isAddGroupModalOpen, setIsAddGroupModalOpen] = useState(false);
+	const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
+
 	const handleChangeGroup = (opt: { id: number; name: string } | null) => {
 		setCurrentGroup(opt);
 		setCurrentProject(null);
@@ -64,6 +82,40 @@ export const TrackList: FC = () => {
 
 	const handleConfirmRemoveTrack = (trackId: number) => {
 		setDeleteTrackId(trackId);
+	};
+
+	const handleEditTrack = async (data: {
+		name: string;
+		minTeamMembers: number;
+		maxTeamMembers: number;
+	}) => {
+		if (!selectedTrack) return;
+
+		try {
+			await dispatch(
+				updateTrackAction({
+					id: selectedTrack.id,
+					name: data.name,
+					minTeamMembers: data.minTeamMembers,
+					maxTeamMembers: data.maxTeamMembers,
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Трек обновлен',
+				text: 'Параметры проектного трека успешно изменены.',
+				type: 'success',
+			});
+
+			setIsEditModalOpen(false);
+			setSelectedTrack(null);
+		} catch (err) {
+			showToast({
+				title: 'Не удалось изменить трек',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
 	};
 
 	const handleRemoveTrack = async (trackId: number) => {
@@ -80,6 +132,34 @@ export const TrackList: FC = () => {
 		} catch (err) {
 			showToast({
 				title: 'Не удалось удалить проектный трек',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
+	};
+
+	const handleAddGroup = async (groupIds: number[]) => {
+		if (!selectedTrack) return;
+
+		try {
+			await dispatch(
+				addGroupsToTrackAction({
+					trackId: selectedTrack.id,
+					group_ids: groupIds,
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Группа добавлена',
+				text: 'Группа успешно добавлена в проектный трек.',
+				type: 'success',
+			});
+
+			setIsAddGroupModalOpen(false);
+			setSelectedTrack(null);
+		} catch (err) {
+			showToast({
+				title: 'Не удалось добавить группу',
 				text: getErrorMessage(err),
 				type: 'error',
 			});
@@ -112,6 +192,34 @@ export const TrackList: FC = () => {
 		} catch (err) {
 			showToast({
 				title: 'Не удалось удалить группу',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
+	};
+
+	const handleAddProject = async (projects: ITrackProjectToAdd[]) => {
+		if (!selectedTrack) return;
+
+		try {
+			await dispatch(
+				addProjectsToTrackAction({
+					trackId: selectedTrack.id,
+					projects,
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Проект добавлен',
+				text: 'Проект успешно добавлен в проектный трек.',
+				type: 'success',
+			});
+
+			setIsAddProjectModalOpen(false);
+			setSelectedTrack(null);
+		} catch (err) {
+			showToast({
+				title: 'Не удалось добавить проект',
 				text: getErrorMessage(err),
 				type: 'error',
 			});
@@ -213,12 +321,22 @@ export const TrackList: FC = () => {
 	}, [trackList, currentGroup, currentProject]);
 
 	useEffect(() => {
-		if (user?.institute_code) {
-			dispatch(getTrackListAction(user.institute_code));
+		dispatch(getGroupsAction());
+		dispatch(getTrackProjectsAction());
+		if (user) {
+			if (user.role === 'cpds') {
+				if (selectedInstitute) {
+					dispatch(getTrackListAction(selectedInstitute));
+				}
+			} else {
+				if (user?.institute_code) {
+					dispatch(getTrackListAction(user.institute_code));
+				}
+			}
 		}
-	}, [dispatch, user]);
+	}, [dispatch, selectedInstitute, user]);
 
-	if (isLoading) {
+	if (isLoading || isLoadingCatalog) {
 		return <Preloader />;
 	}
 
@@ -233,6 +351,18 @@ export const TrackList: FC = () => {
 					<TrackCard
 						key={track.id}
 						track={track}
+						onEdit={(track) => {
+							setSelectedTrack(track);
+							setIsEditModalOpen(true);
+						}}
+						onAddGroup={(track) => {
+							setSelectedTrack(track);
+							setIsAddGroupModalOpen(true);
+						}}
+						onAddProject={(track) => {
+							setSelectedTrack(track);
+							setIsAddProjectModalOpen(true);
+						}}
 						onDelete={handleConfirmRemoveTrack}
 						onRemoveGroup={handleConfirmRemoveGroup}
 						onRemoveProject={handleConfirmRemoveProject}
@@ -301,6 +431,37 @@ export const TrackList: FC = () => {
 						)
 					}
 				/>
+			)}
+			{selectedTrack && (
+				<>
+					<EditTrackModal
+						isOpen={isEditModalOpen}
+						track={selectedTrack}
+						onClose={() => {
+							setIsEditModalOpen(false);
+							setSelectedTrack(null);
+						}}
+						onSubmit={handleEditTrack}
+					/>
+					<AddGroupModal
+						isOpen={isAddGroupModalOpen}
+						track={selectedTrack}
+						onClose={() => {
+							setIsAddGroupModalOpen(false);
+							setSelectedTrack(null);
+						}}
+						onSubmit={handleAddGroup}
+					/>
+					<AddProjectModal
+						isOpen={isAddProjectModalOpen}
+						track={selectedTrack}
+						onClose={() => {
+							setIsAddProjectModalOpen(false);
+							setSelectedTrack(null);
+						}}
+						onSubmit={handleAddProject}
+					/>
+				</>
 			)}
 		</div>
 	);

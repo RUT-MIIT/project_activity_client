@@ -21,6 +21,9 @@
 		flex: 1;
 		min-height: 0;
 	}
+	&_height_stretch {
+		min-height: 360px;
+	}
 }
 
 .title {

@@ -83,6 +83,13 @@ export interface ICreateTrack {
 	department_id: number;
 }
 
+export interface IUpdateTrack {
+	id: number;
+	name?: string;
+	minTeamMembers?: number;
+	maxTeamMembers?: number;
+}
+
 export interface IAddGroupsToTrack {
 	trackId: number;
 	group_ids: number[];
@@ -99,6 +106,7 @@ export interface IAddProjectsToTrack {
 	trackId: number;
 	projects: ITrackProjectToAdd[];
 }
+
 export interface ITrackGroup {
 	id: number;
 	name: string;

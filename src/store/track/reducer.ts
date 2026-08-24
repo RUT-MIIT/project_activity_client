@@ -49,6 +49,51 @@ export const trackSlice = createSlice({
 				state.isLoading = false;
 				state.error = action.error?.message || 'Не удалось загрузить треки';
 			})
+			.addCase(actions.updateTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.updateTrackAction.fulfilled, (state, action) => {
+				state.isLoadingAction = false;
+
+				state.trackList = state.trackList.map((track) =>
+					track.id === action.payload.id ? action.payload : track
+				);
+			})
+			.addCase(actions.updateTrackAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не удалось загрузить треки';
+			})
+			.addCase(actions.addGroupsToTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.addGroupsToTrackAction.fulfilled, (state, action) => {
+				state.isLoadingAction = false;
+
+				state.trackList = state.trackList.map((track) =>
+					track.id === action.payload.id ? action.payload : track
+				);
+			})
+			.addCase(actions.addGroupsToTrackAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не удалось загрузить треки';
+			})
+			.addCase(actions.addProjectsToTrackAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.addProjectsToTrackAction.fulfilled, (state, action) => {
+				state.isLoadingAction = false;
+
+				state.trackList = state.trackList.map((track) =>
+					track.id === action.payload.id ? action.payload : track
+				);
+			})
+			.addCase(actions.addProjectsToTrackAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не удалось загрузить треки';
+			})
 			.addCase(actions.getTrackProjectsAction.pending, (state) => {
 				state.isLoadingProjects = true;
 				state.error = null;

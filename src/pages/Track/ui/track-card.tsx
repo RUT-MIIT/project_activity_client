@@ -7,11 +7,16 @@ import { Badge } from '../../../shared/components/Badge/ui/badge';
 import { Text } from '../../../shared/components/Typography';
 
 import styles from '../styles/track-card.module.scss';
+import { Button } from '../../../shared/components/Button/ui/button';
 
 interface ITrackCardProps {
 	track: ITrack;
+
 	onEdit?: (track: ITrack) => void;
 	onDelete?: (id: number) => void;
+
+	onAddGroup?: (track: ITrack) => void;
+	onAddProject?: (track: ITrack) => void;
 
 	onRemoveGroup?: (trackId: number, groupId: number) => void;
 	onRemoveProject?: (trackId: number, applicationId: number) => void;
@@ -19,7 +24,10 @@ interface ITrackCardProps {
 
 export const TrackCard: FC<ITrackCardProps> = ({
 	track,
+	onEdit,
 	onDelete,
+	onAddGroup,
+	onAddProject,
 	onRemoveGroup,
 	onRemoveProject,
 }) => {
@@ -44,7 +52,6 @@ export const TrackCard: FC<ITrackCardProps> = ({
 				</div>
 
 				<div className={styles.controls}>
-					{/*
 					<button
 						type='button'
 						className={`${styles.button} ${styles.button_edit}`}
@@ -52,7 +59,6 @@ export const TrackCard: FC<ITrackCardProps> = ({
 						aria-label='Редактировать'>
 						✎
 					</button>
-					*/}
 					<button
 						type='button'
 						className={`${styles.button} ${styles.button_delete}`}
@@ -77,9 +83,17 @@ export const TrackCard: FC<ITrackCardProps> = ({
 					<div className={styles.details__content}>
 						<div className={styles.columns}>
 							<div className={styles.column}>
-								<h4 className={styles.column__title}>
-									Группы ({track.groups.length})
-								</h4>
+								<div className={styles.column__header}>
+									<h4 className={styles.column__title}>
+										Группы ({track.groups.length})
+									</h4>
+									<Button
+										text='Добавить группу'
+										color='blue'
+										onClick={() => onAddGroup?.(track)}
+										withIcon={{ type: 'add', position: 'left', color: 'white' }}
+									/>
+								</div>
 
 								{track.groups.length ? (
 									<ul className={styles.list}>
@@ -119,9 +133,17 @@ export const TrackCard: FC<ITrackCardProps> = ({
 							</div>
 
 							<div className={styles.column}>
-								<h4 className={styles.column__title}>
-									Проекты ({track.applications.length})
-								</h4>
+								<div className={styles.column__header}>
+									<h4 className={styles.column__title}>
+										Проекты ({track.applications.length})
+									</h4>
+									<Button
+										text='Добавить проект'
+										color='blue'
+										onClick={() => onAddProject?.(track)}
+										withIcon={{ type: 'add', position: 'left', color: 'white' }}
+									/>
+								</div>
 
 								{track.applications.length ? (
 									<ul className={styles.list}>
@@ -136,6 +158,7 @@ export const TrackCard: FC<ITrackCardProps> = ({
 														<span>
 															<b>ID:</b> {application.id}
 														</span>
+
 														<span>
 															<b>№ заявки:</b> {application.print_number}
 														</span>
