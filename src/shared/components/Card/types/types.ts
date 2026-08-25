@@ -10,4 +10,5 @@ export interface ICardProps {
 
 export interface ICardControlProps {
 	children?: ReactNode;
+	withMarginAuto?: boolean;
 }

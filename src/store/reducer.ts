@@ -8,6 +8,7 @@ import { historySlice } from './history/reducer';
 import { trackSlice } from './track/reducer';
 import { controlSlice } from './control/reducer';
 import { statsSlice } from './stats/reducer';
+import { studentSlice } from './student/reducer';
 
 export const rootReducer = combineSlices(
 	userSlice,
@@ -18,5 +19,6 @@ export const rootReducer = combineSlices(
 	historySlice,
 	trackSlice,
 	controlSlice,
-	statsSlice
+	statsSlice,
+	studentSlice
 );

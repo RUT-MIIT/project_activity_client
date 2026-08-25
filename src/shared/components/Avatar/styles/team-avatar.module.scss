@@ -1,0 +1,39 @@
+.img {
+	margin: 0;
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+
+	font-style: normal;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 14px;
+	text-transform: uppercase;
+
+	color: var(--main-blue-color);
+	background-color: var(--main-blue-background-color);
+
+	border-radius: var(--border-radius);
+
+	user-select: none;
+	pointer-events: none;
+
+	&_captain {
+		background-color: var(--background-yellow-color);
+		background-image: url('../../../../shared/images/icons/captain.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 20px 20px;
+	}
+
+	&_mentor {
+		background-color: var(--background-purple-color);
+		background-image: url('../../../../shared/images/icons/mentor.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 20px 20px;
+	}
+}

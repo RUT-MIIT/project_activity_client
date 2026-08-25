@@ -58,7 +58,7 @@
 	&__caption {
 		margin: 0;
 		font-style: normal;
-		font-size: 14px;
+		font-size: 12px;
 		font-weight: normal;
 		line-height: 14px;
 		color: var(--main-grey-color);
@@ -73,13 +73,64 @@
 	}
 }
 
+.education {
+	margin: 0 0 0 48px;
+
+	display: grid;
+	grid-template-columns: repeat(1fr);
+	gap: 12px;
+}
+
+.education__row {
+	margin: 0;
+	display: flex;
+	gap: 20px;
+}
+
+.education__item {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: 100%;
+}
+
+.education__caption {
+	margin: 0;
+	font-style: normal;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 14px;
+	color: var(--main-grey-color);
+}
+
+.education__title {
+	margin: 0;
+	font-style: normal;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 18px;
+	color: var(--main-black-color);
+}
+
 @media (max-width: 1440px) {
 	.name {
 		margin: 0;
 		max-width: none;
 	}
+
 	.badge {
 		display: none;
 	}
+
+	.education {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
+@media (max-width: 768px) {
+	.education {
+		margin-left: 0;
+		grid-template-columns: 1fr;
+	}
+}

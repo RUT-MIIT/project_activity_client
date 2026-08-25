@@ -48,6 +48,9 @@
 	align-items: center;
 	justify-content: flex-end;
 	gap: 8px;
+	&_margin_auto {
+		margin: auto 0 0 0;
+	}
 }
 
 @media (max-width: 1600px) {

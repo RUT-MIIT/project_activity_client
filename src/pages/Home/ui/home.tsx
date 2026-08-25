@@ -9,6 +9,8 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { HomePerson } from './home-person';
 import { HomeStats } from './home-stats';
 import { HomePlan } from './home-plan';
+import { HomeProject } from './home-project';
+import { HomeTeam } from './home-team';
 
 import { getUser } from '../../../store/user/reducer';
 import { getMyDivisionStatsAction } from '../../../store/structure/actions';
@@ -81,8 +83,8 @@ export const Home: FC = () => {
 				<div className={styles.container}>
 					<div className={styles.row}>
 						<HomePerson />
-						<HomeStats />
-						<HomePlan />
+						{user.role === EROLES.STUDENT ? <HomeProject /> : <HomeStats />}
+						{user.role === EROLES.STUDENT ? <HomeTeam /> : <HomePlan />}
 					</div>
 				</div>
 			</div>

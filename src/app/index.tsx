@@ -28,10 +28,12 @@ import { Team } from '../pages/Team/ui/team';
 import { Showcase } from '../pages/Showcase/ui/showcase';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
 import { Privacy } from '../pages/Privacy/ui/privacy';
+import { Preloader } from '../shared/components/Preloader/ui/preloader';
 
 import { checkUserAuth } from '../store/user/actions';
 import { getSemestersAction } from '../store/structure/actions';
 import { getAppsAction } from '../store/application/actions';
+import { getMyGroupAction } from '../store/student/actions';
 import { ToastProvider } from '../shared/components/ToastProvider/ui/ToastProvider';
 import { EPAGESROUTES, EMAINROUTES } from '../shared/utils/routes';
 import { EROLES } from '../shared/utils/roles';
@@ -41,6 +43,8 @@ import styles from './app.module.scss';
 export const App = () => {
 	const dispatch = useDispatch();
 	const { user, isAuthChecked } = useSelector((state) => state.user);
+	const { isLoadingGroup } = useSelector((state) => state.student);
+	const { isLoading } = useSelector((state) => state.application);
 
 	useEffect(() => {
 		dispatch(checkUserAuth());
@@ -52,8 +56,15 @@ export const App = () => {
 				dispatch(getSemestersAction());
 				dispatch(getAppsAction());
 			}
+			if (user.role === EROLES.STUDENT) {
+				dispatch(getMyGroupAction());
+			}
 		}
 	}, [dispatch, isAuthChecked, user]);
+
+	if (isLoading || isLoadingGroup) {
+		<Preloader />;
+	}
 
 	return (
 		<ToastProvider>
