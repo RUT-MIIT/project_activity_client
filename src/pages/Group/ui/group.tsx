@@ -94,7 +94,7 @@ export const Group: FC = () => {
 
 						<TableColumn text='Команда' textWeight='bold' columnSize='full' />
 
-						<TableColumn text='Email' textWeight='bold' columnSize='full' />
+						<TableColumn text='Проект' textWeight='bold' columnSize='full' />
 
 						<TableColumn text='Статус' textWeight='bold' columnSize='status' />
 					</TableHeader>
@@ -110,9 +110,12 @@ export const Group: FC = () => {
 									textWeight='bold'
 								/>
 
-								<TableColumn text={member.team || '—'} columnSize='full' />
+								<TableColumn
+									text={member.team?.name || '—'}
+									columnSize='full'
+								/>
 
-								<TableColumn text={member.email || '—'} columnSize='full' />
+								<TableColumn text={'—'} columnSize='full' />
 
 								<TableColumn columnSize='status' withChildren>
 									<Badge

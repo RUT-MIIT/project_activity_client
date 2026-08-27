@@ -25,6 +25,7 @@ import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
 import { Group } from '../pages/Group/ui/group';
 import { Team } from '../pages/Team/ui/team';
+import { TeamLobby } from '../pages/Team/ui/team-lobby';
 import { Showcase } from '../pages/Showcase/ui/showcase';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
 import { Privacy } from '../pages/Privacy/ui/privacy';
@@ -127,7 +128,10 @@ export const App = () => {
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
 						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route path={`/${EMAINROUTES.GROUP}/*`} element={<Group />} />
-						<Route path={`/${EMAINROUTES.TEAM}/*`} element={<Team />} />
+						<Route path={`/${EMAINROUTES.TEAM}`}>
+							<Route index element={<Team />} />
+							<Route path=':teamId/lobby' element={<TeamLobby />} />
+						</Route>
 						<Route path={`/${EMAINROUTES.SHOWCASE}/*`} element={<Showcase />} />
 						<Route
 							path={`/${EMAINROUTES.CONTROL}/*`}

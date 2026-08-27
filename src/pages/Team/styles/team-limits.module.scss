@@ -1,0 +1,92 @@
+.container {
+	margin: 0;
+	width: 100%;
+
+
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+}
+
+
+.notices {
+	min-width: 0;
+	flex: 1;
+
+
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+
+.slots {
+	margin: 0;
+	padding: 24px;
+	width: 240px;
+	min-height: 100%;
+	flex-shrink: 0;
+	box-sizing: border-box;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	border-radius: var(--border-radius);
+
+	background-color: var(--main-blue-color);
+	color: var(--main-white-color);
+}
+
+.slots__count {
+	margin: 0;
+
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	gap: 4px;
+}
+
+.slots__used {
+	font-size: 48px;
+	line-height: 52px;
+	font-weight: 700;
+}
+
+.slots__separator {
+	font-size: 32px;
+	line-height: 36px;
+	font-weight: 400;
+	opacity: 0.6;
+}
+
+.slots__total {
+	font-size: 32px;
+	line-height: 36px;
+	font-weight: 500;
+	opacity: 0.8;
+}
+
+.slots__title {
+	margin: 8px 0 0 0;
+
+	font-size: 12px;
+	line-height: 16px;
+	font-weight: 500;
+
+	opacity: 0.8;
+}
+
+
+@media (max-width: 900px) {
+	.container {
+		flex-direction: column;
+	}
+
+
+	.slots {
+		width: 100%;
+		min-height: 140px;
+	}
+}

@@ -84,13 +84,13 @@ export const cpdsLinks = [
 
 export const studentLinks = [
 	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
-	{ name: 'Моя группа', url: EMAINROUTES.GROUP, icon: 'group' },
 	{ name: 'Моя команда', url: EMAINROUTES.TEAM, icon: 'team' },
 	{
 		name: 'Витрина проектов',
 		url: EMAINROUTES.SHOWCASE,
 		icon: 'showcase',
 	},
+	{ name: 'Учебная группа', url: EMAINROUTES.GROUP, icon: 'group' },
 ];
 
 export const getLinksByRole = (role?: string) => {

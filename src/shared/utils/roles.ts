@@ -1,5 +1,5 @@
 export enum EROLES {
 	ADMIN = 'admin',
-	CPDS = 'cdps',
+	CPDS = 'cpds',
 	STUDENT = 'student',
 }
