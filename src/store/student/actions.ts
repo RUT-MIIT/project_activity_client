@@ -8,6 +8,7 @@ import type {
 	ITeamInvitationRejectResponse,
 	ITeamEventLogResponse,
 	ITeamJoinRequestResponse,
+	IStudentShowcase,
 } from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -28,6 +29,8 @@ import {
 	approveTeamJoinRequest,
 	rejectTeamJoinRequest,
 	confirmTeamComposition,
+	getStudentShowcase,
+	getStudentShowcaseDetail,
 } from '../../shared/api/student';
 
 export const getMyGroupAction = createAsyncThunk<IGroup>(
@@ -103,4 +106,20 @@ export const rejectTeamJoinRequestAction = createAsyncThunk<IMyTeam, number>(
 export const confirmTeamCompositionAction = createAsyncThunk<IMyTeam>(
 	'student/confirmTeamComposition',
 	confirmTeamComposition
+);
+
+export const getStudentShowcaseAction = createAsyncThunk<IStudentShowcase>(
+	'student/getStudentShowcase',
+	getStudentShowcase
+);
+
+export const getStudentShowcaseDetailAction = createAsyncThunk(
+	'student/getStudentShowcaseDetail',
+	async (projectId: number, { rejectWithValue }) => {
+		try {
+			return await getStudentShowcaseDetail(projectId);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
 );

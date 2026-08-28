@@ -1,8 +1,12 @@
 import type { FC } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { Button } from '../../../shared/components/Button/ui/button';
 import { TeamAvatar } from '../../../shared/components/Avatar/ui/team-avatar';
+
+import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/home-team.module.scss';
 
@@ -64,31 +68,16 @@ const mockTeam = {
 };
 
 export const HomeTeam: FC = () => {
+	const navigate = useNavigate();
 	const members = [...mockTeam.members, mockTeam.mentor];
 
 	return (
-		<Card title='Моя команда' subtitle={mockTeam.name} withHeightStretch>
-			<div className={styles.container}>
-				{members.map((user) => (
-					<div className={styles.info} key={user.id}>
-						<TeamAvatar
-							firstName={user.first_name}
-							lastName={user.last_name}
-							role={user.role}
-						/>
-						<div className={styles.user}>
-							<p className={styles.name}>
-								{user.first_name} {user.last_name}
-							</p>
-
-							<p className={styles.role}>{user.role}</p>
-						</div>
-					</div>
-				))}
-			</div>
-
+		<Card title='Моя команда' subtitle='Название команды' withHeightStretch>
 			<CardControl withMarginAuto>
-				<Button text='К моей команде' />
+				<Button
+					text='К моей команде'
+					onClick={() => navigate(`/${EMAINROUTES.TEAM}`)}
+				/>
 			</CardControl>
 		</Card>
 	);

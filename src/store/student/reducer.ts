@@ -8,13 +8,17 @@ const initialState: IStudentStore = {
 	group: null,
 	lobby: null,
 	myTeam: null,
+	showcase: [],
 	eventLog: null,
+	projectDetail: null,
 	isLoadingGroup: false,
 	isLoadingAction: false,
 	isLoadingLobby: false,
 	isLoadingMyTeam: false,
 	isMyTeamLoaded: false,
 	isLoadingEventLog: false,
+	isLoadingShowcase: false,
+	isLoadingShowcaseDetail: false,
 	error: null,
 };
 
@@ -171,10 +175,37 @@ export const studentSlice = createSlice({
 				state.isLoadingEventLog = false;
 				state.eventLog = action.payload;
 			})
-
 			.addCase(actions.getMyTeamEventLogAction.rejected, (state) => {
 				state.isLoadingEventLog = false;
 				state.eventLog = null;
+			})
+			.addCase(actions.getStudentShowcaseAction.pending, (state) => {
+				state.isLoadingShowcase = true;
+				state.error = null;
+			})
+			.addCase(actions.getStudentShowcaseAction.fulfilled, (state, action) => {
+				state.isLoadingShowcase = false;
+				state.showcase = action.payload;
+			})
+			.addCase(actions.getStudentShowcaseAction.rejected, (state, action) => {
+				state.isLoadingShowcase = false;
+				state.error =
+					action.error.message || 'Не удалось загрузить витрину проектов';
+			})
+			.addCase(actions.getStudentShowcaseDetailAction.pending, (state) => {
+				state.isLoadingShowcaseDetail = true;
+				state.projectDetail = null;
+			})
+			.addCase(
+				actions.getStudentShowcaseDetailAction.fulfilled,
+				(state, action) => {
+					state.isLoadingShowcaseDetail = false;
+					state.projectDetail = action.payload;
+				}
+			)
+			.addCase(actions.getStudentShowcaseDetailAction.rejected, (state) => {
+				state.isLoadingShowcaseDetail = false;
+				state.projectDetail = null;
 			});
 	},
 });

@@ -174,3 +174,28 @@ export const confirmTeamComposition = () => {
 		},
 	});
 };
+
+export const getStudentShowcase = () => {
+	return request('/showcase/student-showcase/?semester_id=actual', {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+		},
+	});
+};
+
+export const getStudentShowcaseDetail = (projectId: number) => {
+	return request(
+		`/showcase/student-showcase/projects/${projectId}/?semester_id=actual`,
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};

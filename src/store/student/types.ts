@@ -29,6 +29,8 @@ export interface IStudentStore {
 	lobby: ITeamLobby | null;
 	myTeam: IMyTeam | null;
 	eventLog: ITeamEventLogResponse | null;
+	showcase: IStudentShowcase;
+	projectDetail: IStudentShowcaseDetail | null;
 
 	isLoadingGroup: boolean;
 	isLoadingAction: boolean;
@@ -36,6 +38,8 @@ export interface IStudentStore {
 	isLoadingMyTeam: boolean;
 	isMyTeamLoaded: boolean;
 	isLoadingEventLog: boolean;
+	isLoadingShowcase: boolean;
+	isLoadingShowcaseDetail: boolean;
 
 	error: string | null;
 }
@@ -305,4 +309,54 @@ export interface ITeamEventLogResponse {
 export interface ITeamJoinRequestResponse {
 	id: number;
 	status: TeamRequestStatus;
+}
+
+export interface IShowcaseProjectTag {
+	id: number;
+	name: string;
+	category: string;
+}
+
+export interface IShowcaseProject {
+	id: number;
+	title: string;
+	company: string;
+	maxTeams: number;
+	enrolledTeamsCount: number;
+	minTeamMembers: number;
+	maxTeamMembers: number;
+	tags: IShowcaseProjectTag[];
+}
+
+export interface IShowcaseTrack {
+	id: number;
+	name: string;
+	description: string;
+	projects: IShowcaseProject[];
+}
+
+export type IStudentShowcase = IShowcaseTrack[];
+
+export interface IStudentShowcaseTag {
+	id: number;
+	name: string;
+	category: string;
+}
+
+export interface IStudentShowcaseDetail {
+	id: number;
+	title: string;
+	company: string;
+	goal: string;
+	barrier: string;
+	existingSolutions: string;
+	context: string;
+	projectLevel: string;
+	tags: IStudentShowcaseTag[];
+	maxTeams: number;
+	enrolledTeamsCount: number;
+	minTeamMembers: number;
+	maxTeamMembers: number;
+	trackId: number;
+	canEnroll: boolean;
 }
