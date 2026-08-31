@@ -9,6 +9,8 @@ import { trackSlice } from './track/reducer';
 import { controlSlice } from './control/reducer';
 import { statsSlice } from './stats/reducer';
 import { studentSlice } from './student/reducer';
+import { controlGroupSlice } from './controlGroup/reducer';
+import { mentorSlice } from './mentor/reducer';
 
 export const rootReducer = combineSlices(
 	userSlice,
@@ -20,5 +22,7 @@ export const rootReducer = combineSlices(
 	trackSlice,
 	controlSlice,
 	statsSlice,
-	studentSlice
+	studentSlice,
+	controlGroupSlice,
+	mentorSlice
 );

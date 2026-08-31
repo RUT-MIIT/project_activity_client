@@ -12,6 +12,7 @@ import { ChangePasswordForm } from '../../../features/ChangePassword/ui/change-p
 
 import { getUser } from '../../../store/user/reducer';
 import { convertRole } from '../../../shared/lib/role';
+import { EROLES } from '../../../shared/utils/roles';
 
 import styles from '../styles/home-person.module.scss';
 
@@ -62,8 +63,15 @@ export const HomePerson: FC = () => {
 							<p className={styles.role__title}>{convertRole(user.role)}</p>
 						</div>
 
-						{group && (
+						{group && user.role === EROLES.STUDENT && (
 							<div className={styles.education}>
+								<div className={styles.education__item}>
+									<span className={styles.education__caption}>
+										Учебная группа
+									</span>
+
+									<p className={styles.education__title}>{group.name}</p>
+								</div>
 								<div className={styles.education__item}>
 									<span className={styles.education__caption}>Институт</span>
 
@@ -82,13 +90,6 @@ export const HomePerson: FC = () => {
 									<p className={styles.education__title}>
 										{group.direction.name}
 									</p>
-								</div>
-								<div className={styles.education__item}>
-									<span className={styles.education__caption}>
-										Учебная группа
-									</span>
-
-									<p className={styles.education__title}>{group.name}</p>
 								</div>
 							</div>
 						)}

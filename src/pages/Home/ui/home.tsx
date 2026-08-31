@@ -81,7 +81,10 @@ export const Home: FC = () => {
 					)}
 				</div>
 				<div className={styles.container}>
-					<div className={styles.row}>
+					<div
+						className={`${
+							user.role === EROLES.STUDENT ? styles.row_student : styles.row
+						}`}>
 						<HomePerson />
 						{user.role === EROLES.STUDENT ? <HomeProject /> : <HomeStats />}
 						{user.role === EROLES.STUDENT ? <HomeTeam /> : <HomePlan />}

@@ -1,31 +1,46 @@
 .list {
 	margin: 0;
 	padding: 8px 0;
+
 	width: 100%;
+
 	list-style-type: none;
+
 	display: flex;
 	flex-wrap: wrap;
-	gap: 12px;
 	align-items: center;
+
+	gap: 12px;
+
 	position: relative;
+
 	max-height: 144px;
 	overflow-y: auto;
+
+	box-sizing: border-box;
 }
 
 .item {
 	margin: 0;
 	padding: 12px 20px;
+
 	font-size: 16px;
 	line-height: 16px;
 	font-style: normal;
 	font-weight: 500;
 	text-align: left;
+
 	box-sizing: border-box;
+
 	border-radius: var(--border-radius);
+
 	background-color: var(--main-blue-background-color);
 	color: var(--main-blue-color);
+
 	position: relative;
-	transition: all .3s ease-in-out;
+
+	transition: all 0.3s ease-in-out;
+
 	&:hover {
 		background-color: var(--main-blue-light-color);
 		color: var(--main-white-color);
@@ -34,22 +49,121 @@
 
 .remove {
 	position: absolute;
+
 	top: -10px;
 	right: 4px;
+
 	width: 20px;
 	height: 20px;
+
 	content: '';
+
 	border-radius: 50%;
+
 	background-color: var(--main-white-color);
 	background-image: url('../../../../shared/images/icons/close.svg');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 80%;
+
 	opacity: 0;
+
 	cursor: pointer;
-	transition: all .3s ease-in-out;
+
+	transition: all 0.3s ease-in-out;
 }
 
 .item:hover .remove {
 	opacity: 1;
+}
+
+
+/* =========================
+ * Планшет / небольшие экраны
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.list {
+		padding: 6px 0;
+
+		gap: 8px;
+
+		max-height: none;
+		overflow-y: visible;
+	}
+
+	.item {
+		padding: 10px 16px;
+
+		font-size: 14px;
+		line-height: 16px;
+	}
+
+	.remove {
+		top: -8px;
+		right: 2px;
+
+		width: 18px;
+		height: 18px;
+	}
+}
+
+
+/* =========================
+ * Мобильные
+ * ========================= */
+
+@media (max-width: 768px) {
+	.list {
+		padding: 4px 0;
+
+		gap: 6px 8px;
+	}
+
+	.item {
+		padding: 9px 14px;
+
+		font-size: 13px;
+		line-height: 15px;
+	}
+
+	.remove {
+		top: -7px;
+		right: 2px;
+
+		width: 17px;
+		height: 17px;
+
+		opacity: 1;
+	}
+}
+
+
+/* =========================
+ * Маленькие мобильные
+ * ========================= */
+
+@media (max-width: 480px) {
+	.list {
+		padding: 4px 0;
+
+		gap: 6px;
+	}
+
+	.item {
+		padding: 8px 12px;
+
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.remove {
+		top: -6px;
+		right: 1px;
+
+		width: 16px;
+		height: 16px;
+
+		background-size: 75%;
+	}
 }

@@ -1,7 +1,7 @@
 .container {
 	margin: 16px 0;
 	width: 100%;
-	min-width: 260px;
+
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -11,18 +11,24 @@
 	margin: 0;
 	width: 36px;
 	height: 36px;
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
 	flex-shrink: 0;
+
 	font-style: normal;
 	font-size: 14px;
 	font-weight: 500;
 	line-height: 14px;
 	text-transform: uppercase;
+
 	color: var(--main-blue-color);
 	background-color: var(--main-blue-background-color);
+
 	border-radius: var(--border-radius);
+
 	user-select: none;
 	pointer-events: none;
 }
@@ -30,8 +36,8 @@
 .info {
 	margin: 0;
 	width: 100%;
+
 	display: flex;
-	align-items: center;
 	align-items: flex-start;
 	gap: 12px;
 }
@@ -39,6 +45,7 @@
 .name {
 	margin: 0 auto 0 0;
 	max-width: 180px;
+
 	font-style: normal;
 	font-size: 14px;
 	font-weight: normal;
@@ -52,23 +59,30 @@
 
 .role {
 	margin: 0 0 0 48px;
+
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+
 	&__caption {
 		margin: 0;
+
 		font-style: normal;
 		font-size: 12px;
 		font-weight: normal;
 		line-height: 14px;
+
 		color: var(--main-grey-color);
 	}
+
 	&__title {
 		margin: 0;
+
 		font-style: normal;
 		font-size: 14px;
 		font-weight: normal;
-		line-height: 14px;
+		line-height: 18px;
+
 		color: var(--main-black-color);
 	}
 }
@@ -77,60 +91,110 @@
 	margin: 0 0 0 48px;
 
 	display: grid;
-	grid-template-columns: repeat(1fr);
+	grid-template-columns: 1fr;
 	gap: 12px;
-}
-
-.education__row {
-	margin: 0;
-	display: flex;
-	gap: 20px;
 }
 
 .education__item {
 	margin: 0;
+
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+
 	width: 100%;
 }
 
 .education__caption {
 	margin: 0;
+
 	font-style: normal;
 	font-size: 12px;
 	font-weight: normal;
 	line-height: 14px;
+
 	color: var(--main-grey-color);
 }
 
 .education__title {
 	margin: 0;
+
 	font-style: normal;
 	font-size: 14px;
 	font-weight: normal;
 	line-height: 18px;
+
 	color: var(--main-black-color);
 }
 
-@media (max-width: 1440px) {
-	.name {
-		margin: 0;
-		max-width: none;
-	}
+/* =========================
+ * 1600px
+ * ========================= */
 
-	.badge {
-		display: none;
-	}
-
-	.education {
-		grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1600px) {
+	.container {
+		gap: 14px;
 	}
 }
 
-@media (max-width: 768px) {
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.name {
+		max-width: none;
+	}
+}
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.container {
+		gap: 12px;
+	}
+}
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.container {
+		margin: 14px 0;
+		gap: 12px;
+	}
+
+	.name {
+		max-width: none;
+	}
+
+	.education {
+		gap: 10px;
+	}
+}
+
+/* =========================
+ * 1000px
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.container {
+		margin: 12px 0;
+	}
+
+	.role,
 	.education {
 		margin-left: 0;
-		grid-template-columns: 1fr;
+	}
+
+	.info {
+		gap: 10px;
+	}
+
+	.education {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }

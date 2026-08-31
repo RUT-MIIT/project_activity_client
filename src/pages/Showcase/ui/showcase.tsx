@@ -111,6 +111,7 @@ export const Showcase: FC = () => {
 							<Filter
 								placeholder='Поиск по названию проекта...'
 								onFilter={setSearchQuery}
+								width='full'
 							/>
 						</div>
 

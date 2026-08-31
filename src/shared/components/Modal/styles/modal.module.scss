@@ -58,12 +58,6 @@
 	&_width_full {
 		max-width: 1240px;
 	}
-	&_width_wizard {
-		margin: 8vh 24px 0 auto;
-		max-width: 82vw;
-		height: 84vh;
-		overflow-y: auto;
-	}
 }
 
 .close {
@@ -118,23 +112,121 @@
 	flex-direction: column;
 }
 
-.container_width_wizard .title {
-	font-size: 32px;
-	line-height: 40px;
-}
-
-.container_width_wizard .description {
-	font-size: 20px;
-	line-height: 24px;
-}
-
-.container_width_wizard .close {
-	width: 56px;
-	height: 56px;
-}
-
 @-moz-document url-prefix() {
 	.container {
 		overflow-x: hidden;
+	}
+}
+
+@media (max-width: 1440px) {
+	.container {
+		padding: 28px 32px;
+	}
+
+	.title {
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.description {
+		font-size: 14px;
+		line-height: 18px;
+	}
+}
+
+@media (max-width: 1000px) {
+	.container {
+		margin-top: 6vh;
+		padding: 24px 28px;
+		max-height: 88vh;
+	}
+
+	.title {
+		margin-bottom: 10px;
+
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.description {
+		margin-bottom: 10px;
+
+		font-size: 14px;
+		line-height: 18px;
+	}
+}
+
+@media (max-width: 768px) {
+	.container {
+		margin-top: 4vh;
+		padding: 22px 20px;
+		max-height: 92vh;
+
+		border-radius: var(--border-radius);
+	}
+
+	.container_width_small,
+	.container_width_default,
+	.container_width_large,
+	.container_width_full {
+		max-width: calc(100% - 24px);
+	}
+
+	.title {
+		padding-right: 36px;
+		box-sizing: border-box;
+
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.description {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.close {
+		width: 34px;
+		height: 34px;
+		top: 8px;
+		right: 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.container {
+		margin-top: 2vh;
+		padding: 20px 16px;
+		max-height: 96vh;
+
+		border-radius: var(--border-radius);
+	}
+
+	.container_width_small,
+	.container_width_default,
+	.container_width_large,
+	.container_width_full {
+		max-width: calc(100% - 16px);
+	}
+
+	.title {
+		margin-bottom: 8px;
+
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.description {
+		margin-bottom: 8px;
+
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.close {
+		width: 32px;
+		height: 32px;
+		top: 6px;
+		right: 8px;
 	}
 }

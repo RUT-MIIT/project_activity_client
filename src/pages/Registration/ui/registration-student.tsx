@@ -55,6 +55,9 @@ export const RegistrationStudent: FC = () => {
 	const [authMethod, setAuthMethod] = useState<TAuthMethod>('personnel_number');
 	const [authValue, setAuthValue] = useState('');
 
+	const [lastNameValue, setLastNameValue] = useState('');
+	const [lastNameTouched, setLastNameTouched] = useState(false);
+
 	const [student, setStudent] = useState<IPreRegisteredStudent | null>(null);
 
 	const [email, setEmail] = useState('');
@@ -86,6 +89,12 @@ export const RegistrationStudent: FC = () => {
 					validator.validate(password) ? '' : validator.errorMessage
 				)
 				.find(Boolean) || ''
+		: '';
+
+	const lastNameError = lastNameTouched
+		? !required().validate(lastNameValue.trim())
+			? required().errorMessage
+			: ''
 		: '';
 
 	const handleChangeAuthMethod = (value: TAuthMethod) => {
@@ -122,7 +131,12 @@ export const RegistrationStudent: FC = () => {
 				.find(Boolean) || ''
 		: '';
 
-	const isStepOneBlocked = authValue.trim().length === 0 || !!authValueError;
+	const isStepOneBlocked =
+		lastNameValue.trim().length === 0 ||
+		!!lastNameError ||
+		authValue.trim().length === 0 ||
+		!!authValueError;
+
 	const isStepThreeBlocked =
 		email.trim().length === 0 ||
 		!!emailError ||
@@ -132,19 +146,24 @@ export const RegistrationStudent: FC = () => {
 		password !== passwordRepeat;
 
 	const getLookupData = (): IPreRegistrationLookupRequest => {
+		const lastName = lastNameValue.trim();
+
 		switch (authMethod) {
 			case 'student_card':
 				return {
+					last_name: lastName,
 					student_card: authValue.trim(),
 				};
 
 			case 'personnel_number':
 				return {
+					last_name: lastName,
 					personnel_number: authValue.trim(),
 				};
 
 			case 'snils':
 				return {
+					last_name: lastName,
 					snils: authValue.trim(),
 				};
 		}
@@ -153,9 +172,21 @@ export const RegistrationStudent: FC = () => {
 	const handleLookupStudent = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
+		setLastNameTouched(true);
 		setAuthValueTouched(true);
 
+		const lastName = lastNameValue.trim();
 		const value = authValue.trim();
+
+		if (!lastName) {
+			showToast({
+				title: 'Не заполнено поле',
+				text: 'Введите фамилию.',
+				type: 'error',
+			});
+
+			return;
+		}
 
 		if (!value) {
 			showToast({
@@ -167,10 +198,10 @@ export const RegistrationStudent: FC = () => {
 			return;
 		}
 
-		if (authValueError) {
+		if (lastNameError || authValueError) {
 			showToast({
 				title: 'Проверьте данные',
-				text: authValueError,
+				text: lastNameError || authValueError,
 				type: 'error',
 			});
 
@@ -328,6 +359,10 @@ export const RegistrationStudent: FC = () => {
 	};
 	const handleBackToStepOne = () => {
 		setStudent(null);
+		setLastNameValue('');
+		setLastNameTouched(false);
+		setAuthValue('');
+		setAuthValueTouched(false);
 		setStep(1);
 	};
 
@@ -353,6 +388,22 @@ export const RegistrationStudent: FC = () => {
 						title='Регистрация пользователя'
 						subtitle='Для регистрации в системе необходимо найти ваши данные в базе РУТ (МИИТ). Выберите один из способов идентификации и введите соответствующие данные.'
 						titleAlign='left'>
+						<FormField
+							title='Фамилия'
+							fieldError={{
+								text: lastNameError,
+								isShow: !!lastNameError,
+							}}>
+							<FormInput
+								name='lastName'
+								placeholder='Введите фамилию'
+								value={lastNameValue}
+								onChange={(e) => {
+									setLastNameValue(e.target.value);
+									setLastNameTouched(true);
+								}}
+							/>
+						</FormField>
 						<FormField
 							title='Способ идентификации'
 							withInfo

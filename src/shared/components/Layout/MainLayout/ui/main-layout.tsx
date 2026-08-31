@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '../../../../../store/store';
@@ -16,24 +17,43 @@ export const MainLayout: FC = () => {
 	const user = useSelector(getUser);
 	const dispatch = useDispatch();
 
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 	const handleLogout = () => {
 		dispatch(logoutUser());
 	};
 
+	const handleCloseMenu = () => {
+		setIsMenuOpen(false);
+	};
+
 	return (
 		<div className={styles.container}>
-			<MainMenu />
+			<MainMenu isOpen={isMenuOpen} onClose={handleCloseMenu} />
+
 			<div className={styles.main}>
 				<div className={styles.header}>
+					<button
+						type='button'
+						className={styles.menuButton}
+						onClick={() => setIsMenuOpen(true)}
+						aria-label='Открыть меню'>
+						<span />
+						<span />
+						<span />
+					</button>
+
 					<div className={styles.user}>
 						{user && (
 							<>
 								<p className={styles.role}>{convertRole(user.role)}</p>
+
 								<p className={styles.name}>
 									{user.last_name} {user.first_name}
 								</p>
 							</>
 						)}
+
 						<button
 							onClick={handleLogout}
 							className={styles.logout}
@@ -43,6 +63,7 @@ export const MainLayout: FC = () => {
 						</button>
 					</div>
 				</div>
+
 				<Outlet />
 			</div>
 		</div>

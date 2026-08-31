@@ -34,57 +34,64 @@ export const Group: FC = () => {
 			<div className={styles.summary}>
 				<div
 					className={`${styles.summaryCard} ${styles.summaryCard_color_blue}`}>
-					<h5 className={styles.summaryTitle}>Всего студентов</h5>
-
 					<span className={styles.summaryCount}>{group.students_count}</span>
 
-					<p className={styles.summaryText}>Количество студентов в группе</p>
+					<div className={styles.summaryInfo}>
+						<h5 className={styles.summaryTitle}>Всего студентов</h5>
+
+						<p className={styles.summaryText}>Количество студентов в группе</p>
+					</div>
 				</div>
 
 				<div
 					className={`${styles.summaryCard} ${styles.summaryCard_color_green}`}>
-					<h5 className={styles.summaryTitle}>Зарегистрировано</h5>
-
 					<span className={styles.summaryCount}>
 						{group.registered_students_count}
 					</span>
 
-					<p className={styles.summaryText}>
-						Студентов зарегистрировались в системе
-					</p>
+					<div className={styles.summaryInfo}>
+						<h5 className={styles.summaryTitle}>Зарегистрировано</h5>
+
+						<p className={styles.summaryText}>
+							Студентов зарегистрировались в системе
+						</p>
+					</div>
 				</div>
 
 				<div
 					className={`${styles.summaryCard} ${styles.summaryCard_color_yellow}`}>
-					<h5 className={styles.summaryTitle}>Без команды</h5>
-
 					<span className={styles.summaryCount}>{studentsWithoutTeam}</span>
 
-					<p className={styles.summaryText}>
-						Студентов пока не вошли в команду
-					</p>
+					<div className={styles.summaryInfo}>
+						<h5 className={styles.summaryTitle}>Без команды</h5>
+
+						<p className={styles.summaryText}>
+							Студентов пока не вошли в команду
+						</p>
+					</div>
 				</div>
 
 				<div
 					className={`${styles.summaryCard} ${styles.summaryCard_color_purple}`}>
-					<h5 className={styles.summaryTitle}>Наставник</h5>
-
 					{group.mentor ? (
-						<>
-							<span className={styles.summaryTitle}>{mentorName}</span>
-
-							<p className={styles.summaryText}>{group.mentor.position}</p>
-						</>
+						<span className={styles.summaryCount}>✓</span>
 					) : (
-						<>
-							<span className={styles.summaryTitle}>—</span>
-
-							<p className={styles.summaryText}>У группы пока нет наставника</p>
-						</>
+						<span className={styles.summaryCount}>—</span>
 					)}
+
+					<div className={styles.summaryInfo}>
+						<h5 className={styles.summaryTitle}>Наставник</h5>
+
+						<p className={styles.summaryText}>
+							{group.mentor
+								? `${mentorName}, ${group.mentor.position}`
+								: 'У группы пока нет наставника'}
+						</p>
+					</div>
 				</div>
 			</div>
 
+			{/* Таблица */}
 			<div className={styles.table}>
 				<Table>
 					<TableHeader>
@@ -115,7 +122,7 @@ export const Group: FC = () => {
 									columnSize='full'
 								/>
 
-								<TableColumn text={'—'} columnSize='full' />
+								<TableColumn text='—' columnSize='full' />
 
 								<TableColumn columnSize='status' withChildren>
 									<Badge
@@ -131,6 +138,50 @@ export const Group: FC = () => {
 						))}
 					</TableMain>
 				</Table>
+			</div>
+
+			{/* Карточки для мобильных */}
+			<div className={styles.cards}>
+				{group.members.map((member, index) => (
+					<div className={styles.card} key={member.id}>
+						<div className={styles.cardHeader}>
+							<span className={styles.cardNumber}>#{index + 1}</span>
+
+							<Badge
+								text={
+									member.is_registered
+										? 'Зарегистрирован'
+										: 'Не зарегистрирован'
+								}
+								color={member.is_registered ? 'green' : 'grey'}
+							/>
+						</div>
+
+						<div className={styles.cardInfo}>
+							<div className={styles.cardRow}>
+								<span className={styles.cardLabel}>ФИО</span>
+
+								<span className={styles.cardValue}>
+									{member.last_name} {member.first_name} {member.middle_name}
+								</span>
+							</div>
+
+							<div className={styles.cardRow}>
+								<span className={styles.cardLabel}>Команда</span>
+
+								<span className={styles.cardValue}>
+									{member.team?.name || '—'}
+								</span>
+							</div>
+
+							<div className={styles.cardRow}>
+								<span className={styles.cardLabel}>Проект</span>
+
+								<span className={styles.cardValue}>—</span>
+							</div>
+						</div>
+					</div>
+				))}
 			</div>
 		</Section>
 	);

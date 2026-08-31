@@ -140,6 +140,8 @@ export interface ITeam {
 	name: string;
 	status: TeamStatus;
 	members: ITeamMember[];
+	maxTeamMembers: number;
+	minTeamMembers: number;
 }
 
 /* =========================

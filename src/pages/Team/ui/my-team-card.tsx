@@ -80,11 +80,8 @@ export const MyTeamCard: FC = () => {
 							</div>
 
 							<ProgressBar
-								value={Math.min(
-									lobby.myTeam.members.length,
-									lobby.tracks[0].minTeamMembers
-								)}
-								max={lobby.tracks[0].minTeamMembers}
+								value={lobby.myTeam.members.length}
+								max={lobby.myTeam.maxTeamMembers}
 							/>
 
 							<p className={styles.team__hint}>
@@ -98,6 +95,7 @@ export const MyTeamCard: FC = () => {
 							text='Подробнее'
 							color='blue'
 							onClick={() => navigate(`/team/${lobby.myTeam?.id}/lobby`)}
+							withIcon={{ type: 'next', color: 'white', position: 'right' }}
 						/>
 					</CardControl>
 				</>

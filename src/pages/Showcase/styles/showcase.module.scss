@@ -25,8 +25,6 @@
 	align-items: stretch;
 }
 
-/* Поиск + фильтр */
-
 .filters {
 	display: grid;
 	grid-template-columns: 300px 280px;
@@ -75,8 +73,8 @@
 	&__label {
 		flex-shrink: 0;
 
-		font-size: 13px;
-		line-height: 17px;
+		font-size: 14px;
+		line-height: 18px;
 		font-weight: 500;
 
 		color: var(--main-grey-color);
@@ -85,7 +83,6 @@
 	&__timer {
 		display: flex;
 		align-items: center;
-
 		gap: 4px;
 	}
 
@@ -236,8 +233,8 @@
 	&__infoLabel {
 		margin: 0;
 
-		font-size: 13px;
-		line-height: 17px;
+		font-size: 14px;
+		line-height: 18px;
 
 		color: var(--main-grey-color);
 	}
@@ -274,19 +271,37 @@
 	gap: 6px;
 }
 
+
 /* =========================
- * Responsive
+ * 1440px
  * ========================= */
 
 @media (max-width: 1440px) {
 	.projects {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
+
+	.filters {
+		grid-template-columns: minmax(240px, 300px) minmax(220px, 280px);
+	}
+
+	.card {
+		padding: 18px 20px;
+	}
 }
+
+
+/* =========================
+ * 1100px
+ * ========================= */
 
 @media (max-width: 1100px) {
 	.toolbar {
 		grid-template-columns: 1fr;
+	}
+
+	.filters {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
 	}
 
 	.registration {
@@ -296,12 +311,118 @@
 	}
 }
 
-@media (max-width: 768px) {
+
+/* =========================
+ * 1000px
+ * ========================= */
+
+@media (max-width: 1000px) {
+
+	.list {
+		flex: none;
+		min-height: auto;
+		height: auto;
+		overflow: visible;
+	}
+
+
+	.container {
+		gap: 12px;
+	}
+
+	.filters {
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+	}
 
 	.registration {
+		padding: 12px 16px;
+
+		&__content {
+			gap: 16px;
+		}
+
+		&__label {
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		&__unit {
+			min-width: 38px;
+		}
+
+		&__unit strong {
+			font-size: 18px;
+			line-height: 24px;
+		}
+	}
+
+	.projects {
+		gap: 12px;
+	}
+
+	.card {
+		padding: 16px 18px;
+
+		&__main {
+			margin-top: 12px;
+			gap: 10px;
+		}
+
+		&__title {
+			font-size: 16px;
+			line-height: 20px;
+		}
+
+		&__company {
+			font-size: 14px;
+			line-height: 18px;
+		}
+
+		&__info {
+			gap: 12px;
+		}
+
+		&__infoLabel {
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		&__infoValue {
+			font-size: 14px;
+			line-height: 18px;
+		}
+
+		&__footer {
+			margin-top: 16px;
+			padding-top: 12px;
+		}
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.container {
+		gap: 10px;
+	}
+
+	.filters {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+
+	.registration {
+		padding: 12px 16px;
+
 		&__content {
 			flex-direction: column;
 			align-items: flex-start;
+
+			gap: 12px;
 		}
 
 		&__timer {
@@ -312,9 +433,125 @@
 
 	.projects {
 		grid-template-columns: 1fr;
+		gap: 8px;
 	}
 
-	.card__info {
-		grid-template-columns: 1fr;
+	.card {
+		padding: 16px;
+
+		&__header {
+			min-height: 0;
+		}
+
+		&__main {
+			margin-top: 12px;
+			gap: 8px;
+		}
+
+		&__title {
+			font-size: 16px;
+			line-height: 20px;
+		}
+
+		&__info {
+			grid-template-columns: 1fr 1fr;
+			gap: 12px;
+
+			margin-top: 4px;
+		}
+
+		&__footer {
+			margin-top: 16px;
+			padding-top: 12px;
+		}
+	}
+
+	.tags {
+		gap: 4px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.container {
+		margin-top: 8px;
+		gap: 8px;
+	}
+
+	.registration {
+		padding: 10px 12px;
+
+		&__label {
+			font-size: 12px;
+			line-height: 14px;
+		}
+
+		&__unit {
+			min-width: 34px;
+		}
+
+		&__unit strong {
+			font-size: 16px;
+			line-height: 18px;
+		}
+
+		&__unit span {
+			font-size: 10px;
+			line-height: 12px;
+		}
+
+		&__separator {
+			font-size: 14px;
+			line-height: 18px;
+		}
+	}
+
+	.card {
+		padding: 14px;
+
+		&__main {
+			margin-top: 10px;
+			gap: 7px;
+		}
+
+		&__title {
+			font-size: 16px;
+			line-height: 20px;
+		}
+
+		&__company {
+			font-size: 12px;
+			line-height: 14px;
+		}
+
+		&__info {
+			grid-template-columns: 1fr;
+			gap: 8px;
+
+			margin-top: 4px;
+		}
+
+		&__infoItem {
+			gap: 2px;
+		}
+
+		&__infoLabel {
+			font-size: 12px;
+			line-height: 14px;
+		}
+
+		&__infoValue {
+			font-size: 14px;
+			line-height: 18px;
+		}
+
+		&__footer {
+			margin-top: 12px;
+			padding-top: 10px;
+		}
 	}
 }

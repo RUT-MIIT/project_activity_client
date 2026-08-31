@@ -22,4 +22,6 @@ export enum EMAINROUTES {
 	GROUP = 'group',
 	TEAM = 'team',
 	SHOWCASE = 'showcase',
+	CONTROL_GROUP = 'control-group',
+	MY_GROUPS = 'my-groups',
 }

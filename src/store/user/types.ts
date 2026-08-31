@@ -56,12 +56,15 @@ export interface IPreRegisteredStudent {
 export type IPreRegistrationLookupRequest =
 	| {
 			student_card: string;
+			last_name: string;
 	  }
 	| {
 			personnel_number: string;
+			last_name: string;
 	  }
 	| {
 			snils: string;
+			last_name: string;
 	  };
 
 export interface IStudentRegistrationRequest {

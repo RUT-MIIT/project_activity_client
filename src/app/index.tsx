@@ -24,6 +24,9 @@ import { Track } from '../pages/Track/ui/track';
 import { Stats } from '../pages/Stats/ui/stats';
 import { Control } from '../pages/Control/ui/control';
 import { Group } from '../pages/Group/ui/group';
+import { MyGroups } from '../pages/MyGroups/ui/my-groups';
+import { MyGroupDetail } from '../pages/MyGroups/ui/my-group-detail';
+import { ControlGroup } from '../pages/Control/components/ControlGroup/ui/control-group';
 import { Team } from '../pages/Team/ui/team';
 import { TeamLobby } from '../pages/Team/ui/team-lobby';
 import { Showcase } from '../pages/Showcase/ui/showcase';
@@ -128,6 +131,15 @@ export const App = () => {
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
 						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route path={`/${EMAINROUTES.GROUP}/*`} element={<Group />} />
+						<Route
+							path={`/${EMAINROUTES.MY_GROUPS}/*`}
+							element={<MyGroups />}
+						/>
+						<Route path='/my-groups/:groupId/*' element={<MyGroupDetail />} />
+						<Route
+							path={`/${EMAINROUTES.CONTROL_GROUP}/*`}
+							element={<ControlGroup />}
+						/>
 						<Route path={`/${EMAINROUTES.TEAM}`}>
 							<Route index element={<Team />} />
 							<Route path=':teamId/lobby' element={<TeamLobby />} />

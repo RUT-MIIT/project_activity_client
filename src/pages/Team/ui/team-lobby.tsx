@@ -380,11 +380,8 @@ export const TeamLobby: FC = () => {
 									</div>
 
 									<ProgressBar
-										value={Math.min(
-											myTeam.members.length,
-											myTeam.minTeamMembers
-										)}
-										max={myTeam.minTeamMembers}
+										value={myTeam.members.length}
+										max={myTeam.maxTeamMembers}
 									/>
 
 									<p className={styles.team__hint}>
@@ -414,6 +411,7 @@ export const TeamLobby: FC = () => {
 									text='Назад'
 									color='cancel'
 									onClick={() => navigate(`/${EMAINROUTES.TEAM}`)}
+									withIcon={{ type: 'prev', color: 'black' }}
 								/>
 
 								{myTeam.isCaptain && myTeam.status === 'forming' && (

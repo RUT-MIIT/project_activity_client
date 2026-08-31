@@ -1,0 +1,316 @@
+.container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* =========================
+ * Шапка команды
+ * ========================= */
+
+.header {
+	width: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+
+	padding-bottom: 16px;
+	border-bottom: 1px solid var(--main-grey-light-color);
+}
+
+.main {
+	min-width: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.title {
+	margin: 0;
+
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: 700;
+
+	color: var(--main-black-color);
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.count {
+	flex-shrink: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 2px;
+}
+
+.count__label {
+	margin: 0;
+
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-grey-color);
+}
+
+.count__value {
+	margin: 0;
+
+	font-size: 24px;
+	line-height: 28px;
+	font-weight: 600;
+
+	color: var(--main-blue-color);
+}
+
+/* =========================
+ * Основные действия
+ * ========================= */
+
+.actions {
+	width: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+
+	padding-bottom: 4px;
+}
+
+/* =========================
+ * Секции
+ * ========================= */
+
+.section {
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.section__title {
+	margin: 0;
+
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+/* =========================
+ * Участники
+ * ========================= */
+
+.members {
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.member {
+	width: 100%;
+	min-width: 0;
+
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	padding-bottom: 12px;
+
+	border-bottom: 1px solid var(--main-grey-light-color);
+}
+
+.member:last-child {
+	border-bottom: none;
+}
+
+.member__count {
+	flex-shrink: 0;
+
+	width: 20px;
+
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-grey-color);
+	text-align: center;
+}
+
+.member__info {
+	min-width: 0;
+
+	flex: 1;
+
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.member__name {
+	margin: 0;
+
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 500;
+
+	color: var(--main-black-color);
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.member__role {
+	margin: 0;
+
+	font-size: 12px;
+	line-height: 14px;
+
+	color: var(--main-grey-color);
+}
+
+.remove {
+	width: 36px;
+	height: 36px;
+
+	flex-shrink: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border: none;
+	border-radius: 50%;
+
+	background: transparent;
+
+	color: var(--accent-grey-color);
+
+	font-size: 20px;
+	line-height: 1;
+
+	cursor: pointer;
+
+	transition: all 0.3s ease-in-out;
+}
+
+.remove:hover {
+	background-color: var(--background-red-color);
+	color: var(--accent-red-color);
+}
+
+.remove:active {
+	transform: scale(0.95);
+}
+
+.remove:disabled {
+	opacity: 0.4;
+	cursor: default;
+	pointer-events: none;
+}
+
+/* =========================
+ * Нижние действия
+ * ========================= */
+
+.footer {
+	width: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+
+	padding-top: 16px;
+
+	border-top: 1px solid var(--main-grey-light-color);
+}
+
+/* =========================
+ * Адаптив
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.header {
+		align-items: flex-start;
+	}
+
+	.actions {
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+}
+
+@media (max-width: 768px) {
+	.container {
+		gap: 16px;
+	}
+
+	.header {
+		flex-direction: column;
+	}
+
+	.count {
+		align-items: flex-start;
+	}
+
+	.title {
+		font-size: 18px;
+		line-height: 22px;
+	}
+
+	.actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.footer {
+		flex-direction: column-reverse;
+		align-items: stretch;
+	}
+
+	.member {
+		gap: 8px;
+	}
+}
+
+@media (max-width: 480px) {
+	.container {
+		gap: 14px;
+	}
+
+	.header {
+		padding-bottom: 12px;
+	}
+
+	.title {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.count__value {
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.member__count {
+		width: 16px;
+
+		font-size: 12px;
+		line-height: 16px;
+	}
+}
