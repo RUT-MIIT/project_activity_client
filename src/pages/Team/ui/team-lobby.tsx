@@ -2,7 +2,6 @@ import type { FC } from 'react';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useDispatch, useSelector } from '../../../store/store';
 import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
@@ -42,7 +41,6 @@ import styles from '../styles/team-lobby.module.scss';
 export const TeamLobby: FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
 	const { showToast } = useToast();
 
 	const {
@@ -54,6 +52,7 @@ export const TeamLobby: FC = () => {
 		isMyTeamLoaded,
 	} = useSelector((state) => state.student);
 
+	const [visibleEventCount, setVisibleEventCount] = useState(3);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 	const [isRemoveMemberModalOpen, setIsRemoveMemberModalOpen] = useState(false);
@@ -69,12 +68,20 @@ export const TeamLobby: FC = () => {
 	const [isConfirmCompositionModalOpen, setIsConfirmCompositionModalOpen] =
 		useState(false);
 
+	const visibleEvents = eventLog?.results.slice(0, visibleEventCount) ?? [];
+
+	const hasMoreEvents = (eventLog?.results.length ?? 0) > visibleEventCount;
+
+	const isMemberOfTeam = myTeam !== null;
+
 	useEffect(() => {
 		dispatch(getMyTeamAction());
 		dispatch(getMyTeamEventLogAction());
 	}, [dispatch]);
 
-	const isMemberOfTeam = myTeam !== null;
+	useEffect(() => {
+		setVisibleEventCount(3);
+	}, [eventLog]);
 
 	useEffect(() => {
 		if (!isMyTeamLoaded) {
@@ -452,32 +459,47 @@ export const TeamLobby: FC = () => {
 										Загрузка истории...
 									</div>
 								) : eventLog?.results.length ? (
-									<div className={styles.eventLog__list}>
-										{eventLog.results.map((event) => (
-											<div
-												className={styles.eventLog__item}
-												key={`${event.created_at}-${event.user_id}`}>
-												<div className={styles.eventLog__dot} />
+									<>
+										<div className={styles.eventLog__list}>
+											{visibleEvents.map((event) => (
+												<div
+													className={styles.eventLog__item}
+													key={`${event.created_at}-${event.user_id}`}>
+													<div className={styles.eventLog__dot} />
 
-												<div className={styles.eventLog__content}>
-													<p className={styles.eventLog__text}>{event.text}</p>
+													<div className={styles.eventLog__content}>
+														<p className={styles.eventLog__text}>
+															{event.text}
+														</p>
 
-													<time className={styles.eventLog__date}>
-														{new Date(event.created_at).toLocaleString(
-															'ru-RU',
-															{
-																day: '2-digit',
-																month: '2-digit',
-																year: 'numeric',
-																hour: '2-digit',
-																minute: '2-digit',
-															}
-														)}
-													</time>
+														<time className={styles.eventLog__date}>
+															{new Date(event.created_at).toLocaleString(
+																'ru-RU',
+																{
+																	day: '2-digit',
+																	month: '2-digit',
+																	year: 'numeric',
+																	hour: '2-digit',
+																	minute: '2-digit',
+																}
+															)}
+														</time>
+													</div>
 												</div>
-											</div>
-										))}
-									</div>
+											))}
+										</div>
+
+										{hasMoreEvents && (
+											<button
+												type='button'
+												className={styles.eventLog__more}
+												onClick={() =>
+													setVisibleEventCount((prev) => prev + 3)
+												}>
+												Показать ещё
+											</button>
+										)}
+									</>
 								) : (
 									<div className={styles.eventLog__empty}>
 										История команды пока пуста

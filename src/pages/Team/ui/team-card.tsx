@@ -33,9 +33,14 @@ export const TeamCard: FC<ITeamCardProps> = ({ team }) => {
 	const isAlreadyInTeam = lobby?.myTeam != null;
 	const isTeamFull = team.membersCount >= team.maxTeamMembers;
 	const isRequestPending = team.myPendingJoinRequestId !== null;
+	const isTeamAssembled = team.status === 'assembled';
 
 	const isJoinDisabled =
-		isAlreadyInTeam || isTeamFull || isRequestPending || isLoadingAction;
+		isAlreadyInTeam ||
+		isTeamFull ||
+		isRequestPending ||
+		isTeamAssembled ||
+		isLoadingAction;
 
 	const getJoinButtonText = () => {
 		if (isMyTeam) {
@@ -44,6 +49,10 @@ export const TeamCard: FC<ITeamCardProps> = ({ team }) => {
 
 		if (isRequestPending) {
 			return 'Заявка подана';
+		}
+
+		if (isTeamAssembled) {
+			return 'Состав сформирован';
 		}
 
 		if (isTeamFull) {

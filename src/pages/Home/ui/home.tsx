@@ -28,8 +28,8 @@ export const Home: FC = () => {
 	);
 	const user = useSelector(getUser);
 
-	const createNewApp = () => {
-		navigate(`/${EMAINROUTES.NEW_APP}`, {
+	const openMyGroups = () => {
+		navigate(`/${EMAINROUTES.MY_GROUPS}`, {
 			replace: true,
 		});
 	};
@@ -72,12 +72,7 @@ export const Home: FC = () => {
 							onClick={openShowCase}
 						/>
 					) : (
-						<Button
-							text='Новая заявка'
-							color='white'
-							withIcon={{ type: 'add', position: 'left', color: 'blue' }}
-							onClick={createNewApp}
-						/>
+						<Button text='Мои группы' color='white' onClick={openMyGroups} />
 					)}
 				</div>
 				<div className={styles.container}>

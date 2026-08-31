@@ -18,15 +18,15 @@ const noticeIcons = {
 export const Notice: FC<INoticeProps> = ({ type, title, text, button }) => {
 	return (
 		<div className={`${styles.notice} ${styles[`notice_${type}`]}`}>
-			<div className={styles.icon}>
-				<img src={noticeIcons[type]} alt='' />
-			</div>
+			<div className={styles.header}>
+				<div className={styles.icon}>
+					<img src={noticeIcons[type]} alt='' />
+				</div>
 
-			<div className={styles.content}>
 				<p className={styles.title}>{title}</p>
-
-				{text && <p className={styles.text}>{text}</p>}
 			</div>
+
+			{text && <p className={styles.text}>{text}</p>}
 
 			{button && <div className={styles.action}>{button}</div>}
 		</div>

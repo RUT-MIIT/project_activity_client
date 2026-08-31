@@ -2,30 +2,29 @@
 	margin: 0;
 	width: 100%;
 
-
 	display: flex;
 	align-items: stretch;
 	gap: 12px;
 }
 
-
 .notices {
 	min-width: 0;
 	flex: 1;
-
 
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 }
 
-
 .slots {
 	margin: 0;
 	padding: 24px;
+
 	width: 240px;
 	min-height: 100%;
+
 	flex-shrink: 0;
+
 	box-sizing: border-box;
 
 	display: flex;
@@ -58,6 +57,7 @@
 	font-size: 32px;
 	line-height: 36px;
 	font-weight: 400;
+
 	opacity: 0.6;
 }
 
@@ -65,6 +65,7 @@
 	font-size: 32px;
 	line-height: 36px;
 	font-weight: 500;
+
 	opacity: 0.8;
 }
 
@@ -79,14 +80,253 @@
 }
 
 
-@media (max-width: 900px) {
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
 	.container {
-		flex-direction: column;
+		gap: 10px;
 	}
 
+	.notices {
+		gap: 10px;
+	}
+
+	.slots {
+		width: 220px;
+		padding: 20px;
+	}
+
+	.slots__used {
+		font-size: 44px;
+		line-height: 48px;
+	}
+
+	.slots__separator {
+		font-size: 30px;
+		line-height: 34px;
+	}
+
+	.slots__total {
+		font-size: 30px;
+		line-height: 34px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.container {
+		gap: 8px;
+	}
+
+	.notices {
+		gap: 8px;
+	}
+
+	.slots {
+		width: 200px;
+		padding: 18px;
+	}
+
+	.slots__used {
+		font-size: 40px;
+		line-height: 44px;
+	}
+
+	.slots__separator {
+		font-size: 28px;
+		line-height: 32px;
+	}
+
+	.slots__total {
+		font-size: 28px;
+		line-height: 32px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.container {
+		gap: 8px;
+	}
+
+	.slots {
+		width: 190px;
+		padding: 16px;
+	}
+
+	.slots__used {
+		font-size: 38px;
+		line-height: 42px;
+	}
+
+	.slots__separator {
+		font-size: 26px;
+		line-height: 30px;
+	}
+
+	.slots__total {
+		font-size: 26px;
+		line-height: 30px;
+	}
+
+	.slots__title {
+		margin-top: 6px;
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.container {
+		align-items: stretch;
+	}
+
+	.slots {
+		width: 180px;
+		padding: 14px;
+	}
+
+	.slots__used {
+		font-size: 36px;
+		line-height: 40px;
+	}
+
+	.slots__separator {
+		font-size: 24px;
+		line-height: 28px;
+	}
+
+	.slots__total {
+		font-size: 24px;
+		line-height: 28px;
+	}
+}
+
+
+/* =========================
+ * 1000px — мобильная версия
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.container {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.notices {
+		width: 100%;
+		gap: 8px;
+	}
 
 	.slots {
 		width: 100%;
-		min-height: 140px;
+		min-height: 120px;
+		padding: 16px;
+	}
+
+	.slots__used {
+		font-size: 36px;
+		line-height: 40px;
+	}
+
+	.slots__separator {
+		font-size: 24px;
+		line-height: 28px;
+	}
+
+	.slots__total {
+		font-size: 24px;
+		line-height: 28px;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.container {
+		gap: 8px;
+	}
+
+	.notices {
+		gap: 8px;
+	}
+
+	.slots {
+		min-height: 100px;
+		padding: 14px;
+	}
+
+	.slots__used {
+		font-size: 32px;
+		line-height: 36px;
+	}
+
+	.slots__separator {
+		font-size: 22px;
+		line-height: 26px;
+	}
+
+	.slots__total {
+		font-size: 22px;
+		line-height: 26px;
+	}
+
+	.slots__title {
+		margin-top: 4px;
+
+		font-size: 12px;
+		line-height: 14px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.container {
+		gap: 6px;
+	}
+
+	.slots {
+		min-height: 88px;
+		padding: 12px;
+	}
+
+	.slots__used {
+		font-size: 28px;
+		line-height: 32px;
+	}
+
+	.slots__separator {
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.slots__total {
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.slots__title {
+		font-size: 12px;
+		line-height: 14px;
 	}
 }

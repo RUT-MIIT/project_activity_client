@@ -1,6 +1,7 @@
 .container {
 	width: 100%;
 	margin: 20px 0 0 0;
+
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -20,9 +21,10 @@
 .row_bottom {
 	width: 100%;
 	margin: 0;
+
 	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 20px;
-	grid-template-columns: 1fr 1fr 1fr;
 }
 
 .team {
@@ -49,8 +51,8 @@
 	margin: 0;
 
 	font-size: 20px;
-	font-weight: 600;
 	line-height: 26px;
+	font-weight: 600;
 
 	color: var(--main-black-color);
 }
@@ -66,6 +68,7 @@
 
 .team__members {
 	margin: 0 0 8px 0;
+
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -84,6 +87,7 @@
 
 	strong {
 		font-size: 14px;
+		line-height: 18px;
 		font-weight: 600;
 
 		color: var(--main-black-color);
@@ -99,13 +103,22 @@
 	color: var(--main-grey-color);
 }
 
+
+/* =========================
+ * История команды
+ * ========================= */
+
 .eventLog {
 	width: 100%;
 
 	max-height: 240px;
 
 	overflow-y: auto;
+	overflow-x: hidden;
+
 	padding-right: 8px;
+
+	box-sizing: border-box;
 }
 
 .eventLog__list {
@@ -128,6 +141,7 @@
 	content: '';
 
 	position: absolute;
+
 	top: 8px;
 	left: 4px;
 	bottom: 0;
@@ -142,6 +156,7 @@
 	z-index: 1;
 
 	flex: 0 0 9px;
+
 	width: 9px;
 	height: 9px;
 
@@ -183,4 +198,382 @@
 	line-height: 18px;
 
 	color: var(--main-grey-color);
+}
+
+.eventLog__more {
+	margin: 8px auto 0;
+	padding: 8px 12px;
+
+	border: none;
+	background: transparent;
+
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 500;
+
+	color: var(--main-blue-color);
+
+	cursor: pointer;
+
+	transition: opacity 0.3s ease-in-out;
+
+	&:hover {
+		opacity: 0.7;
+	}
+}
+
+
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
+	.container {
+		gap: 18px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 16px;
+	}
+
+	.team {
+		gap: 18px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.container {
+		margin-top: 16px;
+		gap: 16px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 14px;
+	}
+
+	.team {
+		gap: 16px;
+	}
+
+	.team__name {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.team__track {
+		font-size: 13px;
+		line-height: 18px;
+	}
+
+	.eventLog {
+		max-height: 220px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.container {
+		gap: 14px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 12px;
+	}
+
+	.team {
+		gap: 14px;
+	}
+
+	.team__main {
+		gap: 8px;
+	}
+
+	.team__name {
+		font-size: 18px;
+		line-height: 22px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__members {
+		gap: 6px;
+	}
+
+	.eventLog {
+		max-height: 210px;
+	}
+
+	.eventLog__item {
+		gap: 10px;
+		padding: 10px 0;
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.container {
+		margin-top: 12px;
+		gap: 12px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 10px;
+	}
+
+	.team__name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.eventLog {
+		max-height: 200px;
+	}
+
+	.eventLog__text {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.eventLog__date {
+		font-size: 12px;
+		line-height: 14px;
+	}
+}
+
+
+/* =========================
+ * 1000px — мобильная версия
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.container {
+		margin-top: 12px;
+		gap: 12px;
+	}
+
+	.row_top,
+	.row_bottom {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	.team {
+		gap: 12px;
+	}
+
+	.team__header {
+		gap: 8px;
+	}
+
+	.team__main {
+		flex-direction: column-reverse;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.team__name {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__members {
+		gap: 6px;
+	}
+
+	.team__hint {
+		margin-bottom: 8px;
+	}
+
+	.eventLog {
+		max-height: none;
+		overflow: visible;
+		padding-right: 0;
+	}
+
+	.eventLog__item {
+		gap: 10px;
+		padding: 10px 0;
+	}
+
+	.eventLog__text {
+		font-size: 14px;
+		line-height: 18px;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.container {
+		gap: 8px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 8px;
+	}
+
+	.team {
+		gap: 10px;
+	}
+
+	.team__name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.team__hint {
+		margin-bottom: 6px;
+	}
+
+	.eventLog__item {
+		padding: 8px 0;
+		gap: 8px;
+	}
+
+	.eventLog__dot {
+		flex-basis: 8px;
+
+		width: 8px;
+		height: 8px;
+
+		margin-top: 5px;
+	}
+
+	.eventLog__item:not(:last-child)::before {
+		left: 3.5px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.container {
+		margin-top: 8px;
+		gap: 8px;
+	}
+
+	.row_top,
+	.row_bottom {
+		gap: 8px;
+	}
+
+	.team {
+		gap: 8px;
+	}
+
+	.team__header {
+		gap: 6px;
+	}
+
+	.team__name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__members {
+		gap: 6px;
+	}
+
+	.team__membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.team__hint {
+		margin-bottom: 4px;
+
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.eventLog__item {
+		gap: 8px;
+		padding: 8px 0;
+	}
+
+	.eventLog__content {
+		gap: 2px;
+	}
+
+	.eventLog__text {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.eventLog__date {
+		font-size: 12px;
+		line-height: 14px;
+	}
 }

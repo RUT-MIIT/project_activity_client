@@ -65,8 +65,6 @@ export const MyTeamCard: FC = () => {
 									color={getTeamStatusColor(lobby.myTeam.status)}
 								/>
 							</div>
-
-							<p className={styles.team__track}>Трек: {lobby.tracks[0].name}</p>
 						</div>
 
 						<div className={styles.team__members}>

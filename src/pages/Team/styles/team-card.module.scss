@@ -5,6 +5,7 @@
 	width: 100%;
 	max-width: 360px;
 	min-width: 0;
+
 	box-sizing: border-box;
 
 	display: flex;
@@ -35,6 +36,9 @@
 	font-weight: 600;
 
 	color: var(--main-black-color);
+
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .info {
@@ -79,6 +83,7 @@
 	padding-top: 16px;
 
 	border-top: 1px solid var(--main-grey-light-color);
+
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -110,8 +115,257 @@
 	}
 }
 
-@media (max-width: 768px) {
+
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
+	.card {
+		padding: 18px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.card {
+		padding: 18px;
+	}
+
+	.header {
+		margin-bottom: 18px;
+	}
+
+	.info {
+		gap: 10px;
+	}
+
+	.actions {
+		margin-top: 18px;
+		padding-top: 14px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.card {
+		padding: 16px;
+	}
+
+	.header {
+		margin-bottom: 16px;
+		gap: 6px;
+	}
+
+	.name {
+		margin-top: 6px;
+
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.info {
+		gap: 10px;
+	}
+
+	.value {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.membersInfo {
+		font-size: 13px;
+		line-height: 18px;
+
+		strong {
+			font-size: 14px;
+			line-height: 18px;
+		}
+	}
+
+	.actions {
+		margin-top: 16px;
+		padding-top: 12px;
+		gap: 8px;
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.card {
+		padding: 16px;
+	}
+
+	.header {
+		margin-bottom: 14px;
+	}
+
+	.caption {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.actions {
+		margin-top: 14px;
+		padding-top: 12px;
+	}
+}
+
+
+/* =========================
+ * 1000px — мобильная версия
+ * ========================= */
+
+@media (max-width: 1000px) {
 	.card {
 		max-width: none;
+		width: 100%;
+		padding: 16px;
+	}
+
+	.header {
+		margin-bottom: 16px;
+		gap: 12px;
+	}
+
+	.name {
+		margin-top: 4px;
+
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.info {
+		gap: 10px;
+	}
+
+	.actions {
+		margin-top: 16px;
+		padding-top: 12px;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.card {
+		padding: 14px;
+	}
+
+	.header {
+		margin-bottom: 14px;
+	}
+
+	.name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.caption {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.value {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.members {
+		gap: 6px;
+	}
+
+	.membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.actions {
+		margin-top: 14px;
+		padding-top: 10px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.card {
+		padding: 14px;
+	}
+
+	.header {
+		margin-bottom: 12px;
+	}
+
+	.name {
+		margin-top: 3px;
+
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.info {
+		gap: 8px;
+	}
+
+	.row {
+		gap: 2px;
+	}
+
+	.caption {
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.value {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.members {
+		gap: 6px;
+	}
+
+	.membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.actions {
+		margin-top: 12px;
+		padding-top: 10px;
 	}
 }

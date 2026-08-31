@@ -17,6 +17,8 @@
 
 	padding: 12px 0;
 
+	box-sizing: border-box;
+
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--main-grey-light-color);
 	}
@@ -33,12 +35,11 @@
 
 .info {
 	min-width: 0;
+	flex: 1;
 
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-
-	flex: 1;
 }
 
 .name {
@@ -66,6 +67,8 @@
 }
 
 .actions {
+	margin-left: auto;
+
 	display: flex;
 	align-items: center;
 	gap: 4px;
@@ -125,12 +128,184 @@
 	}
 }
 
-@media (max-width: 700px) {
+
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
+	.item {
+		gap: 10px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.item {
+		padding: 11px 0;
+	}
+
+	.accept,
+	.reject {
+		width: 34px;
+		height: 34px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.item {
+		gap: 10px;
+	}
+
+	.name {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.text {
+		font-size: 12px;
+		line-height: 14px;
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.item {
+		gap: 8px;
+	}
+
+	.count {
+		font-size: 13px;
+		line-height: 16px;
+	}
+}
+
+
+/* =========================
+ * 1000px — мобильная версия
+ * ========================= */
+
+@media (max-width: 1000px) {
 	.item {
 		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.info {
+		flex: 1;
+	}
+
+	.name {
+		white-space: normal;
+		overflow: visible;
+		text-overflow: clip;
+
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 
 	.actions {
 		margin-left: auto;
+	}
+
+	.accept,
+	.reject {
+		width: 34px;
+		height: 34px;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.item {
+		padding: 10px 0;
+	}
+
+	.count {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.name {
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.text {
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.actions {
+		gap: 2px;
+	}
+
+	.accept,
+	.reject {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.item {
+		align-items: flex-start;
+		gap: 6px;
+		padding: 9px 0;
+	}
+
+	.count {
+		width: 18px;
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.name {
+		font-size: 14px;
+		line-height: 18px;
+
+		overflow-wrap: break-word;
+		word-break: normal;
+	}
+
+	.text {
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.accept,
+	.reject {
+		width: 30px;
+		height: 30px;
+	}
+
+	.accept {
+		font-size: 16px;
+	}
+
+	.reject {
+		font-size: 18px;
 	}
 }

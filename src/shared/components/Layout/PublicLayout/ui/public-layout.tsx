@@ -3,6 +3,8 @@ import type { IPublicLayoutProps } from '../types/types';
 
 import { PublicLayoutFooter } from './public-layout-footer';
 
+import qr from '../../../../images/qr.png';
+
 import styles from '../styles/public-layout.module.scss';
 
 export const PublicLayout: FC<IPublicLayoutProps> = ({ children }) => {
@@ -17,6 +19,7 @@ export const PublicLayout: FC<IPublicLayoutProps> = ({ children }) => {
 					<p className={styles.subtitle}>
 						Создавайте, развивайте и реализуйте свои идеи вместе с университетом
 					</p>
+					<img className={styles.qr} src={qr} alt='qr код'></img>
 				</div>
 				<PublicLayoutFooter />
 			</div>

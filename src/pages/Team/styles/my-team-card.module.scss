@@ -1,4 +1,8 @@
-.team {
+/* =========================
+ * Базовые стили
+ * ========================= */
+
+ .team {
 	width: 100%;
 	flex: 1;
 
@@ -70,4 +74,212 @@
 	line-height: 16px;
 
 	color: var(--main-grey-color);
+}
+
+
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
+	.team {
+		gap: 18px;
+	}
+
+	.team__name {
+		font-size: 20px;
+		line-height: 26px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.team {
+		gap: 16px;
+	}
+
+	.team__main {
+		gap: 8px;
+	}
+
+	.team__name {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.team__track {
+		font-size: 13px;
+		line-height: 18px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.team {
+		gap: 14px;
+	}
+
+	.team__members {
+		gap: 6px;
+	}
+
+	.team__membersInfo {
+		font-size: 13px;
+		line-height: 18px;
+
+		strong {
+			font-size: 14px;
+			line-height: 18px;
+		}
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.team {
+		gap: 12px;
+	}
+
+	.team__name {
+		font-size: 18px;
+		line-height: 22px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__hint {
+		margin-bottom: 8px;
+
+		font-size: 12px;
+		line-height: 16px;
+	}
+}
+
+
+/* =========================
+ * 1000px — мобильная версия
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.team {
+		gap: 12px;
+	}
+
+	.team__header {
+		gap: 8px;
+	}
+
+	.team__main {
+		flex-direction: column-reverse;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.team__name {
+		margin: 0;
+
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__members {
+		gap: 6px;
+	}
+
+	.team__membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 14px;
+			line-height: 18px;
+		}
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.team {
+		gap: 10px;
+	}
+
+	.team__name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__hint {
+		margin-bottom: 6px;
+
+		font-size: 12px;
+		line-height: 16px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.team {
+		gap: 8px;
+	}
+
+	.team__header {
+		gap: 6px;
+	}
+
+	.team__name {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.team__track {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.team__membersInfo {
+		font-size: 12px;
+		line-height: 16px;
+
+		strong {
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	.team__hint {
+		margin-bottom: 4px;
+	}
 }

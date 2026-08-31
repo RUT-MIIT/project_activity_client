@@ -133,6 +133,7 @@
 
 @media (max-width: 1000px) {
 	.summary {
+		margin: 8px 0;
 		grid-template-columns: 1fr;
 		gap: 8px;
 	}

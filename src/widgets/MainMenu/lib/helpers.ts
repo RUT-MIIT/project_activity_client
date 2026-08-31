@@ -21,17 +21,22 @@ export const adminLinks = [
 
 export const mentorLinks = [
 	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
-	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
-	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
 	{
 		name: 'Мои группы',
 		url: EMAINROUTES.MY_GROUPS,
 		icon: 'group',
 	},
+	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
+	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
 ];
 
 export const departmentValidatorLinks = [
 	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
+	{
+		name: 'Мои группы',
+		url: EMAINROUTES.MY_GROUPS,
+		icon: 'group',
+	},
 	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
 	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
 	{
@@ -39,15 +44,20 @@ export const departmentValidatorLinks = [
 		url: EMAINROUTES.COORDINATION,
 		icon: 'coordination',
 	},
+];
+
+export const instituteValidatorLinks = [
+	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
 	{
 		name: 'Мои группы',
 		url: EMAINROUTES.MY_GROUPS,
 		icon: 'group',
 	},
-];
-
-export const instituteValidatorLinks = [
-	{ name: 'Главная', url: EMAINROUTES.HOME, icon: 'home' },
+	{
+		name: 'Учебные группы',
+		url: EMAINROUTES.CONTROL_GROUP,
+		icon: 'education',
+	},
 	{ name: 'Новая заявка', url: EMAINROUTES.NEW_APP, icon: 'app-add' },
 	{ name: 'Мои заявки', url: EMAINROUTES.MY_APPS, icon: 'apps' },
 	{
@@ -65,16 +75,6 @@ export const instituteValidatorLinks = [
 		name: 'Проектные треки',
 		url: EMAINROUTES.TRACK,
 		icon: 'control',
-	},
-	{
-		name: 'Учебные группы',
-		url: EMAINROUTES.CONTROL_GROUP,
-		icon: 'education',
-	},
-	{
-		name: 'Мои группы',
-		url: EMAINROUTES.MY_GROUPS,
-		icon: 'group',
 	},
 ];
 
