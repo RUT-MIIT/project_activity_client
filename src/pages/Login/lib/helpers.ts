@@ -2,11 +2,7 @@ import type { ILoginForm } from '../types/types';
 import type { TFormValidationErrors } from '../../../shared/components/Form/types/types';
 import { EPAGESROUTES } from '../../../shared/utils/routes';
 
-import {
-	required,
-	minLength,
-	emailFormat,
-} from '../../../shared/lib/validationRules';
+import { required, emailFormat } from '../../../shared/lib/validationRules';
 
 export const links = [
 	{
@@ -32,10 +28,8 @@ export const validationSchema = {
 		required('Введите электронную почту'),
 		emailFormat('Неверный формат электронной почты'),
 	],
-	password: [
-		required('Введите пароль'),
-		minLength(8, 'Пароль должен быть не менее 8 символов'),
-	],
+
+	password: [required('Введите пароль')],
 };
 
 export const shouldBlockSubmit = (
