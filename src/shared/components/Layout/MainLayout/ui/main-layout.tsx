@@ -11,6 +11,8 @@ import { getUser } from '../../../../../store/user/reducer';
 import { logoutUser } from '../../../../../store/user/actions';
 import { convertRole } from '../../../../lib/role';
 
+import menu from '../../../../images/icons/menu.png';
+
 import styles from '../styles/main-layout.module.scss';
 
 export const MainLayout: FC = () => {
@@ -38,9 +40,7 @@ export const MainLayout: FC = () => {
 						className={styles.menuButton}
 						onClick={() => setIsMenuOpen(true)}
 						aria-label='Открыть меню'>
-						<span />
-						<span />
-						<span />
+						<img src={menu} alt='меню' />
 					</button>
 
 					<div className={styles.user}>

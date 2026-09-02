@@ -1,5 +1,6 @@
 .header {
-	margin: 0 0 20px 0;
+	margin: 0 0 20px;
+
 	display: flex;
 	align-items: center;
 	gap: 20px;
@@ -16,4 +17,227 @@
 	border-radius: var(--border-radius);
 
 	overflow-x: auto;
+}
+
+.cards {
+	display: none;
+}
+
+.cardHeader {
+	width: 100%;
+	margin: 0 0 12px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.cardNumber {
+	flex-shrink: 0;
+
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.cardTitle {
+	margin: 0 0 16px;
+
+	font-size: 18px;
+	line-height: 22px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+
+	overflow-wrap: anywhere;
+}
+
+.cardInfo {
+	margin: 0 0 8px 0;
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.cardRow {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.cardLabel {
+	font-size: 11px;
+	line-height: 14px;
+
+	color: var(--main-grey-color);
+}
+
+.cardValue {
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 500;
+
+	color: var(--main-black-color);
+
+	overflow-wrap: anywhere;
+
+	&_grey {
+		color: var(--main-grey-color);
+	}
+}
+
+.cardMeta {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+.cardMetaItem {
+	min-width: 0;
+
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+
+/* =========================
+ * 1600px
+ * ========================= */
+
+@media (max-width: 1600px) {
+	.header {
+		gap: 16px;
+	}
+}
+
+
+/* =========================
+ * 1440px
+ * ========================= */
+
+@media (max-width: 1440px) {
+	.header {
+		gap: 12px;
+	}
+
+	.table {
+		padding: 12px 14px;
+	}
+}
+
+
+/* =========================
+ * 1366px
+ * ========================= */
+
+@media (max-width: 1366px) {
+	.header {
+		margin-bottom: 16px;
+		gap: 10px;
+	}
+
+	.table {
+		padding: 10px 12px;
+	}
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.header {
+		gap: 8px;
+	}
+}
+
+
+/* =========================
+ * 1000px
+ * ========================= */
+
+@media (max-width: 1000px) {
+	.header {
+		margin-bottom: 12px;
+	}
+
+	.table {
+		display: none;
+	}
+
+	.cards {
+		width: 100%;
+
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.header {
+		margin-bottom: 10px;
+	}
+
+	.cards {
+		gap: 8px;
+	}
+
+	.cardTitle {
+		font-size: 16px;
+		line-height: 20px;
+
+		margin-bottom: 14px;
+	}
+
+	.cardInfo {
+		gap: 10px;
+	}
+
+	.cardMeta {
+		gap: 8px;
+	}
+}
+
+
+/* =========================
+ * 480px
+ * ========================= */
+
+@media (max-width: 480px) {
+	.header {
+		margin-bottom: 8px;
+	}
+
+	.cardTitle {
+		font-size: 16px;
+		line-height: 20px;
+
+		margin-bottom: 12px;
+	}
+
+	.cardLabel {
+		font-size: 11px;
+		line-height: 14px;
+	}
+
+	.cardValue {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	.cardMeta {
+		gap: 8px;
+	}
 }

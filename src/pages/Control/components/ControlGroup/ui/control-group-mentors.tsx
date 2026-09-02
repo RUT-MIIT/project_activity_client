@@ -15,6 +15,9 @@ import { Modal } from '../../../../../shared/components/Modal/ui/modal';
 import { Filter } from '../../../../../shared/components/Filter/ui/filter';
 import { Select } from '../../../../../shared/components/Select/ui/select';
 import { Text } from '../../../../../shared/components/Typography';
+import { Badge } from '../../../../../shared/components/Badge/ui/badge';
+import { Card, CardControl } from '../../../../../shared/components/Card/ui';
+import { Button } from '../../../../../shared/components/Button/ui/button';
 
 import {
 	getGroupMentorsAction,
@@ -22,6 +25,8 @@ import {
 } from '../../../../../store/controlGroup/actions';
 
 import { EditGroupMentorsForm } from './edit-group-mentors-form';
+
+import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
 
 import styles from '../styles/control-group-mentors.module.scss';
 
@@ -44,12 +49,14 @@ const mentorFilterOptions: IFilterOption[] = [
 export const ControlGroupMentors: FC = () => {
 	const dispatch = useDispatch();
 
+	const windowWidth = useWindowWidth();
+	const isMobile = windowWidth <= 1000;
+
 	const { groupMentors, employees, isLoadingGroupMentors } = useSelector(
 		(state) => state.controlGroup
 	);
 
 	const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
-
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const [currentCourse, setCurrentCourse] = useState<IFilterOption | null>(
@@ -72,9 +79,6 @@ export const ControlGroupMentors: FC = () => {
 		(group) => group.id === selectedGroupId
 	);
 
-	/**
-	 * Фильтр по курсу
-	 */
 	const courseOptions = useMemo<IFilterOption[]>(() => {
 		const courses = new Set<number>();
 
@@ -90,9 +94,6 @@ export const ControlGroupMentors: FC = () => {
 			}));
 	}, [groupMentors]);
 
-	/**
-	 * Фильтр по направлению
-	 */
 	const directionOptions = useMemo<IFilterOption[]>(() => {
 		const directions = new Set<string>();
 
@@ -110,13 +111,9 @@ export const ControlGroupMentors: FC = () => {
 			}));
 	}, [groupMentors]);
 
-	/**
-	 * Фильтрация групп
-	 */
 	const filteredGroups = useMemo(() => {
 		let result = groupMentors;
 
-		// Поиск по названию группы и ФИО наставника
 		if (searchQuery.trim()) {
 			const query = searchQuery.trim().toLowerCase();
 
@@ -133,22 +130,19 @@ export const ControlGroupMentors: FC = () => {
 			});
 		}
 
-		// Фильтр по курсу
-		if (currentCourse) {
+		if (!isMobile && currentCourse) {
 			result = result.filter(
 				(group) => group.courseNumber === currentCourse.id
 			);
 		}
 
-		// Фильтр по направлению
-		if (currentDirection) {
+		if (!isMobile && currentDirection) {
 			result = result.filter(
 				(group) => group.directionCode === currentDirection.id
 			);
 		}
 
-		// Фильтр по наличию наставников
-		if (currentMentorFilter.id === 2) {
+		if (!isMobile && currentMentorFilter.id === 2) {
 			result = result.filter((group) => group.mentorIds.length === 0);
 		}
 
@@ -160,7 +154,22 @@ export const ControlGroupMentors: FC = () => {
 		currentCourse,
 		currentDirection,
 		currentMentorFilter,
+		isMobile,
 	]);
+
+	const getMentors = (mentorIds: number[]) => {
+		return mentorIds
+			.map((mentorId) => employees.find((employee) => employee.id === mentorId))
+			.filter(Boolean);
+	};
+
+	const getMentorNames = (mentorIds: number[]) => {
+		const mentors = getMentors(mentorIds);
+
+		return mentors.length
+			? mentors.map((mentor) => mentor?.fullName).join(', ')
+			: 'Не назначены';
+	};
 
 	const openGroup = (groupId: number) => {
 		setSelectedGroupId(groupId);
@@ -180,39 +189,46 @@ export const ControlGroupMentors: FC = () => {
 				<Filter
 					placeholder='Поиск по группе или наставнику...'
 					onFilter={setSearchQuery}
+					width={isMobile ? 'full' : 'default'}
 				/>
 
-				<Select
-					placeholder='Выберите курс...'
-					currentOption={currentCourse}
-					options={courseOptions}
-					onChooseOption={setCurrentCourse}
-					width='medium'
-				/>
+				{!isMobile && (
+					<>
+						<Select
+							placeholder='Выберите курс...'
+							currentOption={currentCourse}
+							options={courseOptions}
+							onChooseOption={setCurrentCourse}
+							width='medium'
+						/>
 
-				<Select
-					placeholder='Выберите направление...'
-					currentOption={currentDirection}
-					options={directionOptions}
-					onChooseOption={setCurrentDirection}
-					width='medium'
-				/>
+						<Select
+							placeholder='Выберите направление...'
+							currentOption={currentDirection}
+							options={directionOptions}
+							onChooseOption={setCurrentDirection}
+							width='medium'
+						/>
 
-				<Select
-					placeholder='Наставники...'
-					currentOption={currentMentorFilter}
-					options={mentorFilterOptions}
-					onChooseOption={(option) => {
-						if (option) {
-							setCurrentMentorFilter(option);
-						}
-					}}
-					width='medium'
-					withClear={false}
-				/>
+						<Select
+							placeholder='Наставники...'
+							currentOption={currentMentorFilter}
+							options={mentorFilterOptions}
+							onChooseOption={(option) => {
+								if (option) {
+									setCurrentMentorFilter(option);
+								}
+							}}
+							width='medium'
+							withClear={false}
+						/>
+					</>
+				)}
 			</div>
 
-			{filteredGroups.length > 0 ? (
+			{filteredGroups.length === 0 ? (
+				<Text text='Группы не найдены.' color='grey' />
+			) : !isMobile ? (
 				<div className={styles.table}>
 					<Table>
 						<TableHeader>
@@ -241,11 +257,7 @@ export const ControlGroupMentors: FC = () => {
 
 						<TableMain>
 							{filteredGroups.map((group, index) => {
-								const mentors = group.mentorIds
-									.map((mentorId) =>
-										employees.find((employee) => employee.id === mentorId)
-									)
-									.filter(Boolean);
+								const mentors = getMentors(group.mentorIds);
 
 								return (
 									<TableRow key={group.id}>
@@ -261,12 +273,8 @@ export const ControlGroupMentors: FC = () => {
 										/>
 
 										<TableColumn
-											text={
-												mentors.length
-													? mentors.map((mentor) => mentor?.fullName).join(', ')
-													: 'Не назначены'
-											}
-											textColor={mentors.length < 1 ? 'grey' : 'default'}
+											text={getMentorNames(group.mentorIds)}
+											textColor={mentors.length === 0 ? 'grey' : 'default'}
 											columnSize='full'
 										/>
 
@@ -286,7 +294,78 @@ export const ControlGroupMentors: FC = () => {
 					</Table>
 				</div>
 			) : (
-				<Text text='Группы не найдены.' color='grey' />
+				<div className={styles.cards}>
+					{filteredGroups.map((group, index) => {
+						const mentors = getMentors(group.mentorIds);
+
+						return (
+							<Card key={group.id}>
+								<div className={styles.cardHeader}>
+									<span className={styles.cardNumber}>#{index + 1}</span>
+
+									<Badge
+										text={
+											mentors.length
+												? `${mentors.length} ${
+														mentors.length === 1 ? 'наставник' : 'наставника'
+												  }`
+												: 'Без наставника'
+										}
+										color={mentors.length ? 'green' : 'grey'}
+									/>
+								</div>
+
+								<h3 className={styles.cardTitle}>{group.name}</h3>
+
+								<div className={styles.cardInfo}>
+									<div className={styles.cardRow}>
+										<span className={styles.cardLabel}>Наставники</span>
+
+										<span
+											className={`${styles.cardValue} ${
+												mentors.length === 0 ? styles.cardValue_grey : ''
+											}`}>
+											{getMentorNames(group.mentorIds)}
+										</span>
+									</div>
+
+									<div className={styles.cardMeta}>
+										<div className={styles.cardMetaItem}>
+											<span className={styles.cardLabel}>Курс</span>
+
+											<span className={styles.cardValue}>
+												{group.courseNumber}
+											</span>
+										</div>
+
+										<div className={styles.cardMetaItem}>
+											<span className={styles.cardLabel}>Направление</span>
+
+											<span className={styles.cardValue}>
+												{group.directionCode}
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<CardControl withMarginAuto>
+									<Button
+										type='button'
+										text='Подробнее'
+										color='blue'
+										width='full'
+										onClick={() => openGroup(group.id)}
+										withIcon={{
+											type: 'next',
+											color: 'white',
+											position: 'right',
+										}}
+									/>
+								</CardControl>
+							</Card>
+						);
+					})}
+				</div>
 			)}
 
 			{selectedGroup && (

@@ -31,6 +31,10 @@ const tabs = [
 	},
 ];
 
+const hasValue = (value: string | number | null | undefined) => {
+	return value !== null && value !== undefined && String(value).trim() !== '';
+};
+
 export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 	id,
 	isOpen,
@@ -72,49 +76,68 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 
 							{activeTab === 'main' && (
 								<>
-									<FormField title='Наименование проекта'>
-										<FormInputStub value={showcaseDetail.title} />
-									</FormField>
+									{hasValue(showcaseDetail.title) && (
+										<FormField title='Наименование проекта'>
+											<FormInputStub value={showcaseDetail.title} />
+										</FormField>
+									)}
 
-									<FormField title='Организация-заказчик'>
-										<FormInputStub value={showcaseDetail.company} />
-									</FormField>
+									{hasValue(showcaseDetail.company) && (
+										<FormField title='Организация-заказчик'>
+											<FormInputStub value={showcaseDetail.company} />
+										</FormField>
+									)}
 
-									<FormField title='Уровень проекта'>
-										<FormInputStub value={showcaseDetail.projectLevel} />
-									</FormField>
+									{hasValue(showcaseDetail.projectLevel) && (
+										<FormField title='Уровень проекта'>
+											<FormInputStub value={showcaseDetail.projectLevel} />
+										</FormField>
+									)}
 
-									<FormField title='Команд зарегистрировано'>
-										<FormInputStub
-											value={`${showcaseDetail.enrolledTeamsCount} / ${showcaseDetail.maxTeams}`}
-										/>
-									</FormField>
+									{hasValue(showcaseDetail.recommended_teams_count) && (
+										<FormField title='Рекомендованное количество команд'>
+											<FormInputStub
+												value={showcaseDetail.recommended_teams_count.toString()}
+											/>
+										</FormField>
+									)}
 
-									<FormField title='Рекомендуемый состав команды'>
-										<FormInputStub
-											value={`${showcaseDetail.minTeamMembers}–${showcaseDetail.maxTeamMembers} участников`}
-										/>
-									</FormField>
+									{hasValue(showcaseDetail.min_team_members) &&
+										hasValue(showcaseDetail.max_team_members) && (
+											<FormField title='Рекомендуемый состав команды'>
+												<FormInputStub
+													value={`${showcaseDetail.min_team_members}–${showcaseDetail.max_team_members} участников`}
+												/>
+											</FormField>
+										)}
 								</>
 							)}
 
 							{activeTab === 'description' && (
 								<>
-									<FormField title='Цель'>
-										<FormInputStub value={showcaseDetail.goal} />
-									</FormField>
+									{hasValue(showcaseDetail.goal) && (
+										<FormField title='Цель'>
+											<FormInputStub value={showcaseDetail.goal} />
+										</FormField>
+									)}
 
-									<FormField title='Барьер'>
-										<FormInputStub value={showcaseDetail.barrier} />
-									</FormField>
+									{hasValue(showcaseDetail.barrier) && (
+										<FormField title='Барьер'>
+											<FormInputStub value={showcaseDetail.barrier} />
+										</FormField>
+									)}
 
-									<FormField title='Существующие решения'>
-										<FormInputStub value={showcaseDetail.existingSolutions} />
-									</FormField>
+									{hasValue(showcaseDetail.existingSolutions) && (
+										<FormField title='Существующие решения'>
+											<FormInputStub value={showcaseDetail.existingSolutions} />
+										</FormField>
+									)}
 
-									<FormField title='Контекст проекта'>
-										<FormInputStub value={showcaseDetail.context} />
-									</FormField>
+									{hasValue(showcaseDetail.context) && (
+										<FormField title='Контекст проекта'>
+											<FormInputStub value={showcaseDetail.context} />
+										</FormField>
+									)}
 								</>
 							)}
 						</>

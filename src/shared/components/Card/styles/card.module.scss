@@ -61,9 +61,10 @@
 
 @media (max-width: 1000px) {
 	.card {
-		padding: 20px;
+		padding: 16px;
 	}
 	.control {
+		padding-top: 8px;
 		flex-wrap: wrap;
 	}
 }

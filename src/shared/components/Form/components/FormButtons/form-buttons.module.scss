@@ -3,6 +3,7 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 16px;
 	&_margin_top {
 		margin: 120px 0 0 0;

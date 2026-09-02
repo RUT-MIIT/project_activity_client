@@ -74,11 +74,9 @@ export interface IMentorShowcaseDetail {
 	projectLevel: string;
 	tags: IMentorShowcaseTag[];
 
-	maxTeams: number;
-	enrolledTeamsCount: number;
-
-	minTeamMembers: number;
-	maxTeamMembers: number;
+	recommended_teams_count: number;
+	max_team_members: number;
+	min_team_members: number;
 
 	trackId: number;
 
