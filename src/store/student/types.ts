@@ -327,6 +327,8 @@ export interface IShowcaseProject {
 	enrolledTeamsCount: number;
 	minTeamMembers: number;
 	maxTeamMembers: number;
+	isCompetitiveSelection: boolean;
+	isContinuing: boolean;
 	tags: IShowcaseProjectTag[];
 }
 
@@ -351,14 +353,17 @@ export interface IStudentShowcaseDetail {
 	company: string;
 	goal: string;
 	barrier: string;
-	existingSolutions: string;
+	existing_solutions: string;
 	context: string;
-	projectLevel: string;
+	project_level: string;
+	stakeholders: string;
 	tags: IStudentShowcaseTag[];
 	maxTeams: number;
 	enrolledTeamsCount: number;
-	minTeamMembers: number;
-	maxTeamMembers: number;
+	min_team_members: number;
+	max_team_members: number;
 	trackId: number;
 	canEnroll: boolean;
+	isCompetitiveSelection: boolean;
+	isContinuing: boolean;
 }

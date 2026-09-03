@@ -54,6 +54,8 @@ export interface IMentorShowcaseProject {
 	minTeamMembers: number;
 	maxTeamMembers: number;
 	tags: IMentorShowcaseTag[];
+	isCompetitiveSelection: boolean;
+	isContinuing: boolean;
 }
 
 export interface IMentorShowcaseTrack {
@@ -69,9 +71,10 @@ export interface IMentorShowcaseDetail {
 	company: string;
 	goal: string;
 	barrier: string;
-	existingSolutions: string;
+	existing_solutions: string;
 	context: string;
-	projectLevel: string;
+	project_level: string;
+	stakeholders: string;
 	tags: IMentorShowcaseTag[];
 
 	recommended_teams_count: number;
@@ -80,6 +83,8 @@ export interface IMentorShowcaseDetail {
 
 	trackId: number;
 
+	is_continuing: boolean;
+	is_competitive_selection: boolean;
 	canEnroll: boolean;
 }
 

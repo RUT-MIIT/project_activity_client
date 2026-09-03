@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from '../../../store/store';
 import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
+import { Notice } from '../../../shared/components/Notice/ui/notice';
 import {
 	FormField,
 	FormInputStub,
@@ -68,6 +69,22 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 
 							{activeTab === 'main' && (
 								<>
+									{projectDetail.isCompetitiveSelection && (
+										<Notice
+											type='warning'
+											title='Конкурсный отбор'
+											text='Заказчик будет проводить отбор команд. Команды, которые не пройдут отбор, смогут выбрать другой доступный проект.'
+											style={{ margin: ' 0 0 12px 0' }}
+										/>
+									)}
+									{projectDetail.isContinuing && (
+										<Notice
+											type='warning'
+											title='Пролонгация проекта'
+											text='С проектом продолжат работать предыдущие команды.'
+											style={{ margin: '0 0 12px 0' }}
+										/>
+									)}
 									<FormField title='Наименование проекта'>
 										<FormInputStub value={projectDetail.title} />
 									</FormField>
@@ -76,19 +93,9 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 										<FormInputStub value={projectDetail.company} />
 									</FormField>
 
-									<FormField title='Уровень проекта'>
-										<FormInputStub value={projectDetail.projectLevel} />
-									</FormField>
-
-									<FormField title='Команд зарегистрировано'>
-										<FormInputStub
-											value={`${projectDetail.enrolledTeamsCount} / ${projectDetail.maxTeams}`}
-										/>
-									</FormField>
-
 									<FormField title='Рекомендуемый состав команды'>
 										<FormInputStub
-											value={`${projectDetail.minTeamMembers}–${projectDetail.maxTeamMembers} участников`}
+											value={`${projectDetail.min_team_members}–${projectDetail.max_team_members} участников`}
 										/>
 									</FormField>
 								</>
@@ -96,6 +103,9 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 
 							{activeTab === 'description' && (
 								<>
+									<FormField title='Носитель проблемы'>
+										<FormInputStub value={projectDetail.stakeholders} />
+									</FormField>
 									<FormField title='Цель'>
 										<FormInputStub value={projectDetail.goal} />
 									</FormField>
@@ -105,7 +115,7 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 									</FormField>
 
 									<FormField title='Существующие решения'>
-										<FormInputStub value={projectDetail.existingSolutions} />
+										<FormInputStub value={projectDetail.existing_solutions} />
 									</FormField>
 
 									<FormField title='Контекст проекта'>

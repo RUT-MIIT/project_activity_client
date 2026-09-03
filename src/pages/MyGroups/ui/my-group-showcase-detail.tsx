@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from '../../../store/store';
 
 import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
+import { Notice } from '../../../shared/components/Notice/ui/notice';
 import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
 import {
 	FormField,
@@ -76,6 +77,22 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 
 							{activeTab === 'main' && (
 								<>
+									{showcaseDetail.is_competitive_selection && (
+										<Notice
+											type='warning'
+											title='Конкурсный отбор'
+											text='Заказчик будет проводить отбор команд. Команды, которые не пройдут отбор, смогут выбрать другой доступный проект.'
+											style={{ margin: ' 0 0 12px 0' }}
+										/>
+									)}
+									{showcaseDetail.is_continuing && (
+										<Notice
+											type='warning'
+											title='Пролонгация проекта'
+											text='С проектом продолжат работать предыдущие команды.'
+											style={{ margin: '0 0 12px 0' }}
+										/>
+									)}
 									{hasValue(showcaseDetail.title) && (
 										<FormField title='Наименование проекта'>
 											<FormInputStub value={showcaseDetail.title} />
@@ -85,12 +102,6 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 									{hasValue(showcaseDetail.company) && (
 										<FormField title='Организация-заказчик'>
 											<FormInputStub value={showcaseDetail.company} />
-										</FormField>
-									)}
-
-									{hasValue(showcaseDetail.projectLevel) && (
-										<FormField title='Уровень проекта'>
-											<FormInputStub value={showcaseDetail.projectLevel} />
 										</FormField>
 									)}
 
@@ -115,6 +126,12 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 
 							{activeTab === 'description' && (
 								<>
+									{hasValue(showcaseDetail.stakeholders) && (
+										<FormField title='Носитель проблемы'>
+											<FormInputStub value={showcaseDetail.stakeholders} />
+										</FormField>
+									)}
+
 									{hasValue(showcaseDetail.goal) && (
 										<FormField title='Цель'>
 											<FormInputStub value={showcaseDetail.goal} />
@@ -127,9 +144,11 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 										</FormField>
 									)}
 
-									{hasValue(showcaseDetail.existingSolutions) && (
+									{hasValue(showcaseDetail.existing_solutions) && (
 										<FormField title='Существующие решения'>
-											<FormInputStub value={showcaseDetail.existingSolutions} />
+											<FormInputStub
+												value={showcaseDetail.existing_solutions}
+											/>
 										</FormField>
 									)}
 

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
 export type NoticeType = 'info' | 'warning' | 'error' | 'success';
 
@@ -7,4 +7,5 @@ export interface INoticeProps {
 	title: string;
 	text?: string;
 	button?: ReactNode;
+	style?: CSSProperties;
 }

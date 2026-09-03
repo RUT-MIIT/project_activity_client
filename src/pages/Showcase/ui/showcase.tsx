@@ -164,6 +164,12 @@ export const Showcase: FC = () => {
 												{project.tags.map((tag) => (
 													<Badge key={tag.id} text={tag.name} color='blue' />
 												))}
+												{project.isCompetitiveSelection && (
+													<Badge text='Конкурсный отбор' color='yellow' />
+												)}
+												{project.isContinuing && (
+													<Badge text='Пролонгация' color='yellow' />
+												)}
 											</div>
 										</div>
 

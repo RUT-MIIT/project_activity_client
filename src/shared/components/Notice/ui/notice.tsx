@@ -15,9 +15,17 @@ const noticeIcons = {
 	success: successIcon,
 };
 
-export const Notice: FC<INoticeProps> = ({ type, title, text, button }) => {
+export const Notice: FC<INoticeProps> = ({
+	type,
+	title,
+	text,
+	style,
+	button,
+}) => {
 	return (
-		<div className={`${styles.notice} ${styles[`notice_${type}`]}`}>
+		<div
+			style={style}
+			className={`${styles.notice} ${styles[`notice_${type}`]}`}>
 			<div className={styles.header}>
 				<div className={styles.icon}>
 					<img src={noticeIcons[type]} alt='' />

@@ -515,7 +515,7 @@ export const RegistrationStudent: FC = () => {
 								<FormField title='Описание проблемы'>
 									<FormTextarea
 										name='reportComment'
-										placeholder='Например: не та группа, я учусь на другом направлении'
+										placeholder='Оставьте свою почту для связи и опишите проблему'
 										value={reportComment}
 										onChange={(e) => setReportComment(e.target.value)}
 									/>
