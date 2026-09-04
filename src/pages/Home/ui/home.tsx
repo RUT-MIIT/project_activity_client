@@ -11,6 +11,7 @@ import { HomeStats } from './home-stats';
 import { HomePlan } from './home-plan';
 import { HomeProject } from './home-project';
 import { HomeTeam } from './home-team';
+import { HomeContest } from './home-contest';
 
 import { getUser } from '../../../store/user/reducer';
 import { getMyDivisionStatsAction } from '../../../store/structure/actions';
@@ -84,6 +85,7 @@ export const Home: FC = () => {
 						{user.role === EROLES.STUDENT ? <HomeProject /> : <HomeStats />}
 						{user.role === EROLES.STUDENT ? <HomeTeam /> : <HomePlan />}
 					</div>
+					<HomeContest />
 				</div>
 			</div>
 		)

@@ -50,6 +50,10 @@
 		color: var(--accent-purple-color);
 		background-color: var(--background-purple-color);
 	}
+	&_color_contest {
+		background: linear-gradient(120deg, #6323a2 11%, #c109d7 73%, #ba6ecd 97%);
+    color: var(--main-white-color);
+	}
 	&_color_grey {
 		color: #718096;
 		background-color: #F7FAFC;

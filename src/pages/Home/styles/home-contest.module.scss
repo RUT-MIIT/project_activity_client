@@ -1,0 +1,172 @@
+.contest {
+	margin: 20px 0 0 0;
+	width: 100%;
+	padding: 44px 36px;
+	box-sizing: border-box;
+	border-radius: var(--border-radius);
+	display: grid;
+	grid-template-columns: 1fr 180px;
+
+	background: url('../../../shared/images/contest.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.info {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.description {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+.title {
+	color: var(--main-white-color);
+	font-size: 24px;
+	line-height: 24px;
+	margin: 0;
+	font-weight: 600;
+}
+
+.text {
+	max-width: 370px;
+	color: var(--main-white-color);
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: normal;
+	margin: 0;
+}
+
+.prize {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.badge {
+  margin: 0;
+  width: fit-content;
+	max-height: 34px;
+  padding: 10px 20px;
+  position: relative;
+  box-sizing: border-box;
+  font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 14px;
+  border-radius: var(--border-radius);
+  flex-shrink: 0;
+	outline: none;
+	user-select: none;
+	pointer-events: none;
+	background: linear-gradient(120deg, #6323a2 11%, #c109d7 73%, #ba6ecd 97%);
+	color: var(--main-white-color);
+}
+
+@media (max-width: 1599px) {
+	.prize {
+		display: none;
+	}
+}
+
+@media (max-width: 1024px) {
+	.contest {
+		padding: 36px 28px;
+		grid-template-columns: 1fr 160px;
+		gap: 24px;
+	}
+
+	.info {
+		gap: 16px;
+	}
+
+	.description {
+		gap: 24px;
+	}
+
+	.title {
+		font-size: 22px;
+		line-height: 24px;
+	}
+
+	.text {
+		font-size: 14px;
+		line-height: 18px;
+	}
+}
+
+@media (max-width: 768px) {
+	.contest {
+		padding: 40px 24px;
+		grid-template-columns: 1fr;
+		gap: 28px;
+	}
+
+	.info {
+		gap: 16px;
+	}
+
+	.description {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+
+	.title {
+		font-size: 20px;
+		line-height: 22px;
+	}
+
+	.text {
+		max-width: 100%;
+	}
+
+	.prize {
+		gap: 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.contest {
+		margin-top: 16px;
+		border-radius: var(--border-radius);
+		gap: 24px;
+	}
+
+	.info {
+		gap: 14px;
+	}
+
+	.description {
+		gap: 14px;
+	}
+
+	.title {
+		font-size: 18px;
+		line-height: 21px;
+	}
+
+	.text {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	.prize {
+		gap: 10px;
+	}
+
+	.badge {
+		padding: 9px 16px;
+		font-size: 13px;
+		line-height: 14px;
+	}
+}
+
