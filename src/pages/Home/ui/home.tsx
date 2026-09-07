@@ -85,7 +85,7 @@ export const Home: FC = () => {
 						{user.role === EROLES.STUDENT ? <HomeProject /> : <HomeStats />}
 						{user.role === EROLES.STUDENT ? <HomeTeam /> : <HomePlan />}
 					</div>
-					<HomeContest />
+					{user.role === EROLES.STUDENT && <HomeContest />}
 				</div>
 			</div>
 		)

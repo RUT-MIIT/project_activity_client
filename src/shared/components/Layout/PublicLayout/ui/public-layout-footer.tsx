@@ -10,7 +10,7 @@ export const PublicLayoutFooter: FC = () => {
 			<div className={styles.footer__column}>
 				<h4 className={styles.footer__title}>Техническая поддержка:</h4>
 				<p className={`${styles.footer__text} ${styles.footer__mail}`}>
-					ief07@bk.ru
+					ief80@rut-miit.ru
 				</p>
 			</div>
 			<div className={styles.footer__column}>
