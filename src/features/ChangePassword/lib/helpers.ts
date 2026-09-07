@@ -4,10 +4,7 @@ import type { TFormValidationErrors } from '../../../shared/components/Form/type
 import { required, minLength } from '../../../shared/lib/validationRules';
 
 export const validationSchema = {
-	old_password: [
-		required('Введите старый пароль'),
-		minLength(8, 'Пароль должен быть не менее 8 символов'),
-	],
+	old_password: [required('Введите старый пароль')],
 	new_password: [
 		required('Введите новый пароль'),
 		minLength(8, 'Пароль должен быть не менее 8 символов'),
