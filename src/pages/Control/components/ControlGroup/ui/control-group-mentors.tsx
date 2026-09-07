@@ -2,6 +2,7 @@ import type { FC } from 'react';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
+import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
 
 import {
 	Table,
@@ -25,8 +26,6 @@ import {
 } from '../../../../../store/controlGroup/actions';
 
 import { EditGroupMentorsForm } from './edit-group-mentors-form';
-
-import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
 
 import styles from '../styles/control-group-mentors.module.scss';
 

@@ -61,3 +61,13 @@ export const removeGroupMentor = (data: IRemoveMentorRequest) => {
 		}
 	);
 };
+
+export const getInstituteGroupsWithTeams = () => {
+	return request(
+		'/teams/institute-responsible/groups-overview/?semester_id=actual',
+		{
+			method: 'GET',
+			headers: getAuthHeaders(),
+		}
+	);
+};

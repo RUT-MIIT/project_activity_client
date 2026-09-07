@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Section } from '../../../../../shared/components/Section';
 import { Tabs } from '../../../../../shared/components/Tabs/ui/tabs';
 import { ControlGroupMentors } from './control-group-mentors';
+import { ControlGroupTeams } from './control-group-teams';
 
 import { tabs } from '../lib/helpers';
 
@@ -19,6 +20,7 @@ export const ControlGroup: FC = () => {
 
 			<Routes>
 				<Route path='mentors' element={<ControlGroupMentors />} />
+				<Route path='teams' element={<ControlGroupTeams />} />
 				<Route path='' element={<Navigate to='mentors' replace />} />
 			</Routes>
 		</Section>

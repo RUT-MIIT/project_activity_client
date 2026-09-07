@@ -6,12 +6,14 @@ import * as actions from './actions';
 
 const initialState: IInstituteResponsibleStore = {
 	groups: [],
+	groupsWithTeams: [],
 	employees: [],
 	groupMentors: [],
 
 	currentGroup: null,
 
 	isLoadingGroups: false,
+	isLoadingGroupsWithTeams: false,
 	isLoadingEmployees: false,
 	isLoadingGroupMentors: false,
 	isLoadingMentorRequest: false,
@@ -155,7 +157,29 @@ export const controlGroupSlice = createSlice({
 			.addCase(actions.removeGroupMentorAction.rejected, (state, action) => {
 				state.isLoadingMentorRequest = false;
 				state.error = action.error?.message || 'Не удалось снять наставника';
-			});
+			})
+
+			.addCase(actions.getInstituteGroupsWithTeamsAction.pending, (state) => {
+				state.isLoadingGroupsWithTeams = true;
+				state.error = null;
+			})
+
+			.addCase(
+				actions.getInstituteGroupsWithTeamsAction.fulfilled,
+				(state, action) => {
+					state.isLoadingGroupsWithTeams = false;
+					state.groupsWithTeams = action.payload;
+				}
+			)
+
+			.addCase(
+				actions.getInstituteGroupsWithTeamsAction.rejected,
+				(state, action) => {
+					state.isLoadingGroupsWithTeams = false;
+					state.error =
+						action.error?.message || 'Не удалось загрузить группы и команды';
+				}
+			);
 	},
 });
 

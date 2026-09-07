@@ -5,6 +5,16 @@ export interface IResponsibleGroup {
 	directionCode: string;
 }
 
+export interface IResponsibleGroupWithTeams {
+	id: number;
+	name: string;
+	studentsCount: number;
+	registeredStudentsCount: number;
+	teamsCount: number;
+	assembledTeamsCount: number;
+	studentsInTeamsCount: number;
+}
+
 export interface IResponsibleEmployee {
 	id: number;
 	fullName: string;
@@ -40,6 +50,7 @@ export interface IRemoveMentorResponse {
 
 export interface IInstituteResponsibleStore {
 	groups: IResponsibleGroup[];
+	groupsWithTeams: IResponsibleGroupWithTeams[];
 	employees: IResponsibleEmployee[];
 
 	// Группы вместе с назначенными наставниками
@@ -51,6 +62,7 @@ export interface IInstituteResponsibleStore {
 	isLoadingEmployees: boolean;
 	isLoadingGroupMentors: boolean;
 	isLoadingMentorRequest: boolean;
+	isLoadingGroupsWithTeams: boolean;
 
 	error: string | null;
 }
