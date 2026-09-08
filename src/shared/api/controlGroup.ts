@@ -71,3 +71,17 @@ export const getInstituteGroupsWithTeams = () => {
 		}
 	);
 };
+
+export const getInstituteTeams = () => {
+	return request('/teams/institute-responsible/teams/?semester_id=actual', {
+		method: 'GET',
+		headers: getAuthHeaders(),
+	});
+};
+
+export const getInstituteStudents = () => {
+	return request('/teams/institute-responsible/students/?semester_id=actual', {
+		method: 'GET',
+		headers: getAuthHeaders(),
+	});
+};

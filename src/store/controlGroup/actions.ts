@@ -3,6 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
 	getInstituteGroups,
 	getInstituteGroupsWithTeams,
+	getInstituteTeams,
+	getInstituteStudents,
 	getInstituteEmployees,
 	getGroupMentors,
 	assignGroupMentor,
@@ -12,6 +14,8 @@ import {
 import type {
 	IResponsibleGroup,
 	IResponsibleGroupWithTeams,
+	IInstituteTeam,
+	IInstituteStudent,
 	IResponsibleEmployee,
 	IGroupMentors,
 	IAssignMentorRequest,
@@ -28,6 +32,16 @@ export const getInstituteGroupsAction = createAsyncThunk<IResponsibleGroup[]>(
 export const getInstituteGroupsWithTeamsAction = createAsyncThunk<
 	IResponsibleGroupWithTeams[]
 >('controlGroup/getGroupsWithTeams', getInstituteGroupsWithTeams);
+
+export const getInstituteTeamsAction = createAsyncThunk<IInstituteTeam[]>(
+	'controlGroup/getTeams',
+	getInstituteTeams
+);
+
+export const getInstituteStudentsAction = createAsyncThunk<IInstituteStudent[]>(
+	'controlGroup/getStudents',
+	getInstituteStudents
+);
 
 export const getInstituteEmployeesAction = createAsyncThunk<
 	IResponsibleEmployee[]

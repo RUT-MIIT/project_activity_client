@@ -10,19 +10,17 @@ import {
 	TableMain,
 	TableRow,
 } from '../../../../../shared/components/Table/ui';
-import { ProgressBar } from '../../../../../shared/components/ProgressBar/ui/progress-bar';
 import { Preloader } from '../../../../../shared/components/Preloader/ui/preloader';
 import { Filter } from '../../../../../shared/components/Filter/ui/filter';
 import { Text } from '../../../../../shared/components/Typography';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 import { Card } from '../../../../../shared/components/Card/ui';
 
-import { getInstituteGroupsWithTeamsAction } from '../../../../../store/controlGroup/actions';
+import { getInstituteTeamsAction } from '../../../../../store/controlGroup/actions';
 
 import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
 
 import styles from '../styles/control-group-mentors.module.scss';
-import { Button } from '../../../../../shared/components/Button/ui/button';
 
 export const ControlGroupTeams: FC = () => {
 	const dispatch = useDispatch();
@@ -30,29 +28,75 @@ export const ControlGroupTeams: FC = () => {
 	const windowWidth = useWindowWidth();
 	const isMobile = windowWidth <= 1000;
 
-	const { groupsWithTeams, isLoadingGroupsWithTeams } = useSelector(
-		(state) => state.controlGroup
-	);
+	const { teams, isLoadingTeams } = useSelector((state) => state.controlGroup);
 
 	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
-		dispatch(getInstituteGroupsWithTeamsAction());
+		dispatch(getInstituteTeamsAction());
 	}, [dispatch]);
 
-	const filteredGroups = useMemo(() => {
+	const filteredTeams = useMemo(() => {
 		if (!searchQuery.trim()) {
-			return groupsWithTeams;
+			return teams;
 		}
 
 		const query = searchQuery.trim().toLowerCase();
 
-		return groupsWithTeams.filter((group) =>
-			group.name.toLowerCase().includes(query)
-		);
-	}, [groupsWithTeams, searchQuery]);
+		return teams.filter((team) => {
+			const teamName = team.name.toLowerCase();
+			const groupName = team.studyGroup.name.toLowerCase();
 
-	if (isLoadingGroupsWithTeams) {
+			const mentors = team.mentors
+				.map((mentor) => mentor.fullName.toLowerCase())
+				.join(' ');
+
+			const project = team.project?.title.toLowerCase() || '';
+
+			return (
+				teamName.includes(query) ||
+				groupName.includes(query) ||
+				mentors.includes(query) ||
+				project.includes(query)
+			);
+		});
+	}, [teams, searchQuery]);
+
+	const getStatus = (status: string) => {
+		switch (status) {
+			case 'assembled':
+				return {
+					text: 'Состав сформирован',
+					color: 'green' as const,
+				};
+
+			case 'forming':
+				return {
+					text: 'Формируется',
+					color: 'yellow' as const,
+				};
+
+			default:
+				return {
+					text: status,
+					color: 'grey' as const,
+				};
+		}
+	};
+
+	const getMentorsText = (team: (typeof teams)[number]) => {
+		if (team.mentors.length === 0) {
+			return 'Не назначены';
+		}
+
+		if (team.mentors.length <= 1) {
+			return team.mentors.map((mentor) => mentor.fullName).join(', ');
+		}
+
+		return `${team.mentors[0].fullName} и ещё ${team.mentors.length - 1}`;
+	};
+
+	if (isLoadingTeams) {
 		return <Preloader />;
 	}
 
@@ -60,111 +104,84 @@ export const ControlGroupTeams: FC = () => {
 		<>
 			<div className={styles.header}>
 				<Filter
-					placeholder='Поиск по группе...'
+					placeholder='Поиск..'
 					onFilter={setSearchQuery}
 					width={isMobile ? 'full' : 'default'}
 				/>
 			</div>
 
-			{filteredGroups.length === 0 ? (
-				<Text text='Группы не найдены.' color='grey' />
+			{filteredTeams.length === 0 ? (
+				<Text text='Команды не найдены.' color='grey' />
 			) : !isMobile ? (
 				<div className={styles.table}>
 					<Table>
 						<TableHeader>
-							<TableColumn text='№' textWeight='bold' columnSize='small' />
+							<TableColumn text='№' textWeight='bold' columnSize='count' />
+
+							<TableColumn text='Команда' textWeight='bold' columnSize='full' />
+
+							<TableColumn text='Статус' textWeight='bold' columnSize='large' />
 
 							<TableColumn
-								text='Учебная группа'
+								text='Группа'
+								textWeight='bold'
+								columnSize='medium'
+							/>
+
+							<TableColumn
+								text='Наставники'
 								textWeight='bold'
 								columnSize='full'
 							/>
 
+							<TableColumn text='Проект' textWeight='bold' columnSize='full' />
+
 							<TableColumn
 								text='Студенты'
 								textWeight='bold'
-								columnSize='medium'
-							/>
-
-							<TableColumn
-								text='Команды'
-								textWeight='bold'
-								columnSize='medium'
-							/>
-
-							<TableColumn
-								text='Регистраций в системе'
-								textWeight='bold'
-								columnSize='progress'
-							/>
-
-							<TableColumn
-								text='Распределение студентов'
-								textWeight='bold'
-								columnSize='progress'
-							/>
-
-							<TableColumn
-								text='Подтверждено составов'
-								textWeight='bold'
-								columnSize='progress'
+								columnSize='small'
 							/>
 						</TableHeader>
 
 						<TableMain>
-							{filteredGroups.map((group, index) => {
-								const studentsWithoutTeams = Math.max(
-									0,
-									group.studentsCount - group.studentsInTeamsCount
-								);
+							{filteredTeams.map((team, index) => {
+								const status = getStatus(team.status);
 
 								return (
-									<TableRow key={group.id}>
-										<TableColumn text={String(index + 1)} columnSize='small' />
+									<TableRow key={team.id}>
+										<TableColumn text={String(index + 1)} columnSize='count' />
 
 										<TableColumn
-											text={group.name}
+											text={team.name}
 											columnSize='full'
 											textWeight='bold'
 										/>
 
+										<TableColumn withChildren columnSize='large'>
+											<Badge text={status.text} color={status.color} />
+										</TableColumn>
+
 										<TableColumn
-											text={String(group.studentsCount)}
+											text={team.studyGroup.name}
 											columnSize='medium'
 										/>
 
 										<TableColumn
-											text={String(group.teamsCount)}
-											textColor={group.teamsCount === 0 ? 'grey' : 'default'}
-											columnSize='medium'
+											text={getMentorsText(team)}
+											textColor={team.mentors.length === 0 ? 'grey' : 'default'}
+											columnSize='full'
 										/>
 
-										<TableColumn withChildren columnSize='progress'>
-											<ProgressBar
-												value={group.registeredStudentsCount}
-												max={group.studentsCount}
-												withInfo
-												caption={`${group.registeredStudentsCount} из ${group.studentsCount}`}
-											/>
-										</TableColumn>
+										<TableColumn
+											text={team.project?.title || 'Не назначен'}
+											textColor={team.project ? 'default' : 'grey'}
+											columnSize='full'
+										/>
 
-										<TableColumn withChildren columnSize='progress'>
-											<ProgressBar
-												value={group.studentsInTeamsCount}
-												max={group.studentsCount}
-												withInfo
-												caption={`${studentsWithoutTeams} без команды`}
-											/>
-										</TableColumn>
-
-										<TableColumn withChildren columnSize='progress'>
-											<ProgressBar
-												value={group.assembledTeamsCount}
-												max={group.teamsCount}
-												withInfo
-												caption={`${group.assembledTeamsCount} из ${group.teamsCount}`}
-											/>
-										</TableColumn>
+										<TableColumn
+											text={String(team.membersCount)}
+											columnSize='small'
+										/>
 									</TableRow>
 								);
 							})}
@@ -173,81 +190,60 @@ export const ControlGroupTeams: FC = () => {
 				</div>
 			) : (
 				<div className={styles.cards}>
-					{filteredGroups.map((group, index) => {
-						const studentsWithoutTeams = Math.max(
-							0,
-							group.studentsCount - group.studentsInTeamsCount
-						);
+					{filteredTeams.map((team, index) => {
+						const status = getStatus(team.status);
 
 						return (
-							<Card key={group.id}>
+							<Card key={team.id}>
 								<div className={styles.cardHeader}>
 									<span className={styles.cardNumber}>#{index + 1}</span>
 
-									<Badge
-										text={
-											group.teamsCount > 0
-												? `${group.teamsCount} ${
-														group.teamsCount === 1 ? 'команда' : 'команд'
-												  }`
-												: 'Без команд'
-										}
-										color={group.teamsCount > 0 ? 'green' : 'grey'}
-									/>
+									<Badge text={status.text} color={status.color} />
 								</div>
 
-								<h3 className={styles.cardTitle}>{group.name}</h3>
+								<h3 className={styles.cardTitle}>{team.name}</h3>
 
 								<div className={styles.cardMeta}>
 									<div className={styles.cardMetaItem}>
-										<span className={styles.cardLabel}>Студентов</span>
+										<span className={styles.cardLabel}>Учебная группа</span>
 
 										<span className={styles.cardValue}>
-											{group.studentsCount}
+											{team.studyGroup.name}
 										</span>
 									</div>
 
 									<div className={styles.cardMetaItem}>
-										<span className={styles.cardLabel}>Команд создано</span>
+										<span className={styles.cardLabel}>Участников</span>
 
-										<span
-											className={`${styles.cardValue} ${
-												group.teamsCount === 0 ? styles.cardValue_grey : ''
-											}`}>
-											{group.teamsCount}
+										<span className={styles.cardValue}>
+											{team.membersCount}
 										</span>
 									</div>
 								</div>
 
-								<div className={styles.cardProgress}>
-									<div className={styles.cardProgressItem}>
-										<ProgressBar
-											value={group.registeredStudentsCount}
-											max={group.studentsCount}
-											withInfo
-											caption='Регистраций в системе'
-										/>
+								<div className={styles.cardInfo}>
+									<div className={styles.cardMetaItem}>
+										<span className={styles.cardLabel}>Наставники</span>
+
+										<span
+											className={`${styles.cardValue} ${
+												team.mentors.length === 0 ? styles.cardValue_grey : ''
+											}`}>
+											{getMentorsText(team)}
+										</span>
 									</div>
 
-									<div className={styles.cardProgressItem}>
-										<ProgressBar
-											value={group.studentsInTeamsCount}
-											max={group.studentsCount}
-											withInfo
-											caption={`${studentsWithoutTeams} без команды`}
-										/>
-									</div>
+									<div className={styles.cardMetaItem}>
+										<span className={styles.cardLabel}>Проект</span>
 
-									<div className={styles.cardProgressItem}>
-										<ProgressBar
-											value={group.assembledTeamsCount}
-											max={group.teamsCount}
-											withInfo
-											caption='Подтверждено составов'
-										/>
+										<span
+											className={`${styles.cardValue} ${
+												!team.project ? styles.cardValue_grey : ''
+											}`}>
+											{team.project?.title || 'Не назначен'}
+										</span>
 									</div>
 								</div>
-								<Button text='Подробнее' width='full' isBlock />
 							</Card>
 						);
 					})}

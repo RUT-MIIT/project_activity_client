@@ -116,6 +116,87 @@
 	width: 100%;
 }
 
+/* =========================
+ * Студент
+ * ========================= */
+
+ .studentCard {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.studentStatus {
+	flex-shrink: 0;
+}
+
+.studentSection {
+	width: 100%;
+	margin: 0 0 14px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.studentSection:last-child {
+	margin-bottom: 0;
+}
+
+.studentTeam {
+	padding: 10px 12px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	background-color: var(--main-background-color);
+	border-radius: var(--border-radius);
+
+	box-sizing: border-box;
+}
+
+.studentTeamName {
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+
+	overflow-wrap: anywhere;
+}
+
+.studentTeamRole {
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.studentProject {
+	width: 100%;
+	padding: 10px 12px;
+
+	box-sizing: border-box;
+
+	border: 1px solid var(--main-border-color);
+	border-radius: var(--border-radius);
+}
+
+.studentMentors {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.studentMentor {
+	font-size: 13px;
+	line-height: 17px;
+
+	color: var(--main-black-color);
+
+	overflow-wrap: anywhere;
+}
+
 
 /* =========================
  * 1600px
@@ -190,6 +271,10 @@
 		flex-direction: column;
 		gap: 8px;
 	}
+
+	.cardInfo {
+		margin: 12px 0 0 0;
+	}
 }
 
 
@@ -225,6 +310,25 @@
 		margin: 12px 0;
 		gap: 12px;
 	}
+
+	.studentSection {
+		margin-bottom: 12px;
+	}
+
+	.studentTeam,
+	.studentProject {
+		padding: 9px 10px;
+	}
+
+	.studentTeamName {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	.studentTeamRole {
+		font-size: 11px;
+		line-height: 15px;
+	}
 }
 
 
@@ -256,5 +360,19 @@
 
 	.cardMeta {
 		gap: 8px;
+	}
+
+	.studentSection {
+		margin-bottom: 10px;
+	}
+
+	.studentTeam,
+	.studentProject {
+		padding: 8px 10px;
+	}
+
+	.studentTeamName {
+		font-size: 13px;
+		line-height: 17px;
 	}
 }

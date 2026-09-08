@@ -231,7 +231,7 @@ export const ControlGroupMentors: FC = () => {
 				<div className={styles.table}>
 					<Table>
 						<TableHeader>
-							<TableColumn text='№' textWeight='bold' columnSize='small' />
+							<TableColumn text='№' textWeight='bold' columnSize='count' />
 
 							<TableColumn
 								text='Учебная группа'
@@ -260,7 +260,7 @@ export const ControlGroupMentors: FC = () => {
 
 								return (
 									<TableRow key={group.id}>
-										<TableColumn text={String(index + 1)} columnSize='small' />
+										<TableColumn text={String(index + 1)} columnSize='count' />
 
 										<TableColumn
 											text={group.name}

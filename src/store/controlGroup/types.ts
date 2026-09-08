@@ -15,6 +15,35 @@ export interface IResponsibleGroupWithTeams {
 	studentsInTeamsCount: number;
 }
 
+// =========================
+// Команды института
+// =========================
+
+export interface IInstituteTeamStudyGroup {
+	id: number;
+	name: string;
+}
+
+export interface IInstituteTeamMentor {
+	id: number;
+	fullName: string;
+}
+
+export interface IInstituteTeamProject {
+	id: number;
+	title: string;
+}
+
+export interface IInstituteTeam {
+	id: number;
+	name: string;
+	studyGroup: IInstituteTeamStudyGroup;
+	mentors: IInstituteTeamMentor[];
+	status: string;
+	membersCount: number;
+	project: IInstituteTeamProject | null;
+}
+
 export interface IResponsibleEmployee {
 	id: number;
 	fullName: string;
@@ -48,21 +77,67 @@ export interface IRemoveMentorResponse {
 	mentorIds: number[];
 }
 
+// =========================
+// Студенты института
+// =========================
+
+export interface IInstituteStudentStudyGroup {
+	id: number;
+	name: string;
+}
+
+export interface IInstituteStudentMentor {
+	id: number;
+	fullName: string;
+}
+
+export interface IInstituteStudentProject {
+	id: number;
+	title: string;
+}
+
+export interface IInstituteStudent {
+	id: number;
+	lastName: string;
+	firstName: string;
+	middleName: string | null;
+	isRegistered: boolean;
+
+	studyGroup: IInstituteStudentStudyGroup;
+
+	mentors: IInstituteStudentMentor[];
+
+	teamName: string | null;
+	teamRole: string | null;
+
+	project: IInstituteStudentProject | null;
+}
+
 export interface IInstituteResponsibleStore {
 	groups: IResponsibleGroup[];
+
+	// Статистика групп + команд
 	groupsWithTeams: IResponsibleGroupWithTeams[];
+
+	// Список команд
+	teams: IInstituteTeam[];
+
+	// Список студентов
+	students: IInstituteStudent[];
+
 	employees: IResponsibleEmployee[];
 
-	// Группы вместе с назначенными наставниками
 	groupMentors: IGroupMentors[];
 
 	currentGroup: IResponsibleGroup | null;
 
 	isLoadingGroups: boolean;
+	isLoadingGroupsWithTeams: boolean;
+	isLoadingTeams: boolean;
+	isLoadingStudents: boolean;
 	isLoadingEmployees: boolean;
 	isLoadingGroupMentors: boolean;
 	isLoadingMentorRequest: boolean;
-	isLoadingGroupsWithTeams: boolean;
 
 	error: string | null;
 }

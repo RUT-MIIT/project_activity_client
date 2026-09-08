@@ -7,6 +7,8 @@ import * as actions from './actions';
 const initialState: IInstituteResponsibleStore = {
 	groups: [],
 	groupsWithTeams: [],
+	teams: [],
+	students: [],
 	employees: [],
 	groupMentors: [],
 
@@ -14,6 +16,8 @@ const initialState: IInstituteResponsibleStore = {
 
 	isLoadingGroups: false,
 	isLoadingGroupsWithTeams: false,
+	isLoadingTeams: false,
+	isLoadingStudents: false,
 	isLoadingEmployees: false,
 	isLoadingGroupMentors: false,
 	isLoadingMentorRequest: false,
@@ -179,7 +183,37 @@ export const controlGroupSlice = createSlice({
 					state.error =
 						action.error?.message || 'Не удалось загрузить группы и команды';
 				}
-			);
+			)
+			.addCase(actions.getInstituteTeamsAction.pending, (state) => {
+				state.isLoadingTeams = true;
+				state.error = null;
+			})
+			.addCase(actions.getInstituteTeamsAction.fulfilled, (state, action) => {
+				state.isLoadingTeams = false;
+				state.teams = action.payload;
+			})
+			.addCase(actions.getInstituteTeamsAction.rejected, (state, action) => {
+				state.isLoadingTeams = false;
+				state.error = action.error?.message || 'Не удалось загрузить команды';
+			})
+
+			.addCase(actions.getInstituteStudentsAction.pending, (state) => {
+				state.isLoadingStudents = true;
+				state.error = null;
+			})
+
+			.addCase(
+				actions.getInstituteStudentsAction.fulfilled,
+				(state, action) => {
+					state.isLoadingStudents = false;
+					state.students = action.payload;
+				}
+			)
+
+			.addCase(actions.getInstituteStudentsAction.rejected, (state, action) => {
+				state.isLoadingStudents = false;
+				state.error = action.error?.message || 'Не удалось загрузить студентов';
+			});
 	},
 });
 
