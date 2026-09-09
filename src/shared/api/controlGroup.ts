@@ -1,6 +1,7 @@
 import type {
 	IAssignMentorRequest,
 	IRemoveMentorRequest,
+	IRegistrationSettingsUpdate,
 } from '../../store/controlGroup/types';
 
 import { request } from './utils';
@@ -84,4 +85,27 @@ export const getInstituteStudents = () => {
 		method: 'GET',
 		headers: getAuthHeaders(),
 	});
+};
+
+export const getRegistrationSettings = () => {
+	return request(
+		'/teams/institute-responsible/registration-settings/?semester_id=actual',
+		{
+			method: 'GET',
+			headers: getAuthHeaders(),
+		}
+	);
+};
+
+export const updateRegistrationSettings = (
+	data: IRegistrationSettingsUpdate
+) => {
+	return request(
+		'/teams/institute-responsible/registration-settings/?semester_id=actual',
+		{
+			method: 'POST',
+			headers: getAuthHeaders(),
+			body: JSON.stringify(data),
+		}
+	);
 };

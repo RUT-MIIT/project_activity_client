@@ -5,4 +5,5 @@ export const tabs: ITab[] = [
 	{ label: 'Формирование команд', path: '/control-group/formation' },
 	{ label: 'Команды', path: '/control-group/teams' },
 	{ label: 'Студенты', path: '/control-group/students' },
+	{ label: 'Витрина', path: '/control-group/showcase' },
 ];

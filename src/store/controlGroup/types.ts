@@ -113,6 +113,31 @@ export interface IInstituteStudent {
 	project: IInstituteStudentProject | null;
 }
 
+export interface IRegistrationSettingsUpdate {
+	registrationOpensAt?: string | null;
+	closedByDecision?: boolean;
+}
+
+export interface IRegistrationSettingsCurrent {
+	instituteCode: string;
+	instituteName: string;
+	registrationOpensAt: string | null;
+	closedByDecision: boolean;
+	isOpen: boolean;
+	status: 'open' | 'closed';
+}
+
+export interface IOtherInstituteRegistrationSettings {
+	instituteCode: string;
+	instituteName: string;
+	registrationOpensAt: string | null;
+}
+
+export interface IRegistrationSettings {
+	current: IRegistrationSettingsCurrent;
+	otherInstitutes: IOtherInstituteRegistrationSettings[];
+}
+
 export interface IInstituteResponsibleStore {
 	groups: IResponsibleGroup[];
 
@@ -124,6 +149,8 @@ export interface IInstituteResponsibleStore {
 
 	// Список студентов
 	students: IInstituteStudent[];
+
+	registrationSettings: IRegistrationSettings | null;
 
 	employees: IResponsibleEmployee[];
 
@@ -138,6 +165,8 @@ export interface IInstituteResponsibleStore {
 	isLoadingEmployees: boolean;
 	isLoadingGroupMentors: boolean;
 	isLoadingMentorRequest: boolean;
+	isLoadingRegistrationSettings: boolean;
+	isUpdatingRegistrationSettings: boolean;
 
 	error: string | null;
 }

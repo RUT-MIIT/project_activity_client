@@ -12,6 +12,7 @@ const initialState: IInstituteResponsibleStore = {
 	employees: [],
 	groupMentors: [],
 
+	registrationSettings: null,
 	currentGroup: null,
 
 	isLoadingGroups: false,
@@ -21,6 +22,8 @@ const initialState: IInstituteResponsibleStore = {
 	isLoadingEmployees: false,
 	isLoadingGroupMentors: false,
 	isLoadingMentorRequest: false,
+	isLoadingRegistrationSettings: false,
+	isUpdatingRegistrationSettings: false,
 
 	error: null,
 };
@@ -201,7 +204,6 @@ export const controlGroupSlice = createSlice({
 				state.isLoadingStudents = true;
 				state.error = null;
 			})
-
 			.addCase(
 				actions.getInstituteStudentsAction.fulfilled,
 				(state, action) => {
@@ -209,11 +211,51 @@ export const controlGroupSlice = createSlice({
 					state.students = action.payload;
 				}
 			)
-
 			.addCase(actions.getInstituteStudentsAction.rejected, (state, action) => {
 				state.isLoadingStudents = false;
 				state.error = action.error?.message || 'Не удалось загрузить студентов';
-			});
+			})
+			.addCase(actions.getRegistrationSettingsAction.pending, (state) => {
+				state.isLoadingRegistrationSettings = true;
+				state.error = null;
+			})
+			.addCase(
+				actions.getRegistrationSettingsAction.fulfilled,
+				(state, action) => {
+					state.isLoadingRegistrationSettings = false;
+					state.registrationSettings = action.payload;
+				}
+			)
+			.addCase(
+				actions.getRegistrationSettingsAction.rejected,
+				(state, action) => {
+					state.isLoadingRegistrationSettings = false;
+					state.error =
+						action.error?.message ||
+						'Не удалось загрузить настройки регистрации';
+				}
+			)
+
+			.addCase(actions.updateRegistrationSettingsAction.pending, (state) => {
+				state.isUpdatingRegistrationSettings = true;
+				state.error = null;
+			})
+			.addCase(
+				actions.updateRegistrationSettingsAction.fulfilled,
+				(state, action) => {
+					state.isUpdatingRegistrationSettings = false;
+					state.registrationSettings = action.payload;
+				}
+			)
+			.addCase(
+				actions.updateRegistrationSettingsAction.rejected,
+				(state, action) => {
+					state.isUpdatingRegistrationSettings = false;
+					state.error =
+						action.error?.message ||
+						'Не удалось изменить настройки регистрации';
+				}
+			);
 	},
 });
 

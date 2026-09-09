@@ -120,7 +120,11 @@ export const ControlGroupTeams: FC = () => {
 
 							<TableColumn text='Команда' textWeight='bold' columnSize='full' />
 
-							<TableColumn text='Статус' textWeight='bold' columnSize='large' />
+							<TableColumn
+								text='Статус'
+								textWeight='bold'
+								columnSize='status'
+							/>
 
 							<TableColumn
 								text='Группа'
@@ -157,7 +161,7 @@ export const ControlGroupTeams: FC = () => {
 											textWeight='bold'
 										/>
 
-										<TableColumn withChildren columnSize='large'>
+										<TableColumn withChildren columnSize='status'>
 											<Badge text={status.text} color={status.color} />
 										</TableColumn>
 

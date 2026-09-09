@@ -28,13 +28,16 @@ export interface IFormFieldError {
 }
 
 export interface IFormInputProps {
-	type?: 'text' | 'number' | 'password';
+	type?: 'text' | 'number' | 'password' | 'date';
 	name: string;
 	placeholder?: string;
 	value: string;
 	autoComplete?: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
+	min?: string | number;
+	max?: string | number;
+	step?: string | number;
 }
 
 export interface IFormInputStubProps {

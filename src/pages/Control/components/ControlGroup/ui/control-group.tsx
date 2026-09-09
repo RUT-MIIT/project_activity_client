@@ -8,6 +8,7 @@ import { ControlGroupMentors } from './control-group-mentors';
 import { ControlGroupFormation } from './control-group-formation';
 import { ControlGroupTeams } from './control-group-teams';
 import { ControlGroupStudents } from './control-group-students';
+import { ControlGroupShowcase } from './control-group-showcase';
 
 import { tabs } from '../lib/helpers';
 
@@ -25,6 +26,7 @@ export const ControlGroup: FC = () => {
 				<Route path='formation' element={<ControlGroupFormation />} />
 				<Route path='teams' element={<ControlGroupTeams />} />
 				<Route path='students' element={<ControlGroupStudents />} />
+				<Route path='showcase' element={<ControlGroupShowcase />} />
 				<Route path='' element={<Navigate to='mentors' replace />} />
 			</Routes>
 		</Section>

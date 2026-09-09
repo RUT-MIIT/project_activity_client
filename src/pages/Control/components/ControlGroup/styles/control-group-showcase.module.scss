@@ -1,0 +1,352 @@
+.page {
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+	gap: 16px;
+}
+
+.status,
+.calendar,
+.otherInstitutes {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.status {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.statusHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.label {
+	margin-bottom: 4px;
+
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.statusTitle {
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+.statusIndicator {
+	width: 12px;
+	height: 12px;
+
+	flex-shrink: 0;
+
+	border-radius: 50%;
+
+	background-color: var(--accent-grey-color);
+
+	&_open {
+		background-color: var(--accent-green-color);
+	}
+}
+
+.currentDate {
+	padding: 12px;
+
+	display: flex;
+	flex-direction: column;
+
+	background-color: var(--main-grey-background-color);
+	border-radius: var(--border-radius);
+}
+
+.value {
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+.time {
+	margin-top: 2px;
+
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-grey-color);
+}
+
+.decision {
+	margin: 0 auto 0 0;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.decisionText {
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-black-color);
+}
+
+.emptyState {
+	padding: 12px 0;
+
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-grey-color);
+}
+
+.sectionHeader {
+	margin-bottom: 16px;
+
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.sectionTitle {
+	font-size: 18px;
+	line-height: 22px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+.sectionDescription {
+	margin-top: 4px;
+
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.selectedDate {
+	margin: 16px 0 10px;
+
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+.slots {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 8px;
+}
+
+.slot {
+	min-width: 0;
+	padding: 10px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+
+	font-family: inherit;
+
+	background-color: var(--main-white-color);
+	border: 1px solid var(--main-grey-light-color);
+	border-radius: var(--border-radius);
+
+	cursor: pointer;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease,
+		opacity 0.15s ease;
+}
+
+.slot strong {
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-black-color);
+}
+
+.slot span {
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.slot:hover:not(:disabled) {
+	border-color: var(--main-blue-color);
+	background-color: var(--main-blue-background-color);
+}
+
+.slot_selected {
+	border-color: var(--main-blue-color);
+	background-color: var(--main-blue-background-color);
+}
+
+.slot_selected strong,
+.slot_selected span {
+	color: var(--main-blue-color);
+}
+
+.slot_occupied {
+	background-color: var(--inactive-color);
+	opacity: 0.6;
+
+	cursor: not-allowed;
+}
+
+.slot_occupied strong,
+.slot_occupied span {
+	color: var(--accent-grey-color);
+}
+
+.legend {
+	margin: 16px 0;
+
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.legendItem {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.legendDot {
+	width: 8px;
+	height: 8px;
+
+	box-sizing: border-box;
+
+	border-radius: 50%;
+
+	&_free {
+		background-color: var(--main-white-color);
+		border: 1px solid var(--main-grey-color);
+	}
+
+	&_occupied {
+		background-color: var(--main-grey-color);
+	}
+
+	&_selected {
+		background-color: var(--main-blue-color);
+	}
+}
+
+.otherInstitutes {
+	display: flex;
+	flex-direction: column;
+}
+
+.instituteList {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.instituteItem {
+	padding: 12px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+
+	background-color: var(--main-grey-background-color);
+	border-radius: var(--border-radius);
+}
+
+.instituteName {
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 600;
+
+	color: var(--main-black-color);
+}
+
+.instituteCode {
+	margin-top: 2px;
+
+	font-size: 12px;
+	line-height: 16px;
+
+	color: var(--main-grey-color);
+}
+
+.instituteDate {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+
+	font-size: 14px;
+	line-height: 18px;
+
+	color: var(--main-black-color);
+}
+
+.instituteDate span {
+	color: var(--main-grey-color);
+}
+
+
+/* =========================
+ * 1280px
+ * ========================= */
+
+@media (max-width: 1280px) {
+	.grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+
+/* =========================
+ * 768px
+ * ========================= */
+
+@media (max-width: 768px) {
+	.page {
+		gap: 12px;
+	}
+
+	.slots {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.instituteItem {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.instituteDate {
+		align-items: flex-start;
+	}
+}

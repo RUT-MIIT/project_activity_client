@@ -7,8 +7,10 @@ import {
 	getInstituteStudents,
 	getInstituteEmployees,
 	getGroupMentors,
+	getRegistrationSettings,
 	assignGroupMentor,
 	removeGroupMentor,
+	updateRegistrationSettings,
 } from '../../shared/api/controlGroup';
 
 import type {
@@ -22,6 +24,8 @@ import type {
 	IAssignMentorResponse,
 	IRemoveMentorRequest,
 	IRemoveMentorResponse,
+	IRegistrationSettings,
+	IRegistrationSettingsUpdate,
 } from './types';
 
 export const getInstituteGroupsAction = createAsyncThunk<IResponsibleGroup[]>(
@@ -61,3 +65,14 @@ export const removeGroupMentorAction = createAsyncThunk<
 	IRemoveMentorResponse,
 	IRemoveMentorRequest
 >('controlGroup/removeGroupMentor', removeGroupMentor);
+
+export const getRegistrationSettingsAction =
+	createAsyncThunk<IRegistrationSettings>(
+		'controlGroup/getRegistrationSettings',
+		getRegistrationSettings
+	);
+
+export const updateRegistrationSettingsAction = createAsyncThunk<
+	IRegistrationSettings,
+	IRegistrationSettingsUpdate
+>('controlGroup/updateRegistrationSettings', updateRegistrationSettings);
