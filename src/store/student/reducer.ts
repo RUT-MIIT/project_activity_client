@@ -206,6 +206,17 @@ export const studentSlice = createSlice({
 			.addCase(actions.getStudentShowcaseDetailAction.rejected, (state) => {
 				state.isLoadingShowcaseDetail = false;
 				state.projectDetail = null;
+			})
+			.addCase(actions.chooseProjectAction.pending, (state) => {
+				state.isLoadingAction = true;
+				state.error = null;
+			})
+			.addCase(actions.chooseProjectAction.fulfilled, (state) => {
+				state.isLoadingAction = false;
+			})
+			.addCase(actions.chooseProjectAction.rejected, (state, action) => {
+				state.isLoadingAction = false;
+				state.error = action.error?.message || 'Не выбрать проект';
 			});
 	},
 });

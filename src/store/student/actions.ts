@@ -9,6 +9,7 @@ import type {
 	ITeamEventLogResponse,
 	ITeamJoinRequestResponse,
 	IStudentShowcase,
+	IInviteCandidatesResponse,
 } from './types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -31,6 +32,8 @@ import {
 	confirmTeamComposition,
 	getStudentShowcase,
 	getStudentShowcaseDetail,
+	chooseProject,
+	getInviteCandidates,
 } from '../../shared/api/student';
 
 export const getMyGroupAction = createAsyncThunk<IGroup>(
@@ -123,3 +126,15 @@ export const getStudentShowcaseDetailAction = createAsyncThunk(
 		}
 	}
 );
+
+export const chooseProjectAction = createAsyncThunk<IMyTeam, number>(
+	'student/chooseProject',
+	chooseProject
+);
+
+export const getInviteCandidatesAction = createAsyncThunk<
+	IInviteCandidatesResponse,
+	string
+>('student/getInviteCandidates', async (query) => {
+	return getInviteCandidates(query);
+});

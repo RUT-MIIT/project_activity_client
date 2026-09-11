@@ -29,6 +29,7 @@ const getTimeLeft = (date: Date) => {
 export const Countdown: FC<ICountdownProps> = ({
 	targetDate,
 	label = 'До начала',
+	onComplete,
 }) => {
 	const date = useMemo(() => {
 		return targetDate instanceof Date ? targetDate : new Date(targetDate);
@@ -37,8 +38,17 @@ export const Countdown: FC<ICountdownProps> = ({
 	const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(date));
 
 	useEffect(() => {
+		let completed = false;
+
 		const update = () => {
-			setTimeLeft(getTimeLeft(date));
+			const nextTimeLeft = getTimeLeft(date);
+
+			setTimeLeft(nextTimeLeft);
+
+			if (nextTimeLeft.totalSeconds <= 0 && !completed) {
+				completed = true;
+				onComplete?.();
+			}
 		};
 
 		update();
@@ -46,7 +56,7 @@ export const Countdown: FC<ICountdownProps> = ({
 		const interval = window.setInterval(update, 1000);
 
 		return () => window.clearInterval(interval);
-	}, [date]);
+	}, [date, onComplete]);
 
 	if (timeLeft.totalSeconds <= 0) {
 		return null;

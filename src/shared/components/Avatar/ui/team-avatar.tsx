@@ -5,19 +5,19 @@ import styles from '../styles/team-avatar.module.scss';
 interface ITeamAvatarProps {
 	firstName: string;
 	lastName: string;
-	role: string;
+	memberRole: 'leader' | 'mentor' | 'member';
 }
 
 export const TeamAvatar: FC<ITeamAvatarProps> = ({
 	firstName,
 	lastName,
-	role,
+	memberRole,
 }) => {
-	if (role === 'Капитан команды') {
+	if (memberRole === 'leader') {
 		return <div className={`${styles.img} ${styles.img_captain}`} />;
 	}
 
-	if (role === 'Наставник команды') {
+	if (memberRole === 'mentor') {
 		return <div className={`${styles.img} ${styles.img_mentor}`} />;
 	}
 

@@ -10,6 +10,7 @@ import styles from '../styles/team-lobby-members.module.scss';
 interface ITeamLobbyMembersProps {
 	team: IMyTeam;
 	onInvite: () => void;
+	onInviteExternal: () => void;
 	onRemove: (memberId: number) => void;
 }
 
@@ -25,6 +26,7 @@ const getMemberName = (fullName: string) => {
 export const TeamLobbyMembers: FC<ITeamLobbyMembersProps> = ({
 	team,
 	onInvite,
+	onInviteExternal,
 	onRemove,
 }) => {
 	return (
@@ -40,7 +42,7 @@ export const TeamLobbyMembers: FC<ITeamLobbyMembersProps> = ({
 							<TeamAvatar
 								firstName={firstName}
 								lastName={lastName}
-								role={isLeader ? 'Капитан команды' : 'Участник'}
+								memberRole={isLeader ? 'leader' : 'member'}
 							/>
 
 							<div className={styles.user}>
@@ -73,6 +75,14 @@ export const TeamLobbyMembers: FC<ITeamLobbyMembersProps> = ({
 						color='green'
 						isBlock={team.members.length >= team.maxTeamMembers}
 						onClick={onInvite}
+					/>
+
+					<Button
+						type='button'
+						text='Пригласить вне группы'
+						color='blue'
+						isBlock={team.members.length >= team.maxTeamMembers}
+						onClick={onInviteExternal}
 					/>
 				</CardControl>
 			)}

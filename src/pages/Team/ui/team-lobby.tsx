@@ -19,6 +19,7 @@ import { TeamLobbyMembers } from './team-lobby-members';
 import { TeamLobbyInvitations } from './team-lobby-invitations';
 import { TeamLobbyJoinRequests } from './team-lobby-join-requests';
 import { InviteTeamMemberForm } from './invite-team-member-form';
+import { InviteExternalTeamMemberForm } from './invite-external-team-member-form';
 
 import {
 	getMyTeamAction,
@@ -55,6 +56,8 @@ export const TeamLobby: FC = () => {
 	const [visibleEventCount, setVisibleEventCount] = useState(3);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+	const [isExternalInviteModalOpen, setIsExternalInviteModalOpen] =
+		useState(false);
 	const [isRemoveMemberModalOpen, setIsRemoveMemberModalOpen] = useState(false);
 	const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
 	const [isLeaveTeamModalOpen, setIsLeaveTeamModalOpen] = useState(false);
@@ -132,6 +135,16 @@ export const TeamLobby: FC = () => {
 	const handleCloseInviteModal = () => {
 		if (!isLoadingAction) {
 			setIsInviteModalOpen(false);
+		}
+	};
+
+	const handleOpenExternalInviteModal = () => {
+		setIsExternalInviteModalOpen(true);
+	};
+
+	const handleCloseExternalInviteModal = () => {
+		if (!isLoadingAction) {
+			setIsExternalInviteModalOpen(false);
 		}
 	};
 
@@ -229,6 +242,34 @@ export const TeamLobby: FC = () => {
 			});
 
 			setIsInviteModalOpen(false);
+
+			await dispatch(getMyTeamAction()).unwrap();
+			await dispatch(getMyTeamEventLogAction()).unwrap();
+		} catch (err) {
+			showToast({
+				title: 'Не удалось отправить приглашение',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
+	};
+
+	const handleInviteExternalMember = async (userId: number) => {
+		try {
+			await dispatch(
+				createTeamInvitationAction({
+					user_id: userId,
+					role: 'member',
+				})
+			).unwrap();
+
+			showToast({
+				title: 'Приглашение отправлено',
+				text: 'Приглашение студенту успешно отправлено.',
+				type: 'success',
+			});
+
+			setIsExternalInviteModalOpen(false);
 
 			await dispatch(getMyTeamAction()).unwrap();
 			await dispatch(getMyTeamEventLogAction()).unwrap();
@@ -513,6 +554,7 @@ export const TeamLobby: FC = () => {
 							team={myTeam}
 							onRemove={handleOpenRemoveMemberModal}
 							onInvite={handleOpenInviteModal}
+							onInviteExternal={handleOpenExternalInviteModal}
 						/>
 						<TeamLobbyInvitations invitations={myTeam.sentInvitations} />
 						<TeamLobbyJoinRequests
@@ -534,6 +576,21 @@ export const TeamLobby: FC = () => {
 					<InviteTeamMemberForm
 						onSubmit={handleInviteMember}
 						onCancel={handleCloseInviteModal}
+						isLoading={isLoadingAction}
+					/>
+				</Modal>
+			)}
+
+			{/* Приглашение участника вне группы */}
+			{isExternalInviteModalOpen && (
+				<Modal
+					isOpen={isExternalInviteModalOpen}
+					onClose={handleCloseExternalInviteModal}
+					title='Пригласить участника вне группы'
+					description='Найдите студента из вашего проектного трека и отправьте ему приглашение'>
+					<InviteExternalTeamMemberForm
+						onSubmit={handleInviteExternalMember}
+						onCancel={handleCloseExternalInviteModal}
 						isLoading={isLoadingAction}
 					/>
 				</Modal>

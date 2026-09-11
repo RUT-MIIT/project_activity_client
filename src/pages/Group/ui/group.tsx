@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
-import { useSelector } from '../../../store/store';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from '../../../store/store';
 
 import { Section } from '../../../shared/components/Section';
 import {
@@ -11,11 +12,23 @@ import {
 	TableRow,
 } from '../../../shared/components/Table/ui';
 import { Badge } from '../../../shared/components/Badge/ui/badge';
+import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
+
+import { getMyGroupAction } from '../../../store/student/actions';
 
 import styles from '../styles/group.module.scss';
 
 export const Group: FC = () => {
-	const { group } = useSelector((state) => state.student);
+	const dispatch = useDispatch();
+	const { group, isLoadingGroup } = useSelector((state) => state.student);
+
+	useEffect(() => {
+		dispatch(getMyGroupAction());
+	}, [dispatch]);
+
+	if (isLoadingGroup) {
+		return <Preloader />;
+	}
 
 	if (!group) {
 		return null;
@@ -24,10 +37,6 @@ export const Group: FC = () => {
 	const studentsWithoutTeam = group.members.filter(
 		(member) => !member.team
 	).length;
-
-	const mentorName = group.mentor
-		? `${group.mentor.last_name} ${group.mentor.first_name} ${group.mentor.middle_name}`
-		: 'Не назначен';
 
 	return (
 		<Section sectionWidth='full' sectionTitle={{ text: 'Моя группа' }}>
@@ -70,28 +79,8 @@ export const Group: FC = () => {
 						</p>
 					</div>
 				</div>
-
-				<div
-					className={`${styles.summaryCard} ${styles.summaryCard_color_purple}`}>
-					{group.mentor ? (
-						<span className={styles.summaryCount}>✓</span>
-					) : (
-						<span className={styles.summaryCount}>—</span>
-					)}
-
-					<div className={styles.summaryInfo}>
-						<h5 className={styles.summaryTitle}>Наставник</h5>
-
-						<p className={styles.summaryText}>
-							{group.mentor
-								? `${mentorName}, ${group.mentor.position}`
-								: 'У группы пока нет наставника'}
-						</p>
-					</div>
-				</div>
 			</div>
 
-			{/* Таблица */}
 			<div className={styles.table}>
 				<Table>
 					<TableHeader>
@@ -140,7 +129,6 @@ export const Group: FC = () => {
 				</Table>
 			</div>
 
-			{/* Карточки для мобильных */}
 			<div className={styles.cards}>
 				{group.members.map((member, index) => (
 					<div className={styles.card} key={member.id}>

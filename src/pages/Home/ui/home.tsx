@@ -15,6 +15,7 @@ import { HomeContest } from './home-contest';
 
 import { getUser } from '../../../store/user/reducer';
 import { getMyDivisionStatsAction } from '../../../store/structure/actions';
+import { getMyGroupAction } from '../../../store/student/actions';
 
 import { EMAINROUTES } from '../../../shared/utils/routes';
 import { EROLES } from '../../../shared/utils/roles';
@@ -27,6 +28,7 @@ export const Home: FC = () => {
 	const { currentSemester, isLoadingStats } = useSelector(
 		(state) => state.structure
 	);
+	const { isLoadingGroup } = useSelector((state) => state.student);
 	const user = useSelector(getUser);
 
 	const openMyGroups = () => {
@@ -46,10 +48,13 @@ export const Home: FC = () => {
 			if (currentSemester && user.role !== EROLES.STUDENT) {
 				dispatch(getMyDivisionStatsAction(currentSemester.id));
 			}
+			if (user.role === EROLES.STUDENT) {
+				dispatch(getMyGroupAction());
+			}
 		}
 	}, [dispatch, user, currentSemester]);
 
-	if (isLoadingStats) {
+	if (isLoadingStats || isLoadingGroup) {
 		<Preloader />;
 	}
 
@@ -78,13 +83,24 @@ export const Home: FC = () => {
 				</div>
 				<div className={styles.container}>
 					<div
-						className={`${
+						className={
 							user.role === EROLES.STUDENT ? styles.row_student : styles.row
-						}`}>
+						}>
 						<HomePerson />
-						{user.role === EROLES.STUDENT ? <HomeProject /> : <HomeStats />}
-						{user.role === EROLES.STUDENT ? <HomeTeam /> : <HomePlan />}
+
+						{user.role === EROLES.STUDENT ? (
+							<div className={styles.studentColumn}>
+								<HomeProject />
+								<HomeTeam />
+							</div>
+						) : (
+							<>
+								<HomeStats />
+								<HomePlan />
+							</>
+						)}
 					</div>
+
 					{user.role === EROLES.STUDENT && <HomeContest />}
 				</div>
 			</div>

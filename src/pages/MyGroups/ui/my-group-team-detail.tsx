@@ -489,11 +489,7 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 											<TeamAvatar
 												firstName={member.fullName.split(' ')[1] ?? ''}
 												lastName={member.fullName.split(' ')[0] ?? ''}
-												role={
-													member.role === 'leader'
-														? 'Капитан команды'
-														: 'Участник'
-												}
+												memberRole={member.role}
 											/>
 
 											<div className={styles.member__info}>

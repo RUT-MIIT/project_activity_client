@@ -85,7 +85,15 @@
 	margin: 0;
 
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 400px 1fr;
+	gap: 20px;
+}
+
+.studentColumn {
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
 	gap: 20px;
 }
 
@@ -104,6 +112,7 @@
 	}
 
 	.row_student {
+		grid-template-columns: 300px 1fr;
 		gap: 16px;
 	}
 }
@@ -232,6 +241,10 @@
 
 	.row_student {
 		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	.studentColumn {
 		gap: 12px;
 	}
 }

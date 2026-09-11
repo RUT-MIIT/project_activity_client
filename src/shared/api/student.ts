@@ -139,6 +139,21 @@ export const createTeamJoinRequest = (teamSemesterId: number) => {
 	});
 };
 
+export const getInviteCandidates = (query: string, limit = 20) => {
+	return request(
+		`/teams/my-team/invite-candidates/?q=${encodeURIComponent(
+			query
+		)}&limit=${limit}&semester_id=actual`,
+		{
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};
+
 export const approveTeamJoinRequest = (requestId: number) => {
 	return request(`/teams/my-team/join-requests/${requestId}/approve/`, {
 		method: 'POST',
@@ -191,6 +206,20 @@ export const getStudentShowcaseDetail = (projectId: number) => {
 		`/showcase/student-showcase/projects/${projectId}/?semester_id=actual`,
 		{
 			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
+		}
+	);
+};
+
+export const chooseProject = (projectId: number) => {
+	return request(
+		`/showcase/student-showcase/projects/${projectId}/enroll/?semester_id=actual`,
+		{
+			method: 'POST',
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',

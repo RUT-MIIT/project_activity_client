@@ -53,16 +53,22 @@ export interface IGroup {
 	name: string;
 	code: string;
 	course_number: number;
-	form: string;
+	is_end: boolean;
 	profile: string;
+	form: string;
+	enrollment_year: number;
+
 	direction: IDirection;
 	institute: IInstitute;
 
-	mentor: IGroupMentor | null;
+	mentors: IGroupMentor[];
 	members: IGroupMember[];
 
 	students_count: number;
 	registered_students_count: number;
+
+	my_team: IGroupMyTeam | null;
+	registration: IGroupRegistration;
 }
 
 export interface IGroupMentor {
@@ -84,14 +90,29 @@ export interface IGroupMember {
 
 	is_registered: boolean;
 	user_id: number | null;
-	email: string | null;
 	team: IGroupMemberTeam | null;
 }
 
 interface IGroupMemberTeam {
 	id: number;
 	name: string;
-	role: string;
+	role: TeamMemberRole;
+}
+
+export interface IGroupMyTeam {
+	id: number;
+	name: string;
+	status: TeamStatus;
+	is_captain: boolean;
+	has_project: boolean;
+	project: { id: number; title: string } | null;
+	members: ITeamMember[];
+}
+
+export interface IGroupRegistration {
+	is_open: boolean;
+	opens_at: string | null;
+	closed_by_decision: boolean;
 }
 
 /* =========================
@@ -366,4 +387,30 @@ export interface IStudentShowcaseDetail {
 	canEnroll: boolean;
 	isCompetitiveSelection: boolean;
 	isContinuing: boolean;
+}
+
+export interface IInviteCandidateTeam {
+	id: number;
+	name: string;
+}
+
+export interface IInviteCandidate {
+	id: number;
+	user_id: number | null;
+	full_name: string;
+	group: IInviteCandidateTeam;
+	isRegistered: boolean;
+	inTeam: boolean;
+	team: {
+		id: number;
+		name: string;
+	} | null;
+	hasPendingInvitation: boolean;
+	canInvite: boolean;
+}
+
+export interface IInviteCandidatesResponse {
+	trackId: number | null;
+	scope: 'track' | 'group';
+	results: IInviteCandidate[];
 }
