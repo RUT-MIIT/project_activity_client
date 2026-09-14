@@ -17,6 +17,10 @@ export interface IMentorGroupStudent {
 		name: string;
 		role: string;
 	} | null;
+	project: {
+		id: number;
+		title: string;
+	};
 }
 
 export type MentorTeamStatus = 'forming' | 'assembled';
@@ -31,6 +35,11 @@ export interface IMentorGroupTeam {
 export interface IMentorGroupDetail {
 	id: number;
 	name: string;
+	registration: {
+		closed_by_decision: boolean;
+		is_open: boolean;
+		opens_at: string;
+	};
 	students: IMentorGroupStudent[];
 	teams: IMentorGroupTeam[];
 }
@@ -103,6 +112,10 @@ export interface IMentorTeam {
 	status: MentorTeamStatus;
 	membersCount: number;
 	members: IMentorTeamMember[];
+	project: {
+		id: number;
+		title: string;
+	};
 }
 
 export interface IUpdateMentorTeamNameRequest {

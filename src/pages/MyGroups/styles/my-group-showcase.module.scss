@@ -26,10 +26,21 @@
 }
 
 .filters {
-	display: grid;
-	grid-template-columns: 300px 280px;
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
 	gap: 12px;
-	align-items: center;
+
+	&__row {
+		width: 100%;
+
+		display: grid;
+		grid-template-columns: 300px 280px;
+		gap: 12px;
+
+		align-items: center;
+	}
 }
 
 .search,
@@ -38,98 +49,19 @@
 }
 
 /* =========================
- * Таймер регистрации
+ * Регистрация
  * ========================= */
 
 .registration {
+	width: 100%;
 	min-width: 0;
-
-	padding: 14px 20px;
-	box-sizing: border-box;
 
 	display: flex;
 	align-items: center;
 
-	border: 1px solid var(--main-grey-light-color);
-	border-radius: var(--border-radius);
-	background-color: var(--main-white-color);
-
-	&_empty {
-		padding: 0;
-		border: none;
-		background-color: transparent;
-	}
-
-	&__content {
+	& > :global(*) {
 		width: 100%;
-
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		gap: 24px;
 	}
-
-	&__label {
-		flex-shrink: 0;
-
-		font-size: 14px;
-		line-height: 18px;
-		font-weight: 500;
-
-		color: var(--main-grey-color);
-	}
-
-	&__timer {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-	}
-
-	&__unit {
-		min-width: 42px;
-
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		gap: 2px;
-	}
-
-	&__unit strong {
-		font-size: 20px;
-		line-height: 22px;
-		font-weight: 700;
-
-		color: var(--main-black-color);
-
-		font-variant-numeric: tabular-nums;
-	}
-
-	&__unit span {
-		font-size: 10px;
-		line-height: 12px;
-
-		color: var(--main-grey-color);
-	}
-
-	&__separator {
-		margin-top: -11px;
-
-		font-size: 18px;
-		line-height: 20px;
-		font-weight: 600;
-
-		color: var(--main-grey-color);
-	}
-}
-
-/* =========================
- * Выбранные теги
- * ========================= */
-
-.container > :global(.tag-list) {
-	flex-shrink: 0;
 }
 
 /* =========================
@@ -157,6 +89,8 @@
 	gap: 16px;
 
 	padding-bottom: 4px;
+
+	align-items: stretch;
 }
 
 /* =========================
@@ -165,7 +99,7 @@
 
 .card {
 	width: 100%;
-	height: fit-content;
+	height: 100%;
 
 	box-sizing: border-box;
 	padding: 20px 24px;
@@ -221,7 +155,7 @@
 		grid-template-columns: 1fr 1fr;
 		gap: 16px;
 
-		margin-top: 4px;
+		margin: 4px 0 12px;
 	}
 
 	&__infoItem {
@@ -252,7 +186,7 @@
 	&__footer {
 		width: 100%;
 
-		margin-top: 20px;
+		margin-top: auto;
 		padding-top: 16px;
 
 		border-top: 1px solid var(--main-grey-light-color);
@@ -280,7 +214,7 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.filters {
+	.filters__row {
 		grid-template-columns: minmax(240px, 300px) minmax(220px, 280px);
 	}
 
@@ -298,14 +232,8 @@
 		grid-template-columns: 1fr;
 	}
 
-	.filters {
+	.filters__row {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
-	}
-
-	.registration {
-		&__content {
-			justify-content: space-between;
-		}
 	}
 }
 
@@ -325,31 +253,9 @@
 		gap: 12px;
 	}
 
-	.filters {
+	.filters__row {
 		grid-template-columns: 1fr 1fr;
 		gap: 8px;
-	}
-
-	.registration {
-		padding: 0;
-
-		&__content {
-			gap: 16px;
-		}
-
-		&__label {
-			font-size: 12px;
-			line-height: 16px;
-		}
-
-		&__unit {
-			min-width: 38px;
-		}
-
-		&__unit strong {
-			font-size: 18px;
-			line-height: 24px;
-		}
 	}
 
 	.projects {
@@ -389,7 +295,6 @@
 		}
 
 		&__footer {
-			margin-top: 16px;
 			padding-top: 12px;
 		}
 	}
@@ -405,22 +310,12 @@
 	}
 
 	.filters {
-		grid-template-columns: 1fr;
 		gap: 8px;
 	}
 
-	.registration {
-		&__content {
-			flex-direction: column;
-			align-items: flex-start;
-
-			gap: 12px;
-		}
-
-		&__timer {
-			width: 100%;
-			justify-content: center;
-		}
+	.filters__row {
+		grid-template-columns: 1fr;
+		gap: 8px;
 	}
 
 	.projects {
@@ -453,7 +348,6 @@
 		}
 
 		&__footer {
-			margin-top: 16px;
 			padding-top: 12px;
 		}
 	}
@@ -471,32 +365,6 @@
 	.container {
 		margin-top: 8px;
 		gap: 8px;
-	}
-
-	.registration {
-		&__label {
-			font-size: 12px;
-			line-height: 14px;
-		}
-
-		&__unit {
-			min-width: 34px;
-		}
-
-		&__unit strong {
-			font-size: 16px;
-			line-height: 18px;
-		}
-
-		&__unit span {
-			font-size: 10px;
-			line-height: 12px;
-		}
-
-		&__separator {
-			font-size: 14px;
-			line-height: 18px;
-		}
 	}
 
 	.card {
@@ -539,7 +407,6 @@
 		}
 
 		&__footer {
-			margin-top: 12px;
 			padding-top: 10px;
 		}
 	}

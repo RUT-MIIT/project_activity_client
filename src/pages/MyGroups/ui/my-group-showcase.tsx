@@ -14,6 +14,7 @@ import { Filter } from '../../../shared/components/Filter/ui/filter';
 import { MultiSelect } from '../../../shared/components/Select/ui/multi-select';
 import { TagList } from '../../../shared/components/Tag/ui/tag-list';
 import { Notice } from '../../../shared/components/Notice/ui/notice';
+import { Countdown } from '../../../shared/components/Countdown/ui/countdown';
 import { MyGroupShowcaseDetail } from './my-group-showcase-detail';
 
 import { getMyGroupShowcaseAction } from '../../../store/mentor/actions';
@@ -25,16 +26,15 @@ export const MyGroupShowcase: FC = () => {
 
 	const { groupId } = useParams<{ groupId: string }>();
 
-	const { showcase, isLoadingShowcase } = useSelector((state) => state.mentor);
+	const { currentGroup, showcase, isLoadingShowcase } = useSelector(
+		(state) => state.mentor
+	);
 
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedTags, setSelectedTags] = useState<ITag[]>([]);
 
 	const [currentProjectId, setCurrentProjectId] = useState<number | null>(null);
 	const [isShowProjectDetail, setIsShowProjectDetail] = useState(false);
-
-	// Пока дата начала регистрации неизвестна.
-	const isRegistrationDateUnknown = true;
 
 	useEffect(() => {
 		if (!groupId) {
@@ -83,6 +83,28 @@ export const MyGroupShowcase: FC = () => {
 		return result;
 	}, [projects, selectedTags, searchQuery]);
 
+	const registration = currentGroup?.registration ?? null;
+
+	const registrationDate = registration?.opens_at
+		? new Date(registration.opens_at)
+		: null;
+
+	const isRegistrationScheduled =
+		registrationDate !== null && registrationDate.getTime() > Date.now();
+
+	const isRegistrationOpen =
+		registration?.is_open === true &&
+		!registration?.closed_by_decision &&
+		!isRegistrationScheduled;
+
+	const handleRegistrationStart = () => {
+		window.setTimeout(() => {
+			if (groupId) {
+				dispatch(getMyGroupShowcaseAction(Number(groupId)));
+			}
+		}, 2000);
+	};
+
 	const handleRemoveTag = (id: number) => {
 		setSelectedTags((prev) => prev.filter((tag) => tag.id !== id));
 	};
@@ -105,75 +127,62 @@ export const MyGroupShowcase: FC = () => {
 		<div className={styles.container}>
 			<div className={styles.toolbar}>
 				<div className={styles.filters}>
-					<div className={styles.search}>
-						<Filter
-							placeholder='Поиск по названию проекта...'
-							onFilter={setSearchQuery}
-							width='full'
-						/>
+					<div className={styles.filters__row}>
+						<div className={styles.search}>
+							<Filter
+								placeholder='Поиск по названию проекта...'
+								onFilter={setSearchQuery}
+								width='full'
+							/>
+						</div>
+
+						<div className={styles.tagsFilter}>
+							<MultiSelect
+								options={tags}
+								selectedOptions={selectedTags}
+								valueKey='id'
+								labelKey='name'
+								placeholder='Выберите теги...'
+								onChange={setSelectedTags}
+							/>
+						</div>
 					</div>
 
-					<div className={styles.tagsFilter}>
-						<MultiSelect
-							options={tags}
-							selectedOptions={selectedTags}
-							valueKey='id'
-							labelKey='name'
-							placeholder='Выберите теги...'
-							onChange={setSelectedTags}
-						/>
-					</div>
+					<TagList
+						items={selectedTags}
+						emptyText=''
+						onRemove={handleRemoveTag}
+					/>
 				</div>
 
-				<div
-					className={`${styles.registration} ${
-						isRegistrationDateUnknown ? styles.registration_empty : ''
-					}`}>
-					{isRegistrationDateUnknown ? (
+				<div className={styles.registration}>
+					{registration?.closed_by_decision ? (
+						<Notice
+							type='warning'
+							title='Регистрация закрыта'
+							text='Регистрация на проекты закрыта решением организаторов. За дополнительной информацией обратитесь к ответственному.'
+						/>
+					) : isRegistrationScheduled && registrationDate ? (
+						<Countdown
+							targetDate={registrationDate}
+							label='До начала регистрации'
+							onComplete={handleRegistrationStart}
+						/>
+					) : isRegistrationOpen ? (
 						<Notice
 							type='info'
-							title='Регистрация закрыта'
-							text='Время начала регистрации пока не определено.'
+							title='Регистрация на проекты открыта'
+							text='Выберите подходящий проект вместе с вашей группой.'
 						/>
 					) : (
-						<div className={styles.registration__content}>
-							<span className={styles.registration__label}>
-								До начала регистрации
-							</span>
-
-							<div className={styles.registration__timer}>
-								<div className={styles.registration__unit}>
-									<strong>12</strong>
-									<span>дней</span>
-								</div>
-
-								<span className={styles.registration__separator}>:</span>
-
-								<div className={styles.registration__unit}>
-									<strong>08</strong>
-									<span>часов</span>
-								</div>
-
-								<span className={styles.registration__separator}>:</span>
-
-								<div className={styles.registration__unit}>
-									<strong>42</strong>
-									<span>мин</span>
-								</div>
-
-								<span className={styles.registration__separator}>:</span>
-
-								<div className={styles.registration__unit}>
-									<strong>17</strong>
-									<span>сек</span>
-								</div>
-							</div>
-						</div>
+						<Notice
+							type='warning'
+							title='Регистрация закрыта'
+							text='Регистрация на проекты пока недоступна.'
+						/>
 					)}
 				</div>
 			</div>
-
-			<TagList items={selectedTags} emptyText='' onRemove={handleRemoveTag} />
 
 			<div className={styles.list}>
 				{filteredProjects.length > 0 ? (

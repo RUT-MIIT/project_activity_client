@@ -16,6 +16,7 @@ import {
 	FormButtons,
 	FormField,
 	FormInput,
+	FormInputStub,
 } from '../../../shared/components/Form/components';
 import { Text } from '../../../shared/components/Typography';
 import { TeamAvatar } from '../../../shared/components/Avatar/ui/team-avatar';
@@ -476,6 +477,10 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 								</FormButtons>
 							</Form>
 						</div>
+
+						<FormField title='Выбранный проект'>
+							<FormInputStub value={currentTeam?.project?.title || '—'} />
+						</FormField>
 
 						<div className={styles.section}>
 							<h4 className={styles.section__title}>Состав команды</h4>

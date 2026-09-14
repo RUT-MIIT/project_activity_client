@@ -99,6 +99,8 @@ export const MyGroupStudents: FC = () => {
 
 							<TableColumn text='Роль' textWeight='bold' columnSize='large' />
 
+							<TableColumn text='Проект' textWeight='bold' columnSize='full' />
+
 							<TableColumn
 								text='Статус'
 								textWeight='bold'
@@ -140,6 +142,11 @@ export const MyGroupStudents: FC = () => {
 													: '—'
 											}
 											columnSize='large'
+										/>
+
+										<TableColumn
+											text={student.project?.title || '—'}
+											columnSize='full'
 										/>
 
 										<TableColumn columnSize='status' withChildren>
