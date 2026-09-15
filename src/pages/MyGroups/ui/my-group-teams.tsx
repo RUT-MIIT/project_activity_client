@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 
 import { useDispatch, useSelector } from '../../../store/store';
+import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
 
 import { Card, CardControl } from '../../../shared/components/Card/ui';
 import { Badge } from '../../../shared/components/Badge/ui/badge';
@@ -10,14 +11,19 @@ import { Button } from '../../../shared/components/Button/ui/button';
 import { Text } from '../../../shared/components/Typography';
 import { MyGroupTeamDetail } from './my-group-team-detail';
 
-import { getMentorTeamAction } from '../../../store/mentor/actions';
+import {
+	getMentorTeamAction,
+	getMyGroupShowcaseAction,
+} from '../../../store/mentor/actions';
 import { getTeamStatusColor, getTeamStatusText } from '../../Team/lib/helpers';
+import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
 import styles from '../styles/my-group-teams.module.scss';
 
 export const MyGroupTeams: FC = () => {
 	const dispatch = useDispatch();
 	const { currentGroup, currentTeam } = useSelector((state) => state.mentor);
+	const { showToast } = useToast();
 
 	const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
 	const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
@@ -36,11 +42,22 @@ export const MyGroupTeams: FC = () => {
 			await dispatch(
 				getMentorTeamAction({
 					groupId: currentGroup.id,
-					teamId: teamId,
+					teamId,
 				})
 			).unwrap();
-		} catch {
-			// Ошибка уже записывается в store
+
+			await dispatch(
+				getMyGroupShowcaseAction(Number(currentGroup.id))
+			).unwrap();
+		} catch (err) {
+			showToast({
+				title: 'Не удалось открыть команду',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+
+			setSelectedTeamId(null);
+			setIsTeamModalOpen(false);
 		}
 	};
 

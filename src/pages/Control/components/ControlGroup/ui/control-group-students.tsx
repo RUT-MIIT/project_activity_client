@@ -2,6 +2,7 @@ import type { FC } from 'react';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
+import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
 
 import {
 	Table,
@@ -15,10 +16,12 @@ import { Filter } from '../../../../../shared/components/Filter/ui/filter';
 import { Text } from '../../../../../shared/components/Typography';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 import { Card } from '../../../../../shared/components/Card/ui';
+import { Button } from '../../../../../shared/components/Button/ui/button';
 
-import { getInstituteStudentsAction } from '../../../../../store/controlGroup/actions';
-
-import { useWindowWidth } from '../../../../../hooks/useWindowWidth';
+import {
+	getInstituteStudentsAction,
+	exportInstituteStudentsAction,
+} from '../../../../../store/controlGroup/actions';
 
 import styles from '../styles/control-group-mentors.module.scss';
 
@@ -34,9 +37,35 @@ export const ControlGroupStudents: FC = () => {
 
 	const [searchQuery, setSearchQuery] = useState('');
 
+	const [isExporting, setIsExporting] = useState(false);
+
 	useEffect(() => {
 		dispatch(getInstituteStudentsAction());
 	}, [dispatch]);
+
+	const handleExport = async () => {
+		try {
+			setIsExporting(true);
+
+			const blob = await dispatch(exportInstituteStudentsAction()).unwrap();
+
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement('a');
+
+			link.href = url;
+			link.download = 'Список студентов.xlsx';
+
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+
+			URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Ошибка экспорта студентов:', error);
+		} finally {
+			setIsExporting(false);
+		}
+	};
 
 	const getMentorsText = (mentors: (typeof students)[number]['mentors']) => {
 		if (mentors.length === 0) {
@@ -96,9 +125,15 @@ export const ControlGroupStudents: FC = () => {
 		<>
 			<div className={styles.header}>
 				<Filter
-					placeholder='Поиск по студенту, группе, команде...'
+					placeholder='Поиск..'
 					onFilter={setSearchQuery}
 					width={isMobile ? 'full' : 'default'}
+				/>
+				<Button
+					text='Экспорт в Excel'
+					color='green'
+					onClick={handleExport}
+					isBlock={isExporting}
 				/>
 			</div>
 

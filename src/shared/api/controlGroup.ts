@@ -4,7 +4,7 @@ import type {
 	IRegistrationSettingsUpdate,
 } from '../../store/controlGroup/types';
 
-import { request } from './utils';
+import { request, requestBlob } from './utils';
 
 const getAuthHeaders = () => ({
 	Accept: 'application/json',
@@ -106,6 +106,18 @@ export const updateRegistrationSettings = (
 			method: 'POST',
 			headers: getAuthHeaders(),
 			body: JSON.stringify(data),
+		}
+	);
+};
+
+export const exportInstituteStudents = () => {
+	return requestBlob(
+		'/teams/institute-responsible/students/export/?semester_id=actual',
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+			},
 		}
 	);
 };

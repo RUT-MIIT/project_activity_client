@@ -126,9 +126,9 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 
 							{activeTab === 'description' && (
 								<>
-									{hasValue(showcaseDetail.stakeholders) && (
+									{hasValue(showcaseDetail.problem_holder) && (
 										<FormField title='Носитель проблемы'>
-											<FormInputStub value={showcaseDetail.stakeholders} />
+											<FormInputStub value={showcaseDetail.problem_holder} />
 										</FormField>
 									)}
 

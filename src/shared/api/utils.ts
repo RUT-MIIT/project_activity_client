@@ -43,3 +43,13 @@ const checkResponse = async (res: Response) => {
 export const request = (endpoint: string, options: RequestInit) => {
 	return fetch(`${API_URL}${endpoint}`, options).then(checkResponse);
 };
+
+export const requestBlob = async (endpoint: string, options: RequestInit) => {
+	const res = await fetch(`${API_URL}${endpoint}`, options);
+
+	if (!res.ok) {
+		await checkResponse(res);
+	}
+
+	return res.blob();
+};

@@ -84,6 +84,7 @@ export interface IMentorShowcaseDetail {
 	context: string;
 	project_level: string;
 	stakeholders: string;
+	problem_holder: string;
 	tags: IMentorShowcaseTag[];
 
 	recommended_teams_count: number;
@@ -163,6 +164,19 @@ export interface IDeleteMentorTeamRequest {
 	groupId: number;
 	teamSemesterId: number;
 	semesterId?: string;
+}
+
+export interface IUpdateMentorTeamProjectRequest {
+	groupId: number;
+	teamSemesterId: number;
+	projectId: number;
+	semesterId?: string;
+}
+
+export interface IUpdateMentorTeamProjectResponse {
+	teamSemesterId: number;
+	projectId: number;
+	projectTitle: string;
 }
 
 export interface IMentorStore {

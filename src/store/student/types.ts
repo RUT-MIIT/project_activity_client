@@ -377,6 +377,7 @@ export interface IStudentShowcaseDetail {
 	existing_solutions: string;
 	context: string;
 	project_level: string;
+	problem_holder: string;
 	stakeholders: string;
 	tags: IStudentShowcaseTag[];
 	maxTeams: number;

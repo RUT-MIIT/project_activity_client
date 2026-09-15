@@ -166,6 +166,20 @@ export const mentorSlice = createSlice({
 					action.error?.message || 'Не удалось загрузить информацию о группе';
 			})
 
+			.addCase(actions.refreshMyGroupDetailAction.pending, (state) => {
+				state.error = null;
+			})
+			.addCase(
+				actions.refreshMyGroupDetailAction.fulfilled,
+				(state, action) => {
+					state.currentGroup = action.payload;
+				}
+			)
+			.addCase(actions.refreshMyGroupDetailAction.rejected, (state, action) => {
+				state.error =
+					action.error.message || 'Не удалось обновить данные группы';
+			})
+
 			/* =========================
 			 * Витрина проектов группы
 			 * ========================= */
@@ -431,7 +445,34 @@ export const mentorSlice = createSlice({
 			.addCase(actions.deleteMentorTeamAction.rejected, (state, action) => {
 				state.isLoadingTeamRequest = false;
 				state.error = action.error?.message || 'Не удалось удалить команду';
-			});
+			})
+
+			.addCase(actions.updateMentorTeamProjectAction.pending, (state) => {
+				state.isLoadingTeamRequest = true;
+				state.error = null;
+			})
+			.addCase(
+				actions.updateMentorTeamProjectAction.fulfilled,
+				(state, action) => {
+					state.isLoadingTeamRequest = false;
+
+					if (!state.currentTeam) {
+						return;
+					}
+
+					state.currentTeam.project = {
+						id: action.payload.projectId,
+						title: action.payload.projectTitle,
+					};
+				}
+			)
+			.addCase(
+				actions.updateMentorTeamProjectAction.rejected,
+				(state, action) => {
+					state.isLoadingTeamRequest = false;
+					state.error = action.error.message || 'Не удалось изменить проект';
+				}
+			);
 	},
 });
 

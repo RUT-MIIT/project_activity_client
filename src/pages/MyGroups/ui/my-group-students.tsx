@@ -220,6 +220,14 @@ export const MyGroupStudents: FC = () => {
 											: '—'}
 									</span>
 								</div>
+
+								<div className={styles.cardRow}>
+									<span className={styles.cardLabel}>Проект</span>
+
+									<span className={styles.cardValue}>
+										{student.project?.title || '—'}
+									</span>
+								</div>
 							</div>
 						</div>
 					);

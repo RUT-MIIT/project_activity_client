@@ -11,6 +11,7 @@ import {
 	assignGroupMentor,
 	removeGroupMentor,
 	updateRegistrationSettings,
+	exportInstituteStudents,
 } from '../../shared/api/controlGroup';
 
 import type {
@@ -76,3 +77,8 @@ export const updateRegistrationSettingsAction = createAsyncThunk<
 	IRegistrationSettings,
 	IRegistrationSettingsUpdate
 >('controlGroup/updateRegistrationSettings', updateRegistrationSettings);
+
+export const exportInstituteStudentsAction = createAsyncThunk<Blob, void>(
+	'controlGroup/exportInstituteStudents',
+	exportInstituteStudents
+);

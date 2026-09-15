@@ -1,6 +1,7 @@
 import type {
 	IUpdateMentorTeamNameRequest,
 	IUpdateMentorTeamCaptainRequest,
+	IUpdateMentorTeamProjectRequest,
 	IConfirmMentorTeamCompositionRequest,
 	IUnconfirmMentorTeamCompositionRequest,
 	IAddMentorTeamMemberRequest,
@@ -109,6 +110,26 @@ export const updateMentorTeamCaptain = (
 			headers: getAuthHeaders(),
 			body: JSON.stringify({
 				captainId: data.captainId,
+			}),
+		}
+	);
+};
+
+/**
+ * Назначить проект
+ */
+export const updateMentorTeamProject = (
+	data: IUpdateMentorTeamProjectRequest
+) => {
+	return request(
+		`/teams/study-groups/${data.groupId}/teams/${
+			data.teamSemesterId
+		}/enroll-project/?semester_id=${data.semesterId || 'actual'}`,
+		{
+			method: 'POST',
+			headers: getAuthHeaders(),
+			body: JSON.stringify({
+				projectId: data.projectId,
 			}),
 		}
 	);

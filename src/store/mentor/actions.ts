@@ -1,3 +1,20 @@
+import type {
+	IMentorGroup,
+	IMentorGroupDetail,
+	IMentorShowcaseTrack,
+	IMentorShowcaseDetail,
+	IMentorTeam,
+	IUpdateMentorTeamNameRequest,
+	IUpdateMentorTeamCaptainRequest,
+	IUpdateMentorTeamProjectRequest,
+	IUpdateMentorTeamProjectResponse,
+	IConfirmMentorTeamCompositionRequest,
+	IUnconfirmMentorTeamCompositionRequest,
+	IAddMentorTeamMemberRequest,
+	IRemoveMentorTeamMemberRequest,
+	IDeleteMentorTeamRequest,
+} from './types';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
@@ -8,27 +25,13 @@ import {
 	getMentorTeam,
 	updateMentorTeamName,
 	updateMentorTeamCaptain,
+	updateMentorTeamProject,
 	confirmMentorTeamComposition,
 	unconfirmMentorTeamComposition,
 	addMentorTeamMember,
 	removeMentorTeamMember,
 	deleteMentorTeam,
 } from '../../shared/api/mentor';
-
-import type {
-	IMentorGroup,
-	IMentorGroupDetail,
-	IMentorShowcaseTrack,
-	IMentorShowcaseDetail,
-	IMentorTeam,
-	IUpdateMentorTeamNameRequest,
-	IUpdateMentorTeamCaptainRequest,
-	IConfirmMentorTeamCompositionRequest,
-	IUnconfirmMentorTeamCompositionRequest,
-	IAddMentorTeamMemberRequest,
-	IRemoveMentorTeamMemberRequest,
-	IDeleteMentorTeamRequest,
-} from './types';
 
 /* =========================
  * Группы
@@ -43,6 +46,11 @@ export const getMyGroupDetailAction = createAsyncThunk<
 	IMentorGroupDetail,
 	number
 >('mentor/getMyGroupDetail', getMyGroupDetail);
+
+export const refreshMyGroupDetailAction = createAsyncThunk<
+	IMentorGroupDetail,
+	number
+>('mentor/refreshMyGroupDetail', getMyGroupDetail);
 
 /* =========================
  * Витрина проектов
@@ -77,6 +85,14 @@ export const updateMentorTeamCaptainAction = createAsyncThunk<
 	IMentorTeam,
 	IUpdateMentorTeamCaptainRequest
 >('mentor/updateTeamCaptain', updateMentorTeamCaptain);
+
+/**
+ * Назначить проект
+ */
+export const updateMentorTeamProjectAction = createAsyncThunk<
+	IUpdateMentorTeamProjectResponse,
+	IUpdateMentorTeamProjectRequest
+>('mentor/updateTeamProject', updateMentorTeamProject);
 
 /**
  * Подтвердить состав

@@ -1,7 +1,7 @@
 import type { FC, FormEvent } from 'react';
 import type { IMentorTeam } from '../../../store/mentor/types';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useDispatch, useSelector } from '../../../store/store';
 import { useToast } from '../../../shared/components/ToastProvider/ui/ToastProvider';
@@ -16,18 +16,20 @@ import {
 	FormButtons,
 	FormField,
 	FormInput,
-	FormInputStub,
 } from '../../../shared/components/Form/components';
 import { Text } from '../../../shared/components/Typography';
 import { TeamAvatar } from '../../../shared/components/Avatar/ui/team-avatar';
 
 import {
+	getMyGroupShowcaseAction,
+	refreshMyGroupDetailAction,
 	addMentorTeamMemberAction,
 	confirmMentorTeamCompositionAction,
 	deleteMentorTeamAction,
 	removeMentorTeamMemberAction,
 	unconfirmMentorTeamCompositionAction,
 	updateMentorTeamCaptainAction,
+	updateMentorTeamProjectAction,
 	updateMentorTeamNameAction,
 } from '../../../store/mentor/actions';
 
@@ -51,6 +53,11 @@ interface IStudentOption {
 	userId: number;
 }
 
+interface IProjectOption {
+	id: number;
+	name: string;
+}
+
 export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 	groupId,
 	isOpen,
@@ -60,9 +67,8 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 	const dispatch = useDispatch();
 	const { showToast } = useToast();
 
-	const { currentGroup, currentTeam, isLoadingTeamRequest } = useSelector(
-		(state) => state.mentor
-	);
+	const { currentGroup, currentTeam, showcase, isLoadingTeamRequest } =
+		useSelector((state) => state.mentor);
 
 	// currentTeam содержит актуальное состояние после мутаций.
 	// team используется как первоначальный fallback.
@@ -74,6 +80,10 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 		null
 	);
 	const [selectedStudent, setSelectedStudent] = useState<IStudentOption | null>(
+		null
+	);
+
+	const [selectedProject, setSelectedProject] = useState<IProjectOption | null>(
 		null
 	);
 
@@ -129,6 +139,30 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 			name: member.fullName,
 		}));
 	}, [activeTeam]);
+
+	const availableProjects = useMemo<IProjectOption[]>(() => {
+		if (!activeTeam) {
+			return [];
+		}
+
+		const currentProjectId = activeTeam.project?.id;
+
+		return showcase
+			.flatMap((track) => track.projects)
+			.filter((project) => {
+				// Текущий проект всегда оставляем в списке
+				if (project.id === currentProjectId) {
+					return true;
+				}
+
+				// Остальные проекты — только если есть свободные места
+				return project.enrolledTeamsCount < project.maxTeams;
+			})
+			.map((project) => ({
+				id: project.id,
+				name: project.title,
+			}));
+	}, [showcase, activeTeam]);
 
 	const currentCaptain = useMemo(() => {
 		if (!activeTeam) {
@@ -227,6 +261,8 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 				})
 			).unwrap();
 
+			await dispatch(refreshMyGroupDetailAction(groupId)).unwrap();
+
 			showToast({
 				title: 'Капитан назначен',
 				text: 'Капитан команды успешно изменён.',
@@ -237,6 +273,44 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 		} catch (err) {
 			showToast({
 				title: 'Не удалось назначить капитана',
+				text: getErrorMessage(err),
+				type: 'error',
+			});
+		}
+	};
+
+	const handleProject = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if (!activeTeam || !selectedProject) {
+			return;
+		}
+
+		if (selectedProject.id === activeTeam.project?.id) {
+			return;
+		}
+
+		try {
+			await dispatch(
+				updateMentorTeamProjectAction({
+					groupId,
+					teamSemesterId: activeTeam.id,
+					projectId: selectedProject.id,
+				})
+			).unwrap();
+
+			await dispatch(getMyGroupShowcaseAction(groupId)).unwrap();
+
+			await dispatch(refreshMyGroupDetailAction(groupId)).unwrap();
+
+			showToast({
+				title: 'Проект изменён',
+				text: 'Проект команды успешно изменён.',
+				type: 'success',
+			});
+		} catch (err) {
+			showToast({
+				title: 'Не удалось изменить проект',
 				text: getErrorMessage(err),
 				type: 'error',
 			});
@@ -258,6 +332,8 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 					userId: selectedStudent.userId,
 				})
 			).unwrap();
+
+			await dispatch(refreshMyGroupDetailAction(groupId)).unwrap();
 
 			setSelectedStudent(null);
 
@@ -288,6 +364,8 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 					userId,
 				})
 			).unwrap();
+
+			await dispatch(refreshMyGroupDetailAction(groupId)).unwrap();
 
 			showToast({
 				title: 'Участник удалён',
@@ -390,6 +468,19 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 		}
 	};
 
+	useEffect(() => {
+		if (!activeTeam?.project) {
+			setSelectedProject(null);
+
+			return;
+		}
+
+		setSelectedProject({
+			id: activeTeam.project.id,
+			name: activeTeam.project.title,
+		});
+	}, [activeTeam]);
+
 	if (!activeTeam) {
 		return (
 			<Modal isOpen={isOpen} onClose={onClose} title='Управление командой'>
@@ -437,7 +528,7 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 
 							<Button
 								type='button'
-								text='Назначить капитана'
+								text='Изменить капитана'
 								color='blue'
 								onClick={openCaptain}
 								isBlock={
@@ -446,41 +537,65 @@ export const MyGroupTeamDetail: FC<IMyGroupTeamDetailProps> = ({
 							/>
 						</div>
 
-						<div className={styles.section}>
-							<h4 className={styles.section__title}>Добавить участника</h4>
+						<Form
+							name='mentor-team-project'
+							onSubmit={handleProject}
+							formWidth='full'>
+							<FormField title='Выбранный проект'>
+								<SelectWithSearch
+									options={availableProjects}
+									currentOption={selectedProject}
+									onChooseOption={(option) => {
+										setSelectedProject(option);
+									}}
+									placeholder='Выберите проект...'
+									valueKey='id'
+									labelKey='name'
+									withClear={false}
+								/>
+							</FormField>
 
-							<Form
-								name='mentor-team-add-member'
-								onSubmit={handleAddMember}
-								formWidth='full'>
-								<FormField title='Студент'>
-									<SelectWithSearch
-										options={availableStudents}
-										currentOption={selectedStudent}
-										onChooseOption={(option) => {
-											setSelectedStudent(option);
-										}}
-										placeholder='Выберите студента...'
-										valueKey='id'
-										labelKey='name'
-										withClear={false}
-									/>
-								</FormField>
+							<FormButtons>
+								<Button
+									type='submit'
+									text='Сохранить проект'
+									color='blue'
+									isBlock={
+										!selectedProject ||
+										selectedProject.id === activeTeam.project?.id ||
+										isLoadingTeamRequest
+									}
+								/>
+							</FormButtons>
+						</Form>
 
-								<FormButtons>
-									<Button
-										type='submit'
-										text='Добавить участника'
-										color='blue'
-										isBlock={selectedStudent === null || isLoadingTeamRequest}
-									/>
-								</FormButtons>
-							</Form>
-						</div>
+						<Form
+							name='mentor-team-add-member'
+							onSubmit={handleAddMember}
+							formWidth='full'>
+							<FormField title='Добавить студента из группы'>
+								<SelectWithSearch
+									options={availableStudents}
+									currentOption={selectedStudent}
+									onChooseOption={(option) => {
+										setSelectedStudent(option);
+									}}
+									placeholder='Выберите студента...'
+									valueKey='id'
+									labelKey='name'
+									withClear={false}
+								/>
+							</FormField>
 
-						<FormField title='Выбранный проект'>
-							<FormInputStub value={currentTeam?.project?.title || '—'} />
-						</FormField>
+							<FormButtons>
+								<Button
+									type='submit'
+									text='Добавить'
+									color='blue'
+									isBlock={selectedStudent === null || isLoadingTeamRequest}
+								/>
+							</FormButtons>
+						</Form>
 
 						<div className={styles.section}>
 							<h4 className={styles.section__title}>Состав команды</h4>

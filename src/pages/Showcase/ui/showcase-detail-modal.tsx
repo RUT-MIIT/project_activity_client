@@ -104,7 +104,7 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 							{activeTab === 'description' && (
 								<>
 									<FormField title='Носитель проблемы'>
-										<FormInputStub value={projectDetail.stakeholders} />
+										<FormInputStub value={projectDetail.problem_holder} />
 									</FormField>
 									<FormField title='Цель'>
 										<FormInputStub value={projectDetail.goal} />
