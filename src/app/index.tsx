@@ -22,6 +22,7 @@ import { Coordination } from '../pages/Coordination/ui/coordination';
 import { Structure } from '../pages/Structure/ui/structure';
 import { Track } from '../pages/Track/ui/track';
 import { Stats } from '../pages/Stats/ui/stats';
+import { Dashboard } from '../pages/Dashboard/ui/dashboard';
 import { Control } from '../pages/Control/ui/control';
 import { Group } from '../pages/Group/ui/group';
 import { MyGroups } from '../pages/MyGroups/ui/my-groups';
@@ -129,6 +130,10 @@ export const App = () => {
 							element={<Structure />}
 						/>
 						<Route path={`/${EMAINROUTES.STATS}`} element={<Stats />} />
+						<Route
+							path={`/${EMAINROUTES.DASHBOARD}/*`}
+							element={<Dashboard />}
+						/>
 						<Route path={`/${EMAINROUTES.TRACK}/*`} element={<Track />} />
 						<Route path={`/${EMAINROUTES.GROUP}/*`} element={<Group />} />
 						<Route

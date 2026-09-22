@@ -57,6 +57,7 @@
 	},
 	"dependencies": {
 		"@nivo/bar": "^0.99.0",
+		"@nivo/line": "^0.99.0",
 		"@nivo/pie": "^0.99.0",
 		"@reduxjs/toolkit": "^2.8.2",
 		"@types/react-router-dom": "^5.3.3",
@@ -70,7 +71,8 @@
 		"recharts": "^2.15.4",
 		"redux": "^5.0.1",
 		"redux-thunk": "^3.1.0",
-		"reselect": "^5.1.1"
+		"reselect": "^5.1.1",
+		"xlsx": "^0.18.5"
 	},
 	"config": {
 		"commitizen": {

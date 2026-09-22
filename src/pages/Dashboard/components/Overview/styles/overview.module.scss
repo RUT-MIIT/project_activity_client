@@ -1,0 +1,14 @@
+.overview {
+	margin: 20px 0 0 0;
+	width: 100%;
+}
+
+.cards {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 20px;
+}

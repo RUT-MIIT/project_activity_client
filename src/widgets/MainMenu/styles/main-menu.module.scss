@@ -99,10 +99,6 @@
   text-decoration: none;
   border-radius: var(--border-radius);
 	transition: all .3s ease-in-out;
-	&_active {
-		user-select: none;
-		pointer-events: none;
-	}
 	&:hover {
 		cursor: pointer;
 	}

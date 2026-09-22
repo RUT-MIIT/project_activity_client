@@ -120,7 +120,7 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 	const hasInvalidProjectTeams = projects.some((project) => {
 		const value = projectTeams[project.id];
 
-		return value === null || value < 1 || value > 3;
+		return value === null || value < 1 || value > 6;
 	});
 
 	const isSubmitBlocked =
@@ -165,10 +165,10 @@ export const CreateTrackModal: FC<ICreateTrackModalProps> = ({
 			};
 		}
 
-		if (value > 3) {
+		if (value > 6) {
 			return {
 				isShow: true,
-				text: 'Максимальное количество команд — 3',
+				text: 'Максимальное количество команд — 6',
 			};
 		}
 

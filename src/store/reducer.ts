@@ -11,6 +11,7 @@ import { statsSlice } from './stats/reducer';
 import { studentSlice } from './student/reducer';
 import { controlGroupSlice } from './controlGroup/reducer';
 import { mentorSlice } from './mentor/reducer';
+import { dashboardSlice } from './dashboard/reducer';
 
 export const rootReducer = combineSlices(
 	userSlice,
@@ -24,5 +25,6 @@ export const rootReducer = combineSlices(
 	statsSlice,
 	studentSlice,
 	controlGroupSlice,
-	mentorSlice
+	mentorSlice,
+	dashboardSlice
 );
