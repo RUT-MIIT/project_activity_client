@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { IStudentsTableProps } from '../types/types';
 
 import { useSelector, useDispatch } from '../../../../../store/store';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
 	Table,
@@ -50,36 +50,6 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 			return matchesSearch && matchesStatus;
 		});
 	}, [searchQuery, currentStatus, students]);
-
-	console.log('TABLE DEBUG', {
-		searchQuery,
-		currentStatus,
-		studentsCount: students.length,
-		filteredCount: filteredStudents.length,
-		filteredStudents: filteredStudents.map((student) => ({
-			id: student.id,
-			fullName: student.fullName,
-			institute: student.institute.id,
-			course: student.course,
-			status: getStudentStatus(student),
-		})),
-	});
-
-	const duplicateIds = useMemo(() => {
-		return students
-			.map((student) => student.id)
-			.filter((id, index, ids) => ids.indexOf(id) !== index);
-	}, [students]);
-
-	console.log('DUPLICATE STUDENT IDS', duplicateIds);
-
-	useEffect(() => {
-		console.log('StudentsTable MOUNT');
-
-		return () => {
-			console.log('StudentsTable UNMOUNT');
-		};
-	}, []);
 
 	return (
 		<div className={styles.table}>

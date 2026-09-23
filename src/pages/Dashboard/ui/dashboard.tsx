@@ -91,12 +91,12 @@ export const Dashboard: FC = () => {
 
 			<div className={styles.content}>
 				<Routes>
-					<Route path='students' element={<Students />} />
 					<Route path='mentors' element={<Mentors />} />
 					<Route path='projects' element={<Projects />} />
 					<Route path='groups' element={<Groups />} />
+					<Route path='students' element={<Students />} />
 
-					<Route path='' element={<Navigate to='students' replace />} />
+					<Route path='' element={<Navigate to='mentors' replace />} />
 				</Routes>
 			</div>
 		</Section>

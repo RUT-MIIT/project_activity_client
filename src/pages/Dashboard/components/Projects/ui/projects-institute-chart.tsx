@@ -23,14 +23,18 @@ export const ProjectsInstituteChart: FC<IProjectsInstituteChartProps> = ({
 		(state) => state.dashboard.selectedInstitute
 	);
 
+	const validProjects = projects.filter(
+		(project) => project.institute.id.trim() && project.institute.name.trim()
+	);
+
 	const institutes = Array.from(
 		new Map(
-			projects.map((project) => [project.institute.id, project.institute])
+			validProjects.map((project) => [project.institute.id, project.institute])
 		).values()
 	);
 
 	const data = institutes.map((institute) => {
-		const instituteProjects = projects.filter(
+		const instituteProjects = validProjects.filter(
 			(project) => project.institute.id === institute.id
 		);
 

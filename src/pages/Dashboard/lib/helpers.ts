@@ -1,9 +1,5 @@
 export const tabs = [
 	{
-		label: 'Студенты',
-		path: 'students',
-	},
-	{
 		label: 'Наставники',
 		path: 'mentors',
 	},
@@ -14,6 +10,10 @@ export const tabs = [
 	{
 		label: 'Группы',
 		path: 'groups',
+	},
+	{
+		label: 'Студенты',
+		path: 'students',
 	},
 ];
 
