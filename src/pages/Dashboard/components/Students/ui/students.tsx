@@ -66,7 +66,10 @@ export const Students: FC = () => {
 				<StudentsCourseChart />
 			</div>
 
-			<StudentsTable students={filteredStudents} />
+			<StudentsTable
+				key={`${selectedInstitute ?? 'all'}-${selectedCourse ?? 'all'}`}
+				students={filteredStudents}
+			/>
 		</div>
 	);
 };

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { IStudentsTableProps } from '../types/types';
 
 import { useSelector, useDispatch } from '../../../../../store/store';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import {
 	Table,
@@ -72,6 +72,14 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 	}, [students]);
 
 	console.log('DUPLICATE STUDENT IDS', duplicateIds);
+
+	useEffect(() => {
+		console.log('StudentsTable MOUNT');
+
+		return () => {
+			console.log('StudentsTable UNMOUNT');
+		};
+	}, []);
 
 	return (
 		<div className={styles.table}>
