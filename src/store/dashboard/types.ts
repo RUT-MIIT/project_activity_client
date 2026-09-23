@@ -118,7 +118,7 @@ export interface IStatsStudentTeam {
 
 export interface IStatsStudentMentor {
 	id: number;
-	fullname: string;
+	fullName: string;
 }
 
 export interface IStatsStudentProject {

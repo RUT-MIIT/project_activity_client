@@ -51,6 +51,28 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 		});
 	}, [searchQuery, currentStatus, students]);
 
+	console.log('TABLE DEBUG', {
+		searchQuery,
+		currentStatus,
+		studentsCount: students.length,
+		filteredCount: filteredStudents.length,
+		filteredStudents: filteredStudents.map((student) => ({
+			id: student.id,
+			fullName: student.fullName,
+			institute: student.institute.id,
+			course: student.course,
+			status: getStudentStatus(student),
+		})),
+	});
+
+	const duplicateIds = useMemo(() => {
+		return students
+			.map((student) => student.id)
+			.filter((id, index, ids) => ids.indexOf(id) !== index);
+	}, [students]);
+
+	console.log('DUPLICATE STUDENT IDS', duplicateIds);
+
 	return (
 		<div className={styles.table}>
 			<div className={styles.table__header}>
@@ -148,7 +170,7 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 										text={
 											student.mentors?.length
 												? student.mentors
-														.map((mentor) => mentor.fullname)
+														.map((mentor) => mentor.fullName)
 														.join(', ')
 												: 'Без наставника'
 										}

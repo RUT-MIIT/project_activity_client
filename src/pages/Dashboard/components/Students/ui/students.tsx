@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { CardStats } from '../../../../../shared/components/Card/ui';
+import { Preloader } from '../../../../../shared/components/Preloader/ui/preloader';
 import { StudentsChart } from './students-chart';
 import { StudentsCourseChart } from './students-course-chart';
 import { StudentsTable } from './students-table';
@@ -17,13 +18,8 @@ import styles from '../styles/students.module.scss';
 export const Students: FC = () => {
 	const dispatch = useDispatch();
 
-	const selectedInstitute = useSelector(
-		(state) => state.dashboard.selectedInstitute
-	);
-
-	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
-
-	const students = useSelector((state) => state.dashboard.students);
+	const { students, selectedInstitute, selectedCourse, isLoadingStudents } =
+		useSelector((state) => state.dashboard);
 
 	useEffect(() => {
 		dispatch(getStudentsStatsAction());
@@ -45,6 +41,10 @@ export const Students: FC = () => {
 		() => getStudentsStats(filteredStudents),
 		[filteredStudents]
 	);
+
+	if (isLoadingStudents) {
+		return <Preloader />;
+	}
 
 	return (
 		<div className={styles.students}>
