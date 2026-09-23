@@ -1,6 +1,7 @@
-import { projectsMock } from './mock';
+import type { IStatsProject } from '../../../../../store/dashboard/types';
+import type { TProjectStatus } from '../types/types';
 
-export const getProjectsStats = (projects: typeof projectsMock) => {
+export const getProjectsStats = (projects: IStatsProject[]) => {
 	const totalProjects = projects.length;
 
 	const projectsWithTeams = projects.filter(
@@ -60,3 +61,55 @@ export const getProjectsStats = (projects: typeof projectsMock) => {
 		},
 	];
 };
+
+export const getProjectStatus = (
+	teamsCount: number,
+	maxTeamsCount: number
+): TProjectStatus => {
+	if (teamsCount === 0) {
+		return 'empty';
+	}
+
+	if (teamsCount >= maxTeamsCount) {
+		return 'full';
+	}
+
+	return 'available';
+};
+
+export const projectStatusConfig: Record<
+	TProjectStatus,
+	{ text: string; color: 'grey' | 'green' | 'red' }
+> = {
+	empty: {
+		text: 'Нет команд',
+		color: 'grey',
+	},
+	available: {
+		text: 'Есть места',
+		color: 'green',
+	},
+	full: {
+		text: 'Заполнен',
+		color: 'red',
+	},
+};
+
+export const projectStatusOptions = [
+	{
+		id: 'all',
+		name: 'Все статусы',
+	},
+	{
+		id: 'empty',
+		name: 'Нет команд',
+	},
+	{
+		id: 'available',
+		name: 'Есть места',
+	},
+	{
+		id: 'full',
+		name: 'Заполнен',
+	},
+];

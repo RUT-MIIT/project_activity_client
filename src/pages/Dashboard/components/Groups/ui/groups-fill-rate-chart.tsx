@@ -1,43 +1,46 @@
 import type { FC } from 'react';
-
-import { ResponsiveBar } from '@nivo/bar';
+import type { IGroupsFillRateChartProps } from '../types/types';
 
 import { useDispatch, useSelector } from '../../../../../store/store';
 
+import { ResponsiveBar } from '@nivo/bar';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 
-import { groupInstitutes, groupsMock } from '../lib/mock';
 import { setInstitute } from '../../../../../store/dashboard/reducer';
 
 import styles from '../styles/groups-fill-rate-chart.module.scss';
 
-export const GroupsFillRateChart: FC = () => {
+export const GroupsFillRateChart: FC<IGroupsFillRateChartProps> = ({
+	groups,
+}) => {
 	const dispatch = useDispatch();
+
 	const selectedInstitute = useSelector(
 		(state) => state.dashboard.selectedInstitute
 	);
 
 	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
 
-	const data = groupInstitutes.map((institute) => {
-		const groups = groupsMock.filter(
+	const institutes = Array.from(
+		new Map(
+			groups.map((group) => [group.institute.id, group.institute])
+		).values()
+	);
+
+	const data = institutes.map((institute) => {
+		const instituteGroups = groups.filter(
 			(group) =>
 				group.institute.id === institute.id &&
 				(!selectedCourse || group.course === selectedCourse)
 		);
 
-		const totalStudents = groups.reduce(
+		const totalStudents = instituteGroups.reduce(
 			(total, group) => total + group.studentsCount,
 			0
 		);
 
-		const studentsInTeams = groups.reduce(
-			(total, group) =>
-				total +
-				group.teams.reduce(
-					(teamTotal, team) => teamTotal + team.studentsCount,
-					0
-				),
+		const studentsInTeams = instituteGroups.reduce(
+			(total, group) => total + group.studentsInTeamCount,
 			0
 		);
 
@@ -68,6 +71,7 @@ export const GroupsFillRateChart: FC = () => {
 						Доля студентов, состоящих в командах
 					</p>
 				</div>
+
 				{selectedCourse && (
 					<Badge text={`${selectedCourse} курс`} color='blue' />
 				)}
@@ -79,10 +83,10 @@ export const GroupsFillRateChart: FC = () => {
 					keys={['fillRate']}
 					indexBy='institute'
 					margin={{
-						top: 30,
-						right: 20,
+						top: 20,
+						right: 30,
 						bottom: 45,
-						left: 55,
+						left: 40,
 					}}
 					padding={0.35}
 					valueScale={{

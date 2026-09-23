@@ -1,13 +1,11 @@
 import type { FC } from 'react';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { ResponsiveBar } from '@nivo/bar';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 
-import { useDispatch, useSelector } from '../../../../../store/store';
-
-import { studentsMock } from '../lib/mock';
 import { colors, seriesMap } from '../lib/lib';
 import { getStudentStatus } from '../lib/helpers';
 import { courseOptions } from '../../../lib/helpers';
@@ -32,10 +30,11 @@ export const StudentsChart: FC = () => {
 		(state) => state.dashboard.selectedInstitute
 	);
 	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
+	const students = useSelector((state) => state.dashboard.students);
 	const institutes = useSelector((state) => state.catalog.institutes);
 
 	const data = useMemo(() => {
-		const filteredStudents = studentsMock.filter((student) => {
+		const filteredStudents = students.filter((student) => {
 			if (!selectedCourse) {
 				return true;
 			}
@@ -101,7 +100,7 @@ export const StudentsChart: FC = () => {
 					withProjectCount: stats.withProject,
 				};
 			});
-	}, [selectedCourse, institutes]);
+	}, [students, selectedCourse, institutes]);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -119,6 +118,7 @@ export const StudentsChart: FC = () => {
 
 					<p className={styles.chart__subtitle}>Прогресс участия студентов</p>
 				</div>
+
 				{selectedCourse && (
 					<Badge
 						text={

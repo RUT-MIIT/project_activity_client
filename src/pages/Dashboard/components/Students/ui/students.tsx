@@ -1,28 +1,36 @@
 import type { FC } from 'react';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { useSelector } from '../../../../../store/store';
+import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { CardStats } from '../../../../../shared/components/Card/ui';
-
 import { StudentsChart } from './students-chart';
 import { StudentsCourseChart } from './students-course-chart';
 import { StudentsTable } from './students-table';
 
-import { studentsMock } from '../lib/mock';
 import { getStudentsStats } from '../lib/helpers';
+import { getStudentsStatsAction } from '../../../../../store/dashboard/actions';
 
 import styles from '../styles/students.module.scss';
 
 export const Students: FC = () => {
+	const dispatch = useDispatch();
+
 	const selectedInstitute = useSelector(
 		(state) => state.dashboard.selectedInstitute
 	);
+
 	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
 
+	const students = useSelector((state) => state.dashboard.students);
+
+	useEffect(() => {
+		dispatch(getStudentsStatsAction());
+	}, [dispatch]);
+
 	const filteredStudents = useMemo(() => {
-		return studentsMock.filter((student) => {
+		return students.filter((student) => {
 			const matchesInstitute =
 				!selectedInstitute || student.institute.id === selectedInstitute;
 
@@ -31,7 +39,7 @@ export const Students: FC = () => {
 
 			return matchesInstitute && matchesCourse;
 		});
-	}, [selectedInstitute, selectedCourse]);
+	}, [students, selectedInstitute, selectedCourse]);
 
 	const studentsStats = useMemo(
 		() => getStudentsStats(filteredStudents),

@@ -1,4 +1,4 @@
-import type { IStatsStudent } from '../types/types';
+import type { IStatsStudent } from '../../../../../store/dashboard/types';
 
 export const getStudentsStats = (students: IStatsStudent[]) => {
 	const totalStudents = students.length;

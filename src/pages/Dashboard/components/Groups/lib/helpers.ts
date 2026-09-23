@@ -1,4 +1,4 @@
-import type { IStatsGroup } from '../types/types';
+import type { IStatsGroup } from '../../../../../store/dashboard/types';
 
 export const getGroupsStats = (groups: IStatsGroup[]) => {
 	const totalGroups = groups.length;
@@ -14,12 +14,7 @@ export const getGroupsStats = (groups: IStatsGroup[]) => {
 	);
 
 	const totalTeamStudents = groups.reduce(
-		(total, group) =>
-			total +
-			group.teams.reduce(
-				(teamTotal, team) => teamTotal + team.studentsCount,
-				0
-			),
+		(total, group) => total + group.studentsInTeamCount,
 		0
 	);
 

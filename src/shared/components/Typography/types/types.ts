@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 export interface ITextProps {
 	text: string;
+	weight?: 'default' | 'bold';
 	color?: 'black' | 'grey' | 'white';
 	withMarginTop?: boolean;
 }

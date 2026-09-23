@@ -1,13 +1,11 @@
 import type { FC } from 'react';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSelector, useDispatch } from '../../../../../store/store';
 
 import { ResponsiveBar } from '@nivo/bar';
 import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 
-import { useSelector, useDispatch } from '../../../../../store/store';
-
-import { studentsMock } from '../lib/mock';
 import { getStudentStatus } from '../lib/helpers';
 import { colors, seriesMap } from '../lib/lib';
 import { setCourse } from '../../../../../store/dashboard/reducer';
@@ -22,10 +20,11 @@ export const StudentsCourseChart: FC = () => {
 		(state) => state.dashboard.selectedInstitute
 	);
 	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
+	const students = useSelector((state) => state.dashboard.students);
 	const institutes = useSelector((state) => state.catalog.institutes);
 
 	const data = useMemo(() => {
-		const filteredStudents = studentsMock.filter((student) => {
+		const filteredStudents = students.filter((student) => {
 			return !selectedInstitute || student.institute.id === selectedInstitute;
 		});
 
@@ -66,7 +65,6 @@ export const StudentsCourseChart: FC = () => {
 
 				return {
 					course: `${course} курс`,
-
 					courseId: course,
 
 					notRegistered: Number(
@@ -93,7 +91,7 @@ export const StudentsCourseChart: FC = () => {
 					total: stats.total,
 				};
 			});
-	}, [selectedInstitute]);
+	}, [students, selectedInstitute]);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {

@@ -1,11 +1,11 @@
 import type { FC } from 'react';
+import type { IProjectsInstituteChartProps } from '../types/types';
+
+import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-import { useDispatch, useSelector } from '../../../../../store/store';
 import { setInstitute } from '../../../../../store/dashboard/reducer';
-
-import { projectInstitutes, projectsMock } from '../lib/mock';
 
 import styles from '../styles/projects-institute-chart.module.scss';
 
@@ -14,23 +14,31 @@ const chartColors = {
 	empty: '#E53E3E',
 };
 
-export const ProjectsInstituteChart: FC = () => {
+export const ProjectsInstituteChart: FC<IProjectsInstituteChartProps> = ({
+	projects,
+}) => {
 	const dispatch = useDispatch();
 
 	const selectedInstitute = useSelector(
 		(state) => state.dashboard.selectedInstitute
 	);
 
-	const data = projectInstitutes.map((institute) => {
-		const projects = projectsMock.filter(
+	const institutes = Array.from(
+		new Map(
+			projects.map((project) => [project.institute.id, project.institute])
+		).values()
+	);
+
+	const data = institutes.map((institute) => {
+		const instituteProjects = projects.filter(
 			(project) => project.institute.id === institute.id
 		);
 
-		const projectsWithTeams = projects.filter(
+		const projectsWithTeams = instituteProjects.filter(
 			(project) => project.teams.length > 0
 		);
 
-		const emptyProjects = projects.filter(
+		const emptyProjects = instituteProjects.filter(
 			(project) => project.teams.length === 0
 		);
 

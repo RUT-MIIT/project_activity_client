@@ -1,9 +1,5 @@
 export const tabs = [
 	{
-		label: 'Обзор',
-		path: 'overview',
-	},
-	{
 		label: 'Студенты',
 		path: 'students',
 	},
@@ -19,14 +15,6 @@ export const tabs = [
 		label: 'Группы',
 		path: 'groups',
 	},
-];
-
-export const instituteOptions = [
-	{ id: 1, name: 'ИЭФ' },
-	{ id: 2, name: 'ИУИТ' },
-	{ id: 3, name: 'ИТС' },
-	{ id: 4, name: 'ИМТ' },
-	{ id: 5, name: 'ИПСС' },
 ];
 
 export const courseOptions = [

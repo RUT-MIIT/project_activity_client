@@ -1,25 +1,32 @@
 import type { FC } from 'react';
+import type { IProjectsAverageTeamsChartProps } from '../types/types';
 
 import { ResponsiveLine } from '@nivo/line';
 
-import { projectInstitutes, projectsMock } from '../lib/mock';
-
 import styles from '../styles/projects-average-teams-chart.module.scss';
 
-export const ProjectsAverageTeamsChart: FC = () => {
-	const data = projectInstitutes.map((institute) => {
-		const projects = projectsMock.filter(
+export const ProjectsAverageTeamsChart: FC<IProjectsAverageTeamsChartProps> = ({
+	projects,
+}) => {
+	const institutes = Array.from(
+		new Map(
+			projects.map((project) => [project.institute.id, project.institute])
+		).values()
+	);
+
+	const data = institutes.map((institute) => {
+		const instituteProjects = projects.filter(
 			(project) => project.institute.id === institute.id
 		);
 
-		const totalTeams = projects.reduce(
+		const totalTeams = instituteProjects.reduce(
 			(total, project) => total + project.teams.length,
 			0
 		);
 
 		const averageTeams =
-			projects.length > 0
-				? Number((totalTeams / projects.length).toFixed(1))
+			instituteProjects.length > 0
+				? Number((totalTeams / instituteProjects.length).toFixed(1))
 				: 0;
 
 		return {

@@ -1,45 +1,57 @@
 import type { FC } from 'react';
+import type { IGroupsChartProps } from '../types/types';
+
+import { useSelector } from '../../../../../store/store';
 
 import { ResponsiveLine } from '@nivo/line';
 
-import { groupInstitutes, groupsMock } from '../lib/mock';
-
 import styles from '../styles/groups-chart.module.scss';
 
-export const GroupsChart: FC = () => {
-	const data = groupInstitutes.map((institute) => {
-		const groups = groupsMock.filter(
-			(group) => group.institute.id === institute.id
+export const GroupsChart: FC<IGroupsChartProps> = ({ groups }) => {
+	const selectedCourse = useSelector((state) => state.dashboard.selectedCourse);
+
+	const institutes = Array.from(
+		new Map(
+			groups.map((group) => [group.institute.id, group.institute])
+		).values()
+	);
+
+	const data = institutes.map((institute) => {
+		const instituteGroups = groups.filter(
+			(group) =>
+				group.institute.id === institute.id &&
+				(!selectedCourse || group.course === selectedCourse)
 		);
 
-		const totalStudents = groups.reduce(
+		const totalStudents = instituteGroups.reduce(
 			(total, group) => total + group.studentsCount,
 			0
 		);
 
-		const teams = groups.flatMap((group) => group.teams);
+		const totalTeamStudents = instituteGroups.reduce(
+			(total, group) => total + group.studentsInTeamCount,
+			0
+		);
 
-		const totalTeamStudents = teams.reduce(
-			(total, team) => total + team.studentsCount,
+		const teamsCount = instituteGroups.reduce(
+			(total, group) => total + group.teams.length,
 			0
 		);
 
 		const averageGroupSize =
-			groups.length > 0
-				? Number((totalStudents / groups.length).toFixed(1))
+			instituteGroups.length > 0
+				? Number((totalStudents / instituteGroups.length).toFixed(1))
 				: 0;
 
 		const averageTeamSize =
-			teams.length > 0
-				? Number((totalTeamStudents / teams.length).toFixed(1))
-				: 0;
+			teamsCount > 0 ? Number((totalTeamStudents / teamsCount).toFixed(1)) : 0;
 
 		return {
 			institute: institute.name,
 			averageGroupSize,
 			averageTeamSize,
-			groupsCount: groups.length,
-			teamsCount: teams.length,
+			groupsCount: instituteGroups.length,
+			teamsCount,
 		};
 	});
 
@@ -135,7 +147,15 @@ export const GroupsChart: FC = () => {
 							}}>
 							<strong>{point.data.xFormatted}</strong>
 
-							<div>{point.data.yFormatted}</div>
+							{selectedCourse && (
+								<div>
+									Курс: <strong>{selectedCourse}</strong>
+								</div>
+							)}
+
+							<div>
+								{point.seriesId}: {point.data.yFormatted}
+							</div>
 						</div>
 					)}
 				/>

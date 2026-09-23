@@ -1,19 +1,21 @@
-export interface IStatsProjectInstitute {
-	id: string;
-	name: string;
+import type { IStatsProject } from '../../../../../store/dashboard/types';
+
+export interface IProjectsTableProps {
+	projects: IStatsProject[];
 }
 
-export interface IStatsProjectTeam {
-	id: number;
-	name: string;
-	membersCount: number;
+export interface IProjectsInstituteChartProps {
+	projects: IStatsProject[];
 }
 
-export interface IStatsProject {
-	id: number;
-	name: string;
-	type: 'external' | 'internal';
-	institute: IStatsProjectInstitute;
-	teams: IStatsProjectTeam[];
-	maxTeamsCount: number;
+export interface IProjectsAverageTeamsChartProps {
+	projects: IStatsProject[];
+}
+
+export type TProjectStatus = 'empty' | 'available' | 'full';
+
+export interface IProjectDetailModal {
+	id: number | null;
+	isOpen: boolean;
+	onClose: () => void;
 }

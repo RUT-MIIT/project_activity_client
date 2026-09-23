@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
+import type { IStatsGroup } from '../../../../../store/dashboard/types';
 
-import type { IStatsGroup } from '../types/types';
 import { getGroupStatus, getGroupStudentsInTeams } from './helpers';
 
 export const exportGroupsToExcel = (groups: IStatsGroup[]) => {

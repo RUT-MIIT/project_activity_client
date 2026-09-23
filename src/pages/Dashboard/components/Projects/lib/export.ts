@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 
-import type { IStatsProject } from '../types/types';
+import type { IStatsProject } from '../../../../../store/dashboard/types';
 
 type ProjectStatus = 'empty' | 'available' | 'full';
 

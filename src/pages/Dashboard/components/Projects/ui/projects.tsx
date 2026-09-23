@@ -1,37 +1,48 @@
 import type { FC } from 'react';
 
-import { useMemo } from 'react';
-import { useSelector } from '../../../../../store/store';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from '../../../../../store/store';
 
 import { CardStats } from '../../../../../shared/components/Card/ui';
+import { Preloader } from '../../../../../shared/components/Preloader/ui/preloader';
 import { ProjectsInstituteChart } from './projects-institute-chart';
 import { ProjectsAverageTeamsChart } from './projects-average-teams-chart';
 import { ProjectsTable } from './projects-table';
 
-import { projectsMock } from '../lib/mock';
+import { getProjectsAction } from '../../../../../store/dashboard/actions';
 import { getProjectsStats } from '../lib/helpers';
 
 import styles from '../styles/projects.module.scss';
 
 export const Projects: FC = () => {
-	const selectedInstitute = useSelector(
-		(state) => state.dashboard.selectedInstitute
+	const dispatch = useDispatch();
+
+	const { projects, selectedInstitute, isLoadingProjects } = useSelector(
+		(state) => state.dashboard
 	);
+
+	useEffect(() => {
+		dispatch(getProjectsAction());
+	}, [dispatch]);
 
 	const filteredProjects = useMemo(() => {
 		if (!selectedInstitute) {
-			return projectsMock;
+			return projects;
 		}
 
-		return projectsMock.filter(
+		return projects.filter(
 			(project) => project.institute.id === selectedInstitute
 		);
-	}, [selectedInstitute]);
+	}, [projects, selectedInstitute]);
 
 	const projectsStats = useMemo(
 		() => getProjectsStats(filteredProjects),
 		[filteredProjects]
 	);
+
+	if (isLoadingProjects) {
+		return <Preloader />;
+	}
 
 	return (
 		<div className={styles.projects}>
@@ -48,8 +59,8 @@ export const Projects: FC = () => {
 			</ul>
 
 			<div className={styles.row}>
-				<ProjectsInstituteChart />
-				<ProjectsAverageTeamsChart />
+				<ProjectsInstituteChart projects={projects} />
+				<ProjectsAverageTeamsChart projects={projects} />
 			</div>
 
 			<ProjectsTable projects={filteredProjects} />

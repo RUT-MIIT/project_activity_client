@@ -103,12 +103,18 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 							/>
 
 							<TableColumn
+								text='Наставник'
+								textWeight='bold'
+								columnSize='full'
+							/>
+
+							<TableColumn
 								text='Команда'
 								textWeight='bold'
 								columnSize='large'
 							/>
 
-							<TableColumn text='Проект' textWeight='bold' columnSize='full' />
+							<TableColumn text='Проект' textWeight='bold' columnSize='large' />
 
 							<TableColumn
 								text='Регистрация'
@@ -139,6 +145,18 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 									/>
 
 									<TableColumn
+										text={
+											student.mentors?.length
+												? student.mentors
+														.map((mentor) => mentor.fullname)
+														.join(', ')
+												: 'Без наставника'
+										}
+										columnSize='full'
+										textColor={student.mentors?.length ? 'default' : 'grey'}
+									/>
+
+									<TableColumn
 										text={student.team?.name || 'Без команды'}
 										columnSize='large'
 										textColor={student.team ? 'default' : 'grey'}
@@ -146,7 +164,7 @@ export const StudentsTable: FC<IStudentsTableProps> = ({ students }) => {
 
 									<TableColumn
 										text={student.project?.name || 'Без проекта'}
-										columnSize='full'
+										columnSize='large'
 										textColor={student.project ? 'default' : 'grey'}
 									/>
 

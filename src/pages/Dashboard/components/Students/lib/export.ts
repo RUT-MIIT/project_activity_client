@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 
-import type { IStatsStudent } from '../types/types';
+import type { IStatsStudent } from '../../../../../store/dashboard/types';
 
 export const exportStudentsToExcel = (students: IStatsStudent[]) => {
 	const rows = students.map((student, index) => {

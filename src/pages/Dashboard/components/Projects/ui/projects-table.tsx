@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { IStatsProject } from '../types/types';
+import type { IProjectsTableProps } from '../types/types';
 
 import { useMemo, useState } from 'react';
 
@@ -16,76 +16,38 @@ import { Badge } from '../../../../../shared/components/Badge/ui/badge';
 import { Button } from '../../../../../shared/components/Button/ui/button';
 import { Select } from '../../../../../shared/components/Select/ui/select';
 import { ProgressBar } from '../../../../../shared/components/ProgressBar/ui/progress-bar';
+import { ProjectDetailModal } from './project-detail-modal';
 
 import { exportProjectsToExcel } from '../lib/export';
+import {
+	getProjectStatus,
+	projectStatusConfig,
+	projectStatusOptions,
+} from '../lib/helpers';
 
 import styles from '../styles/projects-table.module.scss';
 
-interface ProjectsTableProps {
-	projects: IStatsProject[];
-}
-
-type ProjectStatus = 'empty' | 'available' | 'full';
-
-const getProjectStatus = (
-	teamsCount: number,
-	maxTeamsCount: number
-): ProjectStatus => {
-	if (teamsCount === 0) {
-		return 'empty';
-	}
-
-	if (teamsCount >= maxTeamsCount) {
-		return 'full';
-	}
-
-	return 'available';
-};
-
-const projectStatusConfig: Record<
-	ProjectStatus,
-	{ text: string; color: 'grey' | 'green' | 'red' }
-> = {
-	empty: {
-		text: 'Нет команд',
-		color: 'grey',
-	},
-	available: {
-		text: 'Есть места',
-		color: 'green',
-	},
-	full: {
-		text: 'Заполнен',
-		color: 'red',
-	},
-};
-
-const projectStatusOptions = [
-	{
-		id: 'all',
-		name: 'Все статусы',
-	},
-	{
-		id: 'empty',
-		name: 'Нет команд',
-	},
-	{
-		id: 'available',
-		name: 'Есть места',
-	},
-	{
-		id: 'full',
-		name: 'Заполнен',
-	},
-];
-
-export const ProjectsTable: FC<ProjectsTableProps> = ({ projects }) => {
+export const ProjectsTable: FC<IProjectsTableProps> = ({ projects }) => {
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const [currentStatus, setCurrentStatus] = useState<{
 		id: string;
 		name: string;
 	} | null>(projectStatusOptions[0]);
+
+	const [currentProjectId, setCurrentProjectId] = useState<number | null>(null);
+
+	const [isShowProjectDetail, setIsShowProjectDetail] = useState(false);
+
+	const handleProjectClick = (id: number) => {
+		setCurrentProjectId(id);
+		setIsShowProjectDetail(true);
+	};
+
+	const handleCloseDetail = () => {
+		setIsShowProjectDetail(false);
+		setCurrentProjectId(null);
+	};
 
 	const filteredProjects = useMemo(() => {
 		const query = searchQuery.trim().toLowerCase();
@@ -109,6 +71,7 @@ export const ProjectsTable: FC<ProjectsTableProps> = ({ projects }) => {
 			return matchesSearch && matchesStatus;
 		});
 	}, [projects, searchQuery, currentStatus]);
+
 	return (
 		<div className={styles.table}>
 			<div className={styles.table__header}>
@@ -176,6 +139,9 @@ export const ProjectsTable: FC<ProjectsTableProps> = ({ projects }) => {
 											text={project.name}
 											columnSize='full'
 											textWeight='bold'
+											active
+											id={project.id}
+											onClick={handleProjectClick}
 										/>
 
 										<TableColumn withChildren columnSize='large'>
@@ -188,13 +154,12 @@ export const ProjectsTable: FC<ProjectsTableProps> = ({ projects }) => {
 										/>
 
 										<TableColumn withChildren columnSize='progress'>
-											{' '}
 											<ProgressBar
 												value={teamsCount}
 												max={project.maxTeamsCount}
 												withInfo
 												caption={`${teamsCount} из ${project.maxTeamsCount}`}
-											/>{' '}
+											/>
 										</TableColumn>
 									</TableRow>
 								);
@@ -202,6 +167,14 @@ export const ProjectsTable: FC<ProjectsTableProps> = ({ projects }) => {
 						</TableMain>
 					</Table>
 				</div>
+			)}
+
+			{isShowProjectDetail && (
+				<ProjectDetailModal
+					id={currentProjectId}
+					isOpen={isShowProjectDetail}
+					onClose={handleCloseDetail}
+				/>
 			)}
 		</div>
 	);

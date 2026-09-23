@@ -10,7 +10,6 @@ import { Section } from '../../../shared/components/Section';
 import { Tabs } from '../../../shared/components/Tabs/ui/tabs';
 import { Select } from '../../../shared/components/Select/ui/select';
 
-import { Overview } from '../components/Overview/ui/overview';
 import { Students } from '../components/Students/ui/students';
 import { Mentors } from '../components/Mentors/ui/mentors';
 import { Projects } from '../components/Projects/ui/projects';
@@ -92,13 +91,12 @@ export const Dashboard: FC = () => {
 
 			<div className={styles.content}>
 				<Routes>
-					<Route path='overview' element={<Overview />} />
 					<Route path='students' element={<Students />} />
 					<Route path='mentors' element={<Mentors />} />
 					<Route path='projects' element={<Projects />} />
 					<Route path='groups' element={<Groups />} />
 
-					<Route path='' element={<Navigate to='overview' replace />} />
+					<Route path='' element={<Navigate to='students' replace />} />
 				</Routes>
 			</div>
 		</Section>
