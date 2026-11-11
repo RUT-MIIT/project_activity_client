@@ -13,7 +13,7 @@ export const links = [
 	{
 		label: 'Новый пользователь?',
 		text: 'Регистрация',
-		url: EPAGESROUTES.REGISTRATION_STUDENT,
+		url: EPAGESROUTES.REGISTRATION,
 	},
 	/*{
 		label: 'Вы не сотрудник РУТ (МИИТ)?',
