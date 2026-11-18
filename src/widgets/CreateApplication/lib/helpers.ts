@@ -212,7 +212,7 @@ export const formFieldMainData = {
 	recommended_teams_count: {
 		name: 'recommended_teams_count',
 		title: 'Рекомендуемое число команд на проект',
-		info: '',
+		info: 'Укажите количество команд, которые могут принять участие в проекте.',
 		placeholder: 'Введите число команд',
 	},
 	needs_consultation: {

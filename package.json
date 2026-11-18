@@ -59,6 +59,7 @@
 		"@nivo/bar": "^0.99.0",
 		"@nivo/line": "^0.99.0",
 		"@nivo/pie": "^0.99.0",
+		"@quickdrawjs/react": "^0.3.0",
 		"@reduxjs/toolkit": "^2.8.2",
 		"@types/react-router-dom": "^5.3.3",
 		"clsx": "^2.1.1",

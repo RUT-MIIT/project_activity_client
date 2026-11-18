@@ -207,167 +207,189 @@ export const Showcase: FC = () => {
 			sectionTitle={{ text: 'Витрина проектов' }}
 			sectionDescription='Выберите проект, над которым хотите поработать с командой'>
 			<div className={styles.container}>
-				<div className={styles.toolbar}>
-					<div className={styles.filters}>
-						<div className={styles.filters__row}>
-							<div className={styles.search}>
-								<Filter
-									placeholder='Поиск по названию проекта...'
-									onFilter={setSearchQuery}
-									width='full'
+				{projects.length === 0 ? (
+					<Notice
+						type='warning'
+						title='Проекты для вашей группы не найдены'
+						text='Обратитесь к наставнику или ответственному от института.'
+					/>
+				) : (
+					<>
+						<div className={styles.toolbar}>
+							<div className={styles.filters}>
+								<div className={styles.filters__row}>
+									<div className={styles.search}>
+										<Filter
+											placeholder='Поиск по названию проекта...'
+											onFilter={setSearchQuery}
+											width='full'
+										/>
+									</div>
+
+									<div className={styles.tagsFilter}>
+										<MultiSelect
+											options={tags}
+											selectedOptions={selectedTags}
+											valueKey='id'
+											labelKey='name'
+											placeholder='Выберите теги...'
+											onChange={setSelectedTags}
+										/>
+									</div>
+								</div>
+
+								<TagList
+									items={selectedTags}
+									emptyText=''
+									onRemove={handleRemoveTag}
 								/>
 							</div>
 
-							<div className={styles.tagsFilter}>
-								<MultiSelect
-									options={tags}
-									selectedOptions={selectedTags}
-									valueKey='id'
-									labelKey='name'
-									placeholder='Выберите теги...'
-									onChange={setSelectedTags}
-								/>
+							<div className={styles.registration}>
+								{hasSelectedProject ? (
+									<Notice
+										type='success'
+										title='Проект выбран'
+										text={`Ваша команда выбрала проект «${myTeam.project?.title}».`}
+									/>
+								) : registration?.closed_by_decision ? (
+									<Notice
+										type='warning'
+										title='Регистрация закрыта'
+										text='Регистрация на проекты закрыта решением организаторов. За дополнительной информацией обратитесь к вашему наставнику.'
+									/>
+								) : isRegistrationScheduled && registrationDate ? (
+									<Countdown
+										targetDate={registrationDate}
+										label='До начала регистрации'
+										onComplete={handleRegistrationStart}
+									/>
+								) : isRegistrationOpen ? (
+									<Notice
+										type='info'
+										title='Регистрация на проекты открыта'
+										text={
+											canRegister
+												? 'Капитан команды может выбрать проект для своей команды.'
+												: 'Вы можете просматривать проекты. Записаться на проект может только капитан команды с подтверждённым составом.'
+										}
+									/>
+								) : (
+									<Notice
+										type='warning'
+										title='Регистрация закрыта'
+										text='Регистрация на проекты пока недоступна.'
+									/>
+								)}
 							</div>
 						</div>
 
-						<TagList
-							items={selectedTags}
-							emptyText=''
-							onRemove={handleRemoveTag}
-						/>
-					</div>
+						<div className={styles.list}>
+							{filteredProjects.length > 0 ? (
+								<div className={styles.projects}>
+									{filteredProjects.map((project) => {
+										const isSelectedProject = project.id === selectedProjectId;
+										const isFull =
+											project.enrolledTeamsCount >= project.maxTeams;
 
-					<div className={styles.registration}>
-						{hasSelectedProject ? (
-							<Notice
-								type='success'
-								title='Проект выбран'
-								text={`Ваша команда выбрала проект «${myTeam.project?.title}».`}
-							/>
-						) : registration?.closed_by_decision ? (
-							<Notice
-								type='warning'
-								title='Регистрация закрыта'
-								text='Регистрация на проекты закрыта решением организаторов. За дополнительной информацией обратитесь к вашему наставнику.'
-							/>
-						) : isRegistrationScheduled && registrationDate ? (
-							<Countdown
-								targetDate={registrationDate}
-								label='До начала регистрации'
-								onComplete={handleRegistrationStart}
-							/>
-						) : isRegistrationOpen ? (
-							<Notice
-								type='info'
-								title='Регистрация на проекты открыта'
-								text={
-									canRegister
-										? 'Капитан команды может выбрать проект для своей команды.'
-										: 'Вы можете просматривать проекты. Записаться на проект может только капитан команды с подтверждённым составом.'
-								}
-							/>
-						) : (
-							<Notice
-								type='warning'
-								title='Регистрация закрыта'
-								text='Регистрация на проекты пока недоступна.'
-							/>
-						)}
-					</div>
-				</div>
+										const isJoinDisabled =
+											isSelectedProject ||
+											hasSelectedProject ||
+											isFull ||
+											!canRegister;
 
-				<div className={styles.list}>
-					{filteredProjects.length > 0 ? (
-						<div className={styles.projects}>
-							{filteredProjects.map((project) => {
-								const isSelectedProject = project.id === selectedProjectId;
-								const isFull = project.enrolledTeamsCount >= project.maxTeams;
+										return (
+											<article className={styles.card} key={project.id}>
+												<div className={styles.card__header}>
+													<div className={styles.tags}>
+														{project.tags.map((tag) => (
+															<Badge
+																key={tag.id}
+																text={tag.name}
+																color='blue'
+															/>
+														))}
 
-								const isJoinDisabled =
-									isSelectedProject ||
-									hasSelectedProject ||
-									isFull ||
-									!canRegister;
+														{project.isCompetitiveSelection && (
+															<Badge text='Конкурсный отбор' color='yellow' />
+														)}
 
-								return (
-									<article className={styles.card} key={project.id}>
-										<div className={styles.card__header}>
-											<div className={styles.tags}>
-												{project.tags.map((tag) => (
-													<Badge key={tag.id} text={tag.name} color='blue' />
-												))}
+														{project.isContinuing && (
+															<Badge text='Пролонгация' color='yellow' />
+														)}
 
-												{project.isCompetitiveSelection && (
-													<Badge text='Конкурсный отбор' color='yellow' />
-												)}
-
-												{project.isContinuing && (
-													<Badge text='Пролонгация' color='yellow' />
-												)}
-
-												{isSelectedProject && (
-													<Badge text='Выбран' color='green' />
-												)}
-											</div>
-										</div>
-
-										<div className={styles.card__main}>
-											<h3 className={styles.card__title}>{project.title}</h3>
-
-											<p className={styles.card__company}>{project.company}</p>
-
-											<div className={styles.card__info}>
-												<div className={styles.card__infoItem}>
-													<span className={styles.card__infoLabel}>
-														Команд зарегистрировано
-													</span>
-
-													<strong className={styles.card__infoValue}>
-														{project.enrolledTeamsCount} / {project.maxTeams}
-													</strong>
+														{isSelectedProject && (
+															<Badge text='Выбран' color='green' />
+														)}
+													</div>
 												</div>
 
-												<div className={styles.card__infoItem}>
-													<span className={styles.card__infoLabel}>
-														Рекомендуемый состав
-													</span>
+												<div className={styles.card__main}>
+													<h3 className={styles.card__title}>
+														{project.title}
+													</h3>
 
-													<strong className={styles.card__infoValue}>
-														{project.minTeamMembers}–{project.maxTeamMembers}{' '}
-														участников
-													</strong>
+													<p className={styles.card__company}>
+														{project.company}
+													</p>
+
+													<div className={styles.card__info}>
+														<div className={styles.card__infoItem}>
+															<span className={styles.card__infoLabel}>
+																Команд зарегистрировано
+															</span>
+
+															<strong className={styles.card__infoValue}>
+																{project.enrolledTeamsCount} /{' '}
+																{project.maxTeams}
+															</strong>
+														</div>
+
+														<div className={styles.card__infoItem}>
+															<span className={styles.card__infoLabel}>
+																Рекомендуемый состав
+															</span>
+
+															<strong className={styles.card__infoValue}>
+																{project.minTeamMembers}–
+																{project.maxTeamMembers} участников
+															</strong>
+														</div>
+													</div>
 												</div>
-											</div>
-										</div>
 
-										<div className={styles.card__footer}>
-											<Button
-												type='button'
-												text='Подробнее'
-												color='cancel'
-												onClick={() => handleShowDetail(project.id)}
-											/>
+												<div className={styles.card__footer}>
+													<Button
+														type='button'
+														text='Подробнее'
+														color='cancel'
+														onClick={() => handleShowDetail(project.id)}
+													/>
 
-											<Button
-												type='button'
-												text={
-													joiningProjectId === project.id
-														? 'Записываем...'
-														: getJoinButtonText(isFull, isSelectedProject)
-												}
-												color='green'
-												isBlock={isJoinDisabled || joiningProjectId !== null}
-												onClick={() => handleJoin(project.id)}
-											/>
-										</div>
-									</article>
-								);
-							})}
+													<Button
+														type='button'
+														text={
+															joiningProjectId === project.id
+																? 'Записываем...'
+																: getJoinButtonText(isFull, isSelectedProject)
+														}
+														color='green'
+														isBlock={
+															isJoinDisabled || joiningProjectId !== null
+														}
+														onClick={() => handleJoin(project.id)}
+													/>
+												</div>
+											</article>
+										);
+									})}
+								</div>
+							) : (
+								<Text text='Проекты не найдены' color='grey' />
+							)}
 						</div>
-					) : (
-						<Text text='Проекты не найдены' color='grey' />
-					)}
-				</div>
+					</>
+				)}
 			</div>
 
 			{isShowProjectDetail && (

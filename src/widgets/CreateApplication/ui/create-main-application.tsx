@@ -493,7 +493,7 @@ export const CreateMainApplication: FC = () => {
 		},
 		{ title: 'Наименование проекта*', value: values.title },
 		{
-			title: 'Рекомндуемое число команд на проект*',
+			title: 'Рекомендуемое число команд на проект*',
 			value: values.recommended_teams_count,
 		},
 	];

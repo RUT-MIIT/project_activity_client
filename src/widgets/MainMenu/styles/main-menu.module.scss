@@ -218,6 +218,12 @@
 		background-repeat: no-repeat;
 		background-size: contain;
 	}
+	&_type_workflow {
+		background-image: url('../../../shared/images/icons/new/workflow-grey.png');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
 }
 
 .link_active {
@@ -276,6 +282,9 @@
 	background-image: url('../../../shared/images/icons/new/showcase-blue.png');
 }
 
+.link_active .icon_type_workflow {
+	background-image: url('../../../shared/images/icons/new/workflow-blue.png');
+}
 
 .link:hover .icon__text {
   color: var(--main-blue-color);
@@ -331,6 +340,10 @@
 
 .link:hover .icon_type_showcase {
 	background-image: url('../../../shared/images/icons/new/showcase-blue.png');
+}
+
+.link:hover .icon_type_workflow {
+	background-image: url('../../../shared/images/icons/new/workflow-blue.png');
 }
 
 @media (max-width: 1600px) {

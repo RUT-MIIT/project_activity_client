@@ -8,6 +8,7 @@ import { MyTeamCard } from './my-team-card';
 import { TeamLimits } from './team-limits';
 import { TeamList } from '../ui/team-list';
 import { TeamInvitations } from '../ui/team-invitations';
+import { Notice } from '../../../shared/components/Notice/ui/notice';
 import { Preloader } from '../../../shared/components/Preloader/ui/preloader';
 
 import { getTeamLobbyAction } from '../../../store/student/actions';
@@ -34,20 +35,28 @@ export const Team: FC = () => {
 			sectionDescription='Объединитесь с одногруппниками, сформируйте команду и работайте над проектом вместе'>
 			{lobby && (
 				<div className={styles.container}>
-					<div className={styles.top}>
-						<MyTeamCard />
-
-						<TeamLimits
-							totalSlots={lobby.tracks[0].recommendedTeamsCount}
-							usedSlots={lobby.tracks[0].teamsCount}
+					{lobby.tracks.length === 0 ? (
+						<Notice
+							type='warning'
+							title='Для вашей группы пока не назначен трек'
+							text='Обратитесь к наставнику или ответственному от института.'
 						/>
-					</div>
-					{!isTeamMember && (
+					) : (
 						<>
-							<TeamInvitations invitations={lobby.invitations} />
+							<div className={styles.top}>
+								<MyTeamCard />
+
+								<TeamLimits
+									totalSlots={lobby.tracks[0].recommendedTeamsCount}
+									usedSlots={lobby.tracks[0].teamsCount}
+								/>
+							</div>
+							{!isTeamMember && (
+								<TeamInvitations invitations={lobby.invitations} />
+							)}
+							<TeamList teams={lobby.teams} />
 						</>
 					)}
-					<TeamList teams={lobby.teams} />
 				</div>
 			)}
 		</Section>

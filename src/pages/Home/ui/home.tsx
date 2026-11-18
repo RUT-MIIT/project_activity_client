@@ -11,7 +11,6 @@ import { HomeStats } from './home-stats';
 import { HomePlan } from './home-plan';
 import { HomeProject } from './home-project';
 import { HomeTeam } from './home-team';
-import { HomeContest } from './home-contest';
 
 import { getUser } from '../../../store/user/reducer';
 import { getMyDivisionStatsAction } from '../../../store/structure/actions';
@@ -100,8 +99,6 @@ export const Home: FC = () => {
 							</>
 						)}
 					</div>
-
-					{user.role === EROLES.STUDENT && <HomeContest />}
 				</div>
 			</div>
 		)

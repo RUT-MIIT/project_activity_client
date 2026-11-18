@@ -110,6 +110,11 @@ export const studentLinks = [
 		url: EMAINROUTES.SHOWCASE,
 		icon: 'showcase',
 	},
+	{
+		name: 'Работа в команде',
+		url: EMAINROUTES.WORKFLOW,
+		icon: 'workflow',
+	},
 	{ name: 'Учебная группа', url: EMAINROUTES.GROUP, icon: 'group' },
 ];
 

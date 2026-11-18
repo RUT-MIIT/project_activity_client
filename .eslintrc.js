@@ -9,6 +9,7 @@ module.exports = {
 		react: {
 			version: 'detect',
 		},
+		'import/core-modules': ['@quickdrawjs/core/quickdraw.css'],
 	},
 	extends: [
 		'plugin:@typescript-eslint/recommended',

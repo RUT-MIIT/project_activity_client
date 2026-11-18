@@ -31,6 +31,7 @@ import { ControlGroup } from '../pages/Control/components/ControlGroup/ui/contro
 import { Team } from '../pages/Team/ui/team';
 import { TeamLobby } from '../pages/Team/ui/team-lobby';
 import { Showcase } from '../pages/Showcase/ui/showcase';
+import { Workflow } from '../pages/Workflow/ui/workflow';
 import { MainLayout } from '../shared/components/Layout/MainLayout/ui/main-layout';
 import { Privacy } from '../pages/Privacy/ui/privacy';
 import { Preloader } from '../shared/components/Preloader/ui/preloader';
@@ -150,6 +151,7 @@ export const App = () => {
 							<Route path=':teamId/lobby' element={<TeamLobby />} />
 						</Route>
 						<Route path={`/${EMAINROUTES.SHOWCASE}/*`} element={<Showcase />} />
+						<Route path={`/${EMAINROUTES.WORKFLOW}/*`} element={<Workflow />} />
 						<Route
 							path={`/${EMAINROUTES.CONTROL}/*`}
 							element={
