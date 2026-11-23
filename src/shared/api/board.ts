@@ -40,5 +40,5 @@ export const getBoardWebSocketUrl = (teamId: number) => {
 	const protocol = apiUrl.protocol === 'https:' ? 'wss:' : 'ws:';
 	const token = encodeURIComponent(localStorage.getItem('accessToken') || '');
 
-	return `${protocol}//${apiUrl.host}/ws/teams/${teamId}/board/?token=${token}`;
+	return `${protocol}//${apiUrl.host}/ws/teams/${teamId}/board/?token=${token}&sync=2`;
 };

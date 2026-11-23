@@ -1,4 +1,5 @@
 import type { Diff, Snapshot } from '@quickdrawjs/react';
+import type { BoardChanges } from './board-edits';
 
 import { getBoardWebSocketUrl } from '../../../shared/api/board';
 
@@ -11,12 +12,41 @@ export type BoardSyncMessage =
 			type: 'snapshot';
 			clientId: string;
 			snapshot: Snapshot;
+			protocol?: number;
+			revision?: number;
+			retry?: number;
 	  }
 	| {
 			type: 'diff';
 			clientId: string;
 			diff: Diff;
-	  };
+	  }
+	| {
+			type: 'edit';
+			clientId: string;
+			changes: BoardChanges;
+			revision?: number;
+			sequence?: number;
+	  }
+	| { type: 'ack'; sequence: number; revision: number }
+	| { type: 'edit-rejected'; sequence: number }
+	| { type: 'invalidate'; revision: number };
+
+type BoardEditChunkMessage = {
+	type: 'edit-chunk';
+	clientId: string;
+	offset: number;
+	data: string;
+	final: boolean;
+};
+
+const MAX_SOCKET_BYTES = 512 * 1024;
+const CHUNK_BYTES = 64 * 1024;
+
+const encodeBytes = (bytes: Uint8Array) =>
+	btoa(
+		Array.from(bytes, (byte) => String.fromCharCode(byte)).join('')
+	);
 
 export const createBoardSocketTransport = (teamId: number) => {
 	const socket = new WebSocket(getBoardWebSocketUrl(teamId));
@@ -38,7 +68,32 @@ export const createBoardSocketTransport = (teamId: number) => {
 				return;
 			}
 
-			socket.send(JSON.stringify(message));
+			const serialized = JSON.stringify(message);
+
+			if (message.type !== 'edit') {
+				socket.send(serialized);
+				return;
+			}
+
+			const bytes = new TextEncoder().encode(serialized);
+
+			if (bytes.length <= MAX_SOCKET_BYTES) {
+				socket.send(serialized);
+				return;
+			}
+
+			for (let offset = 0; offset < bytes.length; offset += CHUNK_BYTES) {
+				const end = Math.min(offset + CHUNK_BYTES, bytes.length);
+				const chunk: BoardEditChunkMessage = {
+					type: 'edit-chunk',
+					clientId: message.clientId,
+					offset,
+					data: encodeBytes(bytes.subarray(offset, end)),
+					final: end === bytes.length,
+				};
+
+				socket.send(JSON.stringify(chunk));
+			}
 		},
 		subscribe: (handler: (message: BoardSyncMessage) => void) => {
 			handlers.add(handler);

@@ -11,17 +11,6 @@ module.exports = {
 		port: 8080, // порт, чтобы открывать сайт по адресу localhost:8080, но можно поменять порт
 		open: true, // сайт будет открываться сам при запуске npm run dev
 		hot: true,
-		proxy: {
-			'/ws': {
-				target: 'https://pd.rut-miit.ru',
-				changeOrigin: true,
-				secure: true,
-				ws: true,
-				onProxyReqWs: (proxyReq) => {
-					proxyReq.setHeader('Origin', 'https://pd.rut-miit.ru');
-				},
-			},
-		},
 	},
 	plugins: [new ReactRefreshWebpackPlugin()],
 };
