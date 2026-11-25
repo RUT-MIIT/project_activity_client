@@ -1,20 +1,15 @@
 import type { FC } from 'react';
-import type {
-	ITaskMember,
-	ITaskStage,
-	IWorkflowTask,
-} from '../types/tasks';
+import type { ITaskMember, ITaskStage, IWorkflowTask } from '../types/tasks';
 
-import { Badge } from '../../../shared/components/Badge/ui/badge';
+import { useState } from 'react';
+
 import { Button } from '../../../shared/components/Button/ui/button';
+import { Modal } from '../../../shared/components/Modal/ui/modal';
 import { ProgressBar } from '../../../shared/components/ProgressBar/ui/progress-bar';
 
-import {
-	getStageProgress,
-	getStageStateColor,
-	getStageStateText,
-} from '../lib/tasks';
+import { getStageProgress } from '../lib/tasks';
 
+import { WorkflowStageModal } from './workflow-stage-modal';
 import { WorkflowTaskCard } from './workflow-task-card';
 
 import styles from '../styles/tasks.module.scss';
@@ -44,6 +39,7 @@ export const WorkflowTaskColumn: FC<IWorkflowTaskColumnProps> = ({
 	onDrop,
 	onDragLeave,
 }) => {
+	const [isStageOpen, setIsStageOpen] = useState(false);
 	const progress = getStageProgress(tasks, stage.id);
 	const stageTasks = tasks.filter((task) => task.stageId === stage.id);
 
@@ -68,12 +64,13 @@ export const WorkflowTaskColumn: FC<IWorkflowTaskColumnProps> = ({
 					<p className={styles.column__title}>
 						Этап {stage.id}. {stage.shortTitle}
 					</p>
-					<Badge
-						text={getStageStateText(progress.state)}
-						color={getStageStateColor(progress.state)}
+					<button
+						type='button'
+						className={styles.column__info}
+						aria-label='Подробнее об этапе'
+						onClick={() => setIsStageOpen(true)}
 					/>
 				</div>
-				<p className={styles.column__desc}>{stage.description}</p>
 				<ProgressBar
 					value={progress.done}
 					max={progress.total || 1}
@@ -102,6 +99,14 @@ export const WorkflowTaskColumn: FC<IWorkflowTaskColumnProps> = ({
 				withIcon={{ type: 'add', color: 'white' }}
 				onClick={() => onCreate(stage.id)}
 			/>
+
+			<Modal
+				isOpen={isStageOpen}
+				onClose={() => setIsStageOpen(false)}
+				title={`Этап ${stage.id}. ${stage.title}`}
+				description='Описание этапа проекта'>
+				<WorkflowStageModal stage={stage} />
+			</Modal>
 		</section>
 	);
 };

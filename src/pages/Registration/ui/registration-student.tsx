@@ -484,13 +484,23 @@ export const RegistrationStudent: FC = () => {
 									<FormInputStub value={student.middle_name} />
 								</FormField>
 
-								<FormField title='Учебная группа'>
-									<FormInputStub value={student.group_name} />
-								</FormField>
+								{student.group_name && (
+									<FormField title='Учебная группа'>
+										<FormInputStub value={student.group_name} />
+									</FormField>
+								)}
 
-								<FormField title='Студенческий билет'>
-									<FormInputStub value={student.student_card} />
-								</FormField>
+								{student.group_name && (
+									<FormField title='Учебная группа'>
+										<FormInputStub value={student.group_name} />
+									</FormField>
+								)}
+
+								{student.group_name && (
+									<FormField title='Студенческий билет'>
+										<FormInputStub value={student.student_card} />
+									</FormField>
+								)}
 
 								<FormButtons>
 									<Button

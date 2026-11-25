@@ -83,11 +83,11 @@ export const App = () => {
 					/>
 					<Route
 						path={EPAGESROUTES.REGISTRATION_STUDENT}
-						element={<OnlyUnAuth component={<RegistrationStudent />} />}
+						element={<OnlyUnAuth component={<Registration />} />}
 					/>
 					<Route
 						path={EPAGESROUTES.REGISTRATION}
-						element={<OnlyUnAuth component={<Registration />} />}
+						element={<OnlyUnAuth component={<RegistrationStudent />} />}
 					/>
 					<Route
 						path={EPAGESROUTES.FORGOT_PASSWORD}
