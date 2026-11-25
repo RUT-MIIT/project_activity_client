@@ -12,6 +12,9 @@ export const getRoleColor = (roleCode?: string) => {
 		case 'mentor':
 			return 'green';
 
+		case 'user':
+			return 'grey';
+
 		default:
 			return 'grey';
 	}
@@ -31,6 +34,9 @@ export const getRoleText = (roleCode?: string) => {
 		case 'mentor':
 			return 'Сотрудник РУТ(МИИТ)';
 
+		case 'user':
+			return 'Пользователь';
+
 		default:
 			return 'Пользователь';
 	}
@@ -43,4 +49,13 @@ export const roleOptions = [
 	{ id: 'mentor', name: 'Сотрудник РУТ(МИИТ)' },
 ];
 
-export type TRoleOptions = (typeof roleOptions)[number];
+export const structureRoleOptions = [
+	{ id: 'user', name: 'Пользователь' },
+	{ id: 'department_validator', name: 'Представитель кафедры' },
+	{ id: 'institute_validator', name: 'Ответственный от института' },
+	{ id: 'mentor', name: 'Сотрудник РУТ(МИИТ)' },
+];
+
+export type TRoleOptions =
+	| (typeof roleOptions)[number]
+	| (typeof structureRoleOptions)[number];

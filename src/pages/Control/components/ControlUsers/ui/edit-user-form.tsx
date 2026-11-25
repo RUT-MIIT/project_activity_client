@@ -1,7 +1,7 @@
 import type { FC, FormEvent } from 'react';
 import type { IDepartment, IRole } from '../../../../../store/catalog/types';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from '../../../../../store/store';
 import { useToast } from '../../../../../shared/components/ToastProvider/ui/ToastProvider';
 
@@ -18,7 +18,19 @@ import { SelectWithSearch } from '../../../../../shared/components/Select/ui/sel
 import { editUserAction } from '../../../../../store/control/actions';
 import { getErrorMessage } from '../../../../../shared/lib/getErrorMessage';
 
-export const EditUserForm: FC = () => {
+interface IEditUserFormProps {
+	allowedRoleCodes?: string[];
+	departmentOptions?: IDepartment[];
+	canChangeRoleAndDepartment?: boolean;
+	canChangeContact?: boolean;
+}
+
+export const EditUserForm: FC<IEditUserFormProps> = ({
+	allowedRoleCodes,
+	departmentOptions,
+	canChangeRoleAndDepartment = true,
+	canChangeContact = true,
+}) => {
 	const dispatch = useDispatch();
 	const { showToast } = useToast();
 	const { currentUser, isLoadingRequest } = useSelector(
@@ -26,6 +38,14 @@ export const EditUserForm: FC = () => {
 	);
 
 	const { departments, roles } = useSelector((state) => state.catalog);
+	const availableDepartments = departmentOptions ?? departments;
+	const availableRoles = useMemo(() => {
+		if (!allowedRoleCodes) {
+			return roles;
+		}
+
+		return roles.filter((item) => allowedRoleCodes.includes(item.code));
+	}, [allowedRoleCodes, roles]);
 
 	const [email, setEmail] = useState(currentUser?.email || '');
 	const [phone, setPhone] = useState(currentUser?.phone || '');
@@ -44,7 +64,11 @@ export const EditUserForm: FC = () => {
 		setRole(selected);
 	};
 
-	const isBlockSubmit = !department || !role || !email.trim();
+	const isBlockSubmit =
+		!department ||
+		!role ||
+		!email.trim() ||
+		(!canChangeContact && !canChangeRoleAndDepartment);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -94,6 +118,7 @@ export const EditUserForm: FC = () => {
 					name='email'
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
+					disabled={!canChangeContact}
 				/>
 			</FormField>
 
@@ -102,25 +127,44 @@ export const EditUserForm: FC = () => {
 					name='phone'
 					value={phone}
 					onChange={(e) => setPhone(e.target.value)}
+					disabled={!canChangeContact}
 				/>
 			</FormField>
 
 			<FormField title='Выберите подразделение'>
-				<SelectWithSearch
-					options={departments}
-					currentOption={department}
-					onChooseOption={handleChangeDepartment}
-				/>
+				{canChangeRoleAndDepartment ? (
+					<SelectWithSearch
+						options={availableDepartments}
+						currentOption={department}
+						onChooseOption={handleChangeDepartment}
+					/>
+				) : (
+					<FormInput
+						name='department'
+						value={department?.name || ''}
+						onChange={() => undefined}
+						disabled
+					/>
+				)}
 			</FormField>
 
 			<FormField title='Выберите роль' withMarginBottom>
-				<Select
-					options={roles}
-					currentOption={role}
-					onChooseOption={handleChangeRole}
-					valueKey='code'
-					labelKey='name'
-				/>
+				{canChangeRoleAndDepartment ? (
+					<Select
+						options={availableRoles}
+						currentOption={role}
+						onChooseOption={handleChangeRole}
+						valueKey='code'
+						labelKey='name'
+					/>
+				) : (
+					<FormInput
+						name='role'
+						value={role?.name || ''}
+						onChange={() => undefined}
+						disabled
+					/>
+				)}
 			</FormField>
 
 			<FormButtons>
