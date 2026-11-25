@@ -14,6 +14,11 @@ import {
 } from '../../../shared/components/Form/components';
 
 import { getMyGroupShowcaseDetailAction } from '../../../store/mentor/actions';
+import {
+	isCaseApplication,
+	pickApplicationKind,
+	pickCaseDescription,
+} from '../../../shared/lib/lib';
 
 interface IMyGroupShowcaseDetailProps {
 	id: number | null;
@@ -126,30 +131,46 @@ export const MyGroupShowcaseDetail: FC<IMyGroupShowcaseDetailProps> = ({
 
 							{activeTab === 'description' && (
 								<>
-									{hasValue(showcaseDetail.problem_holder) && (
-										<FormField title='Носитель проблемы'>
-											<FormInputStub value={showcaseDetail.problem_holder} />
-										</FormField>
-									)}
+									{isCaseApplication(
+										pickApplicationKind(showcaseDetail)
+									) ? (
+										hasValue(pickCaseDescription(showcaseDetail)) && (
+											<FormField title='Кейс'>
+												<FormInputStub
+													value={pickCaseDescription(showcaseDetail)}
+												/>
+											</FormField>
+										)
+									) : (
+										<>
+											{hasValue(showcaseDetail.problem_holder) && (
+												<FormField title='Носитель проблемы'>
+													<FormInputStub
+														value={showcaseDetail.problem_holder}
+													/>
+												</FormField>
+											)}
 
-									{hasValue(showcaseDetail.goal) && (
-										<FormField title='Цель'>
-											<FormInputStub value={showcaseDetail.goal} />
-										</FormField>
-									)}
+											{hasValue(showcaseDetail.goal) && (
+												<FormField title='Цель'>
+													<FormInputStub value={showcaseDetail.goal} />
+												</FormField>
+											)}
 
-									{hasValue(showcaseDetail.barrier) && (
-										<FormField title='Барьер'>
-											<FormInputStub value={showcaseDetail.barrier} />
-										</FormField>
-									)}
+											{hasValue(showcaseDetail.barrier) && (
+												<FormField title='Барьер'>
+													<FormInputStub value={showcaseDetail.barrier} />
+												</FormField>
+											)}
 
-									{hasValue(showcaseDetail.existing_solutions) && (
-										<FormField title='Существующие решения'>
-											<FormInputStub
-												value={showcaseDetail.existing_solutions}
-											/>
-										</FormField>
+											{hasValue(showcaseDetail.existing_solutions) && (
+												<FormField title='Существующие решения'>
+													<FormInputStub
+														value={showcaseDetail.existing_solutions}
+													/>
+												</FormField>
+											)}
+										</>
 									)}
 
 									{hasValue(showcaseDetail.context) && (

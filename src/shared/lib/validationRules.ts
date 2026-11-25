@@ -3,6 +3,13 @@ export const required = (errorMessage = 'Поле обязательно для 
 	errorMessage,
 });
 
+export const requiredTrimmed = (
+	errorMessage = 'Поле обязательно для заполнения'
+) => ({
+	validate: (value: string) => value.trim().length > 0,
+	errorMessage,
+});
+
 export const emailFormat = (
 	errorMessage = 'Неверный формат электронной почты'
 ) => ({

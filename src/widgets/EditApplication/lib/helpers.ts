@@ -1,7 +1,8 @@
 import type { IEditAppForm } from '../types/types';
 import type { TFormValidationErrors } from '../../../shared/components/Form/types/types';
 
-import { required } from '../../../shared/lib/validationRules';
+import { applicationKinds } from '../../../shared/lib/lib';
+import { required, requiredTrimmed } from '../../../shared/lib/validationRules';
 
 export const validationSchema = {
 	title: [required('Введите название')],
@@ -12,6 +13,7 @@ export const validationSchema = {
 	goal: [required('Введите компанию')],
 	barrier: [required('Введите компанию')],
 	existing_solutions: [required('Введите компанию')],
+	case_description: [requiredTrimmed('Введите описание кейса')],
 	context: [required('Введите компанию')],
 	recommended_tools: [required('Введите компанию')],
 	stakeholders: [required('Введите компанию')],
@@ -31,11 +33,13 @@ export const initialAppValues: IEditAppForm = {
 	company: '',
 	company_contacts: '',
 	project_level: null,
+	application_kind: applicationKinds[0],
 	target_institutes: [],
 	problem_holder: '',
 	goal: '',
 	barrier: '',
 	existing_solutions: '',
+	case_description: '',
 	context: '',
 	recommended_tools: '',
 	stakeholders: '',
@@ -50,6 +54,8 @@ export const shouldBlockSubmit = (
 	values: IEditAppForm,
 	errors: TFormValidationErrors
 ): boolean => {
+	const isCase = values.application_kind?.id === 'case';
+
 	return (
 		!values.title.trim() ||
 		!!errors.title ||
@@ -58,6 +64,8 @@ export const shouldBlockSubmit = (
 		!values.company_contacts.trim() ||
 		!!errors.company_contacts ||
 		values.recommended_teams_count < 1 ||
-		!!errors.recommended_teams_count
+		!!errors.recommended_teams_count ||
+		(isCase &&
+			(!values.case_description.trim() || !!errors.case_description))
 	);
 };

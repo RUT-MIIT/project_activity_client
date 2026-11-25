@@ -73,8 +73,7 @@ export const SetDivisionNormForm: FC = () => {
 		<Form
 			name='set-division-norm-form'
 			onSubmit={handleSubmit}
-			formWidth='full'
-			withHeightStretch>
+			formWidth='full'>
 			<FormField title='Плановое количество заявок'>
 				<FormInputNumber
 					name='division-norm'
@@ -84,12 +83,11 @@ export const SetDivisionNormForm: FC = () => {
 				/>
 			</FormField>
 
-			<FormButtons withMargin>
+			<FormButtons>
 				<Button
 					text='Сохранить'
 					type='submit'
 					color='green'
-					withIcon={{ type: 'check', color: 'white' }}
 					isBlock={isLoadingAction || isBlockSubmit}
 				/>
 			</FormButtons>

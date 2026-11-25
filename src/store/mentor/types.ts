@@ -78,6 +78,10 @@ export interface IMentorShowcaseDetail {
 	id: number;
 	title: string;
 	company: string;
+	applicationKind?: string;
+	caseDescription?: string;
+	application_kind?: string;
+	case_description?: string;
 	goal: string;
 	barrier: string;
 	existing_solutions: string;

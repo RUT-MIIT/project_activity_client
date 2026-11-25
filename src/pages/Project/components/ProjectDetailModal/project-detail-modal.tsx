@@ -13,6 +13,11 @@ import {
 } from '../../../../shared/components/Form/components';
 
 import { getCoordinationAppDetailAction } from '../../../../store/coordination/actions';
+import {
+	isCaseApplication,
+	pickApplicationKind,
+	pickCaseDescription,
+} from '../../../../shared/lib/lib';
 
 const tabs = [
 	{
@@ -87,20 +92,36 @@ export const ProjectDetailModal: FC<IProjectDetailModal> = ({
 							)}
 							{activeTab === 'problem' && (
 								<>
-									<FormField title='Носитель проблемы'>
-										<FormInputStub value={applicationDetail.problem_holder} />
-									</FormField>
-									<FormField title='Цель'>
-										<FormInputStub value={applicationDetail.goal} />
-									</FormField>
-									<FormField title='Барьер'>
-										<FormInputStub value={applicationDetail.barrier} />
-									</FormField>
-									<FormField title='Существующие решения'>
-										<FormInputStub
-											value={applicationDetail.existing_solutions}
-										/>
-									</FormField>
+									{isCaseApplication(
+										pickApplicationKind(applicationDetail)
+									) ? (
+										<FormField title='Кейс'>
+											<FormInputStub
+												value={pickCaseDescription(applicationDetail)}
+											/>
+										</FormField>
+									) : (
+										<>
+											<FormField title='Носитель проблемы'>
+												<FormInputStub
+													value={applicationDetail.problem_holder || ''}
+												/>
+											</FormField>
+											<FormField title='Цель'>
+												<FormInputStub value={applicationDetail.goal || ''} />
+											</FormField>
+											<FormField title='Барьер'>
+												<FormInputStub
+													value={applicationDetail.barrier || ''}
+												/>
+											</FormField>
+											<FormField title='Существующие решения'>
+												<FormInputStub
+													value={applicationDetail.existing_solutions || ''}
+												/>
+											</FormField>
+										</>
+									)}
 								</>
 							)}
 							{activeTab === 'context' && (

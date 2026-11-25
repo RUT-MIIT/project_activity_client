@@ -1,7 +1,10 @@
 import type { FC, FormEvent } from 'react';
 import type { IEditAppForm, IEditApplicationProps } from '../types/types';
 import type { IInstitute, ITag } from '../../../store/catalog/types';
-import type { IProjectLevel } from '../../../shared/lib/lib';
+import type {
+	IApplicationKind,
+	IProjectLevel,
+} from '../../../shared/lib/lib';
 import type {
 	IApplicationComment,
 	IField,
@@ -50,7 +53,12 @@ import {
 	getTagsAction,
 } from '../../../store/catalog/actions';
 import { setCurrentField } from '../../../store/coordination/reducer';
-import { projectLevels } from '../../../shared/lib/lib';
+import {
+	applicationKinds,
+	getApplicationKind,
+	getApplicationKindPayload,
+	projectLevels,
+} from '../../../shared/lib/lib';
 import { EMAINROUTES } from '../../../shared/utils/routes';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 
@@ -87,11 +95,27 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isBlockSubmit && user && applicationDetail) {
+			const {
+				application_kind,
+				problem_holder,
+				goal,
+				barrier,
+				existing_solutions,
+				case_description,
+				...formValues
+			} = values;
 			const appData = {
-				...values,
+				...formValues,
 				project_level: values.project_level?.name ?? '',
 				target_institutes: values.target_institutes.map((elem) => elem.code),
 				tags: values.tags ? [values.tags.id] : [],
+				...getApplicationKindPayload(application_kind?.id, {
+					problem_holder,
+					goal,
+					barrier,
+					existing_solutions,
+					case_description,
+				}),
 			};
 
 			try {
@@ -266,6 +290,12 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 		handleSelectChange('project_level', selected);
 	};
 
+	const handleChangeApplicationKind = (selected: IApplicationKind | null) => {
+		if (selected) {
+			handleSelectChange('application_kind', selected);
+		}
+	};
+
 	const handleChangeTags = (selected: ITag | null) => {
 		handleSelectChange('tags', selected);
 	};
@@ -288,6 +318,10 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 			const levelOption = projectLevels.find(
 				(level) => level.name === applicationDetail.project_level
 			) || { id: 0, name: 'Выберите уровень..' };
+			const kind = getApplicationKind(applicationDetail.application_kind);
+			const kindOption =
+				applicationKinds.find((item) => item.id === kind) ||
+				applicationKinds[0];
 
 			setValues({
 				author_lastname: applicationDetail.author_lastname,
@@ -300,11 +334,13 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 				company: applicationDetail.company || '',
 				company_contacts: applicationDetail.company_contacts || '',
 				project_level: levelOption,
+				application_kind: kindOption,
 				target_institutes: applicationDetail.target_institutes || [],
 				problem_holder: applicationDetail.problem_holder || '',
 				goal: applicationDetail.goal || '',
 				barrier: applicationDetail.barrier || '',
 				existing_solutions: applicationDetail.existing_solutions || '',
+				case_description: applicationDetail.case_description || '',
 				context: applicationDetail.context || '',
 				recommended_tools: applicationDetail.recommended_tools || '',
 				stakeholders: applicationDetail.stakeholders || '',
@@ -485,57 +521,88 @@ export const EditApplication: FC<IEditApplicationProps> = ({ status }) => {
 								{activeTab === '/problem' && (
 									<>
 										<ApplicationField
-											title='Носитель проблемы'
-											fieldCode='problem_holder'
+											title='Тип заявки'
+											fieldCode='application_kind'
 											currentField={currentField}
 											getCommentCount={getCommentCount}
 											onSelectField={handleSelectField}>
-											<FormInput
-												name='problem_holder'
-												value={values.problem_holder}
-												onChange={handleChange}
-												placeholder='Введите носителя проблемы'
+											<Select
+												options={applicationKinds}
+												currentOption={values.application_kind}
+												onChooseOption={handleChangeApplicationKind}
+												withClear={false}
 											/>
 										</ApplicationField>
-										<ApplicationField
-											title='Цель'
-											fieldCode='goal'
-											currentField={currentField}
-											getCommentCount={getCommentCount}
-											onSelectField={handleSelectField}>
-											<FormTextarea
-												name='goal'
-												value={values.goal}
-												onChange={handleChange}
-												placeholder='Введите цель проекта'
-											/>
-										</ApplicationField>
-										<ApplicationField
-											title='Барьер'
-											fieldCode='barrier'
-											currentField={currentField}
-											getCommentCount={getCommentCount}
-											onSelectField={handleSelectField}>
-											<FormTextarea
-												name='barrier'
-												value={values.barrier}
-												onChange={handleChange}
-												placeholder='Что мешает решить проблему сейчас?'
-											/>
-										</ApplicationField>
-										<ApplicationField
-											title='Существующие решения'
-											fieldCode='existing_solutions'
-											currentField={currentField}
-											getCommentCount={getCommentCount}
-											onSelectField={handleSelectField}>
-											<FormTextarea
-												name='existing_solutions'
-												value={values.existing_solutions}
-												onChange={handleChange}
-												placeholder='Введите существующие решения'
-											/>
-										</ApplicationField>
+										{values.application_kind?.id === 'case' ? (
+											<ApplicationField
+												title='Кейс'
+												fieldCode='case_description'
+												currentField={currentField}
+												getCommentCount={getCommentCount}
+												onSelectField={handleSelectField}>
+												<FormTextarea
+													name='case_description'
+													value={values.case_description}
+													onChange={handleChange}
+													placeholder='Опишите ситуацию и задачу для команды'
+												/>
+											</ApplicationField>
+										) : (
+											<>
+												<ApplicationField
+													title='Носитель проблемы'
+													fieldCode='problem_holder'
+													currentField={currentField}
+													getCommentCount={getCommentCount}
+													onSelectField={handleSelectField}>
+													<FormInput
+														name='problem_holder'
+														value={values.problem_holder}
+														onChange={handleChange}
+														placeholder='Введите носителя проблемы'
+													/>
+												</ApplicationField>
+												<ApplicationField
+													title='Цель'
+													fieldCode='goal'
+													currentField={currentField}
+													getCommentCount={getCommentCount}
+													onSelectField={handleSelectField}>
+													<FormTextarea
+														name='goal'
+														value={values.goal}
+														onChange={handleChange}
+														placeholder='Введите цель проекта'
+													/>
+												</ApplicationField>
+												<ApplicationField
+													title='Барьер'
+													fieldCode='barrier'
+													currentField={currentField}
+													getCommentCount={getCommentCount}
+													onSelectField={handleSelectField}>
+													<FormTextarea
+														name='barrier'
+														value={values.barrier}
+														onChange={handleChange}
+														placeholder='Что мешает решить проблему сейчас?'
+													/>
+												</ApplicationField>
+												<ApplicationField
+													title='Существующие решения'
+													fieldCode='existing_solutions'
+													currentField={currentField}
+													getCommentCount={getCommentCount}
+													onSelectField={handleSelectField}>
+													<FormTextarea
+														name='existing_solutions'
+														value={values.existing_solutions}
+														onChange={handleChange}
+														placeholder='Введите существующие решения'
+													/>
+												</ApplicationField>
+											</>
+										)}
 									</>
 								)}
 								{activeTab === '/context' && (

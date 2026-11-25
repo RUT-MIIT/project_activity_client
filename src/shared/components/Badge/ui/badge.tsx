@@ -7,17 +7,18 @@ export const Badge: FC<IBadge> = ({
 	text,
 	color = 'blue',
 	type = 'elem',
+	withDot = false,
 	onClick,
 }) => {
+	const className = `${styles.badge} ${styles[`badge_color_${color}`]} ${
+		withDot ? styles.badge_dot : ''
+	}`;
+
 	return type === 'elem' ? (
-		<div className={`${styles.badge} ${styles[`badge_color_${color}`]}`}>
-			{text}
-		</div>
+		<div className={className}>{text}</div>
 	) : (
 		<button
-			className={`${styles.badge} ${styles.badge_active} ${
-				styles[`badge_color_${color}`]
-			}`}
+			className={`${className} ${styles.badge_active}`}
 			onClick={onClick}
 			type='button'>
 			{text}

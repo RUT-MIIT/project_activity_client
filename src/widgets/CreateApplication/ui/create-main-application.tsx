@@ -1,7 +1,11 @@
 import type { FC, FormEvent } from 'react';
 import type { ICreateAppForm } from '../types/types';
 import type { IInstitute, ITag } from '../../../store/catalog/types';
-import type { IProjectLevel, ICompanyType } from '../../../shared/lib/lib';
+import type {
+	IProjectLevel,
+	ICompanyType,
+	IApplicationKind,
+} from '../../../shared/lib/lib';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +33,7 @@ import {
 	validationSchema,
 	initialAppValues,
 	requiredFieldsMain,
+	getRequiredFieldsByKind,
 	shouldBlockSubmit,
 	formFieldMainData,
 } from '../lib/helpers';
@@ -37,8 +42,15 @@ import {
 	getInstitutesAction,
 	getTagsAction,
 } from '../../../store/catalog/actions';
+import { getMyDivisionPlansAction } from '../../../store/structure/actions';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
-import { projectLevels, companyTypes } from '../../../shared/lib/lib';
+import {
+	projectLevels,
+	companyTypes,
+	applicationKinds,
+	getApplicationKindPayload,
+	isInternalCustomer,
+} from '../../../shared/lib/lib';
 import { EMAINROUTES } from '../../../shared/utils/routes';
 
 import styles from '../styles/create-main-application.module.scss';
@@ -52,6 +64,13 @@ export const CreateMainApplication: FC = () => {
 	const { institutes, tags, isLoadingCatalog } = useSelector(
 		(state) => state.catalog
 	);
+	const { currentSemester, divisionsPlans } = useSelector(
+		(state) => state.structure
+	);
+	const isInstituteValidator = user?.role === 'institute_validator';
+	const instituteId = user?.institute?.id ?? user?.department.id;
+	const instituteName =
+		user?.institute?.name ?? user?.department.name ?? 'Институт';
 	const [currentStep, setCurrentStep] = useState(1);
 	const { isLoading } = useSelector((state) => state.application);
 	const [isBlockSubmit, setIsBlockSubmit] = useState<boolean>(true);
@@ -66,9 +85,20 @@ export const CreateMainApplication: FC = () => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isBlockSubmit && user) {
+			const {
+				application_kind,
+				problem_holder,
+				goal,
+				barrier,
+				existing_solutions,
+				case_description,
+				main_department,
+				company_type,
+				...formValues
+			} = values;
 			const appMainData = {
 				author: user.id,
-				...values,
+				...formValues,
 
 				author_firstname: user.first_name,
 				author_middlename: user.middle_name,
@@ -78,13 +108,23 @@ export const CreateMainApplication: FC = () => {
 				author_role: user.role,
 				author_division: user.department.name,
 
-				is_internal_customer: values.company_type?.id === 1,
+				customer_type: company_type?.id ?? 'internal',
 
 				project_level: values.project_level?.name ?? '',
 
 				target_institutes: values.target_institutes.map((elem) => elem.code),
 
 				tags: values.tags ? [values.tags.id] : [],
+				main_department_id: isInstituteValidator
+					? main_department?.id ?? user.institute?.id ?? user.department.id
+					: user.department.id,
+				...getApplicationKindPayload(application_kind?.id, {
+					problem_holder,
+					goal,
+					barrier,
+					existing_solutions,
+					case_description,
+				}),
 			};
 
 			try {
@@ -116,12 +156,20 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('project_level', selected);
 	};
 
+	const handleChangeApplicationKind = (selected: IApplicationKind | null) => {
+		if (!selected) {
+			return;
+		}
+
+		handleSelectChange('application_kind', selected);
+	};
+
 	const handleChangeCompanyType = (selected: ICompanyType | null) => {
 		if (!selected) {
 			return;
 		}
 		handleSelectChange('company_type', selected);
-		if (selected.id === 1) {
+		if (isInternalCustomer(selected.id)) {
 			handleSelectChange('company', 'РУТ (МИИТ)');
 		} else {
 			handleSelectChange('company', '');
@@ -132,6 +180,16 @@ export const CreateMainApplication: FC = () => {
 		handleSelectChange('tags', selected);
 	};
 
+	const handleChangeMainDepartment = (
+		selected: { id: number; name: string } | null
+	) => {
+		if (!selected) {
+			return;
+		}
+
+		handleSelectChange('main_department', selected);
+	};
+
 	const handleChangeCheckBox = (name: keyof ICreateAppForm) => {
 		handleCheckboxToggle(name);
 	};
@@ -140,7 +198,16 @@ export const CreateMainApplication: FC = () => {
 	const handlePrevStep = () => setCurrentStep((prev) => prev - 1);
 
 	useEffect(() => {
-		setIsBlockSubmit(shouldBlockSubmit(values, requiredFieldsMain, errors));
+		setIsBlockSubmit(
+			shouldBlockSubmit(
+				values,
+				getRequiredFieldsByKind(
+					requiredFieldsMain,
+					values.application_kind?.id
+				),
+				errors
+			)
+		);
 	}, [values, errors]);
 
 	useEffect(() => {
@@ -148,9 +215,39 @@ export const CreateMainApplication: FC = () => {
 		dispatch(getTagsAction());
 	}, [dispatch]);
 
+	useEffect(() => {
+		if (isInstituteValidator && currentSemester && user?.institute_code) {
+			dispatch(
+				getMyDivisionPlansAction({
+					semesterId: currentSemester.id,
+					divisionCode: user.institute_code,
+				})
+			);
+		}
+	}, [currentSemester, dispatch, isInstituteValidator, user?.institute_code]);
+
 	if (isLoadingCatalog) {
 		return <Preloader />;
 	}
+
+	const instituteOption = {
+		id: instituteId ?? 0,
+		name: instituteName,
+	};
+	const departmentOptions = [
+		instituteOption,
+		...divisionsPlans
+			.filter(
+				(elem) =>
+					elem.department_id !== instituteId && elem.department_name !== 'ЦПДС'
+			)
+			.map((elem) => ({
+				id: elem.department_id,
+				name: elem.department_short_name
+					? `${elem.department_name} (${elem.department_short_name})`
+					: elem.department_name,
+			})),
+	];
 
 	const steps = [
 		{
@@ -183,7 +280,7 @@ export const CreateMainApplication: FC = () => {
 							value={values.company}
 							onChange={handleChange}
 							placeholder={formFieldMainData.company.placeholder}
-							disabled={values.company_type?.id === 1}
+							disabled={isInternalCustomer(values.company_type?.id)}
 						/>
 					</FormField>
 					<FormField
@@ -230,69 +327,104 @@ export const CreateMainApplication: FC = () => {
 		},
 		{
 			title: 'Шаг 2. Проблема',
-			subtitle: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
+			subtitle:
+				values.application_kind?.id === 'case'
+					? 'Опишите ситуацию и задачу для команды'
+					: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
 					<FormField
-						title={formFieldMainData.problem_holder.title}
+						title={formFieldMainData.application_kind.title}
 						withInfo
-						infoText={formFieldMainData.problem_holder.info}
-						fieldError={{
-							text: errors.problem_holder || '',
-							isShow: !!errors.problem_holder,
-						}}>
-						<FormInput
-							name={formFieldMainData.problem_holder.name}
-							value={values.problem_holder}
-							onChange={handleChange}
-							placeholder={formFieldMainData.problem_holder.placeholder}
+						infoText={formFieldMainData.application_kind.info}>
+						<Select
+							placeholder='Выберите тип заявки..'
+							options={applicationKinds}
+							currentOption={values.application_kind}
+							onChooseOption={handleChangeApplicationKind}
+							withClear={false}
 						/>
 					</FormField>
-					<FormField
-						title={formFieldMainData.goal.title}
-						withInfo
-						infoText={formFieldMainData.goal.info}
-						fieldError={{
-							text: errors.goal || '',
-							isShow: !!errors.goal,
-						}}>
-						<FormTextarea
-							name={formFieldMainData.goal.name}
-							value={values.goal}
-							onChange={handleChange}
-							placeholder={formFieldMainData.goal.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.barrier.title}
-						withInfo
-						infoText={formFieldMainData.barrier.info}
-						fieldError={{
-							text: errors.barrier || '',
-							isShow: !!errors.barrier,
-						}}>
-						<FormTextarea
-							name={formFieldMainData.barrier.name}
-							value={values.barrier}
-							onChange={handleChange}
-							placeholder={formFieldMainData.barrier.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldMainData.existing_solutions.title}
-						withInfo
-						infoText={formFieldMainData.existing_solutions.info}
-						fieldError={{
-							text: errors.existing_solutions || '',
-							isShow: !!errors.existing_solutions,
-						}}>
-						<FormTextarea
-							name={formFieldMainData.existing_solutions.name}
-							value={values.existing_solutions}
-							onChange={handleChange}
-							placeholder={formFieldMainData.existing_solutions.placeholder}
-						/>
-					</FormField>
+					{values.application_kind?.id === 'case' ? (
+						<FormField
+							title={formFieldMainData.case_description.title}
+							withInfo
+							infoText={formFieldMainData.case_description.info}
+							fieldError={{
+								text: errors.case_description || '',
+								isShow: !!errors.case_description,
+							}}>
+							<FormTextarea
+								name={formFieldMainData.case_description.name}
+								value={values.case_description}
+								onChange={handleChange}
+								placeholder={formFieldMainData.case_description.placeholder}
+							/>
+						</FormField>
+					) : (
+						<>
+							<FormField
+								title={formFieldMainData.problem_holder.title}
+								withInfo
+								infoText={formFieldMainData.problem_holder.info}
+								fieldError={{
+									text: errors.problem_holder || '',
+									isShow: !!errors.problem_holder,
+								}}>
+								<FormInput
+									name={formFieldMainData.problem_holder.name}
+									value={values.problem_holder}
+									onChange={handleChange}
+									placeholder={formFieldMainData.problem_holder.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldMainData.goal.title}
+								withInfo
+								infoText={formFieldMainData.goal.info}
+								fieldError={{
+									text: errors.goal || '',
+									isShow: !!errors.goal,
+								}}>
+								<FormTextarea
+									name={formFieldMainData.goal.name}
+									value={values.goal}
+									onChange={handleChange}
+									placeholder={formFieldMainData.goal.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldMainData.barrier.title}
+								withInfo
+								infoText={formFieldMainData.barrier.info}
+								fieldError={{
+									text: errors.barrier || '',
+									isShow: !!errors.barrier,
+								}}>
+								<FormTextarea
+									name={formFieldMainData.barrier.name}
+									value={values.barrier}
+									onChange={handleChange}
+									placeholder={formFieldMainData.barrier.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldMainData.existing_solutions.title}
+								withInfo
+								infoText={formFieldMainData.existing_solutions.info}
+								fieldError={{
+									text: errors.existing_solutions || '',
+									isShow: !!errors.existing_solutions,
+								}}>
+								<FormTextarea
+									name={formFieldMainData.existing_solutions.name}
+									value={values.existing_solutions}
+									onChange={handleChange}
+									placeholder={formFieldMainData.existing_solutions.placeholder}
+								/>
+							</FormField>
+						</>
+					)}
 				</>
 			),
 		},
@@ -369,6 +501,20 @@ export const CreateMainApplication: FC = () => {
 			subtitle: 'Опишите дополнительные сведения',
 			content: (
 				<>
+					{isInstituteValidator && (
+						<FormField
+							title={formFieldMainData.main_department.title}
+							withInfo
+							infoText={formFieldMainData.main_department.info}>
+							<Select
+								placeholder={formFieldMainData.main_department.placeholder}
+								options={departmentOptions}
+								currentOption={values.main_department ?? instituteOption}
+								onChooseOption={handleChangeMainDepartment}
+								withClear={false}
+							/>
+						</FormField>
+					)}
 					<FormField
 						title={formFieldMainData.tags.title}
 						withInfo
@@ -476,10 +622,21 @@ export const CreateMainApplication: FC = () => {
 					? values.target_institutes.map((elem) => elem.name).join(', ')
 					: '',
 		},
-		{ title: 'Носитель проблемы*', value: values.problem_holder },
-		{ title: 'Цель*', value: values.goal },
-		{ title: 'Барьер*', value: values.barrier },
-		{ title: 'Существующие решения*', value: values.existing_solutions },
+		{
+			title: 'Тип заявки*',
+			value: values.application_kind?.name ?? '',
+		},
+		...(values.application_kind?.id === 'case'
+			? [{ title: 'Кейс*', value: values.case_description }]
+			: [
+					{ title: 'Носитель проблемы*', value: values.problem_holder },
+					{ title: 'Цель*', value: values.goal },
+					{ title: 'Барьер*', value: values.barrier },
+					{
+						title: 'Существующие решения*',
+						value: values.existing_solutions,
+					},
+			  ]),
 		{ title: 'Контекст проекта*', value: values.context },
 		{ title: 'Другие заинтересованные стороны', value: values.stakeholders },
 		{
@@ -487,6 +644,14 @@ export const CreateMainApplication: FC = () => {
 			value: values.recommended_tools,
 		},
 		{ title: 'Эксперты', value: values.experts },
+		...(isInstituteValidator
+			? [
+					{
+						title: 'Подразделение заявки*',
+						value: values.main_department?.name ?? '',
+					},
+			  ]
+			: []),
 		{
 			title: 'Направление проекта',
 			value: values.tags?.id === 0 ? '' : values.tags?.name ?? '',

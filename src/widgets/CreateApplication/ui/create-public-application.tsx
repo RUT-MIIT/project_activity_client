@@ -1,7 +1,11 @@
 import type { FC, FormEvent } from 'react';
 import type { ICreateAppForm } from '../types/types';
 import type { IInstitute, ITag } from '../../../store/catalog/types';
-import type { IAuthorCategory, ICompanyType } from '../../../shared/lib/lib';
+import type {
+	IAuthorCategory,
+	ICompanyType,
+	IApplicationKind,
+} from '../../../shared/lib/lib';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +33,7 @@ import {
 	validationSchema,
 	initialAppValues,
 	requiredFieldsPublic,
+	getRequiredFieldsByKind,
 	shouldBlockSubmit,
 	formFieldPublicData,
 } from '../lib/helpers';
@@ -37,7 +42,13 @@ import {
 	getInstitutesAction,
 	getExternalTagsAction,
 } from '../../../store/catalog/actions';
-import { authorCategories, companyTypes } from '../../../shared/lib/lib';
+import {
+	authorCategories,
+	companyTypes,
+	applicationKinds,
+	getApplicationKindPayload,
+	isInternalCustomer,
+} from '../../../shared/lib/lib';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage';
 import { EPAGESROUTES } from '../../../shared/utils/routes';
 
@@ -65,16 +76,33 @@ export const CreatePublicApplication: FC = () => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isBlockSubmit) {
+			const {
+				application_kind,
+				problem_holder,
+				goal,
+				barrier,
+				existing_solutions,
+				case_description,
+				company_type,
+				...formValues
+			} = values;
 			const appMainData = {
-				...values,
+				...formValues,
 				project_level: '',
-				is_internal_customer: values.company_type?.id === 1,
+				customer_type: company_type?.id ?? 'internal',
 				author_role:
 					typeof values.author_role === 'object'
 						? values.author_role.name
 						: values.author_role,
 				target_institutes: values.target_institutes.map((elem) => elem.code),
 				tags: values.tags ? [values.tags.id] : [],
+				...getApplicationKindPayload(application_kind?.id, {
+					problem_holder,
+					goal,
+					barrier,
+					existing_solutions,
+					case_description,
+				}),
 			};
 
 			try {
@@ -106,25 +134,25 @@ export const CreatePublicApplication: FC = () => {
 		if (selected) {
 			handleSelectChange('author_role', selected);
 			if (selected.id === 1) {
-				handleSelectChange('company_type', {
-					id: 1,
-					name: 'Внутренний заказчик',
-				});
+				handleSelectChange('company_type', companyTypes[0]);
 				handleSelectChange('company', 'РУТ (МИИТ)');
 			} else {
-				handleSelectChange('company_type', {
-					id: 2,
-					name: 'Внешний заказчик',
-				});
+				handleSelectChange('company_type', companyTypes[2]);
 				handleSelectChange('company', '');
 			}
+		}
+	};
+
+	const handleChangeApplicationKind = (selected: IApplicationKind | null) => {
+		if (selected) {
+			handleSelectChange('application_kind', selected);
 		}
 	};
 
 	const handleChangeCompanyType = (selected: ICompanyType | null) => {
 		if (selected) {
 			handleSelectChange('company_type', selected);
-			if (selected.id === 1) {
+			if (isInternalCustomer(selected.id)) {
 				handleSelectChange('company', 'РУТ (МИИТ)');
 			} else {
 				handleSelectChange('company', '');
@@ -148,7 +176,16 @@ export const CreatePublicApplication: FC = () => {
 	const handlePrevStep = () => setCurrentStep((prev) => prev - 1);
 
 	useEffect(() => {
-		setIsBlockSubmit(shouldBlockSubmit(values, requiredFieldsPublic, errors));
+		setIsBlockSubmit(
+			shouldBlockSubmit(
+				values,
+				getRequiredFieldsByKind(
+					requiredFieldsPublic,
+					values.application_kind?.id
+				),
+				errors
+			)
+		);
 	}, [values, errors]);
 
 	useEffect(() => {
@@ -294,7 +331,7 @@ export const CreatePublicApplication: FC = () => {
 							value={values.company}
 							onChange={handleChange}
 							placeholder={formFieldPublicData.company.placeholder}
-							disabled={values.company_type?.id === 1}
+							disabled={isInternalCustomer(values.company_type?.id)}
 						/>
 					</FormField>
 					<FormField
@@ -330,69 +367,106 @@ export const CreatePublicApplication: FC = () => {
 		},
 		{
 			title: 'Шаг 3. Проблема',
-			subtitle: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
+			subtitle:
+				values.application_kind?.id === 'case'
+					? 'Опишите ситуацию и задачу для команды'
+					: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
 					<FormField
-						title={formFieldPublicData.problem_holder.title}
+						title={formFieldPublicData.application_kind.title}
 						withInfo
-						infoText={formFieldPublicData.problem_holder.info}
-						fieldError={{
-							text: errors.problem_holder || '',
-							isShow: !!errors.problem_holder,
-						}}>
-						<FormInput
-							name={formFieldPublicData.problem_holder.name}
-							value={values.problem_holder}
-							onChange={handleChange}
-							placeholder={formFieldPublicData.problem_holder.placeholder}
+						infoText={formFieldPublicData.application_kind.info}>
+						<Select
+							placeholder='Выберите тип заявки..'
+							options={applicationKinds}
+							currentOption={values.application_kind}
+							onChooseOption={handleChangeApplicationKind}
+							withClear={false}
 						/>
 					</FormField>
-					<FormField
-						title={formFieldPublicData.goal.title}
-						withInfo
-						infoText={formFieldPublicData.goal.info}
-						fieldError={{
-							text: errors.goal || '',
-							isShow: !!errors.goal,
-						}}>
-						<FormTextarea
-							name={formFieldPublicData.goal.name}
-							value={values.goal}
-							onChange={handleChange}
-							placeholder={formFieldPublicData.goal.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldPublicData.barrier.title}
-						withInfo
-						infoText={formFieldPublicData.barrier.info}
-						fieldError={{
-							text: errors.barrier || '',
-							isShow: !!errors.barrier,
-						}}>
-						<FormTextarea
-							name={formFieldPublicData.barrier.name}
-							value={values.barrier}
-							onChange={handleChange}
-							placeholder={formFieldPublicData.barrier.placeholder}
-						/>
-					</FormField>
-					<FormField
-						title={formFieldPublicData.existing_solutions.title}
-						withInfo
-						infoText={formFieldPublicData.existing_solutions.info}
-						fieldError={{
-							text: errors.existing_solutions || '',
-							isShow: !!errors.existing_solutions,
-						}}>
-						<FormTextarea
-							name={formFieldPublicData.existing_solutions.name}
-							value={values.existing_solutions}
-							onChange={handleChange}
-							placeholder={formFieldPublicData.existing_solutions.placeholder}
-						/>
-					</FormField>
+					{values.application_kind?.id === 'case' ? (
+						<FormField
+							title={formFieldPublicData.case_description.title}
+							withInfo
+							infoText={formFieldPublicData.case_description.info}
+							fieldError={{
+								text: errors.case_description || '',
+								isShow: !!errors.case_description,
+							}}>
+							<FormTextarea
+								name={formFieldPublicData.case_description.name}
+								value={values.case_description}
+								onChange={handleChange}
+								placeholder={formFieldPublicData.case_description.placeholder}
+							/>
+						</FormField>
+					) : (
+						<>
+							<FormField
+								title={formFieldPublicData.problem_holder.title}
+								withInfo
+								infoText={formFieldPublicData.problem_holder.info}
+								fieldError={{
+									text: errors.problem_holder || '',
+									isShow: !!errors.problem_holder,
+								}}>
+								<FormInput
+									name={formFieldPublicData.problem_holder.name}
+									value={values.problem_holder}
+									onChange={handleChange}
+									placeholder={formFieldPublicData.problem_holder.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldPublicData.goal.title}
+								withInfo
+								infoText={formFieldPublicData.goal.info}
+								fieldError={{
+									text: errors.goal || '',
+									isShow: !!errors.goal,
+								}}>
+								<FormTextarea
+									name={formFieldPublicData.goal.name}
+									value={values.goal}
+									onChange={handleChange}
+									placeholder={formFieldPublicData.goal.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldPublicData.barrier.title}
+								withInfo
+								infoText={formFieldPublicData.barrier.info}
+								fieldError={{
+									text: errors.barrier || '',
+									isShow: !!errors.barrier,
+								}}>
+								<FormTextarea
+									name={formFieldPublicData.barrier.name}
+									value={values.barrier}
+									onChange={handleChange}
+									placeholder={formFieldPublicData.barrier.placeholder}
+								/>
+							</FormField>
+							<FormField
+								title={formFieldPublicData.existing_solutions.title}
+								withInfo
+								infoText={formFieldPublicData.existing_solutions.info}
+								fieldError={{
+									text: errors.existing_solutions || '',
+									isShow: !!errors.existing_solutions,
+								}}>
+								<FormTextarea
+									name={formFieldPublicData.existing_solutions.name}
+									value={values.existing_solutions}
+									onChange={handleChange}
+									placeholder={
+										formFieldPublicData.existing_solutions.placeholder
+									}
+								/>
+							</FormField>
+						</>
+					)}
 				</>
 			),
 		},
@@ -484,10 +558,21 @@ export const CreatePublicApplication: FC = () => {
 					? values.target_institutes.map((elem) => elem.name).join(', ')
 					: '',
 		},
-		{ title: 'Носитель проблемы', value: values.problem_holder },
-		{ title: 'Цель', value: values.goal },
-		{ title: 'Барьер', value: values.barrier },
-		{ title: 'Существующие решения', value: values.existing_solutions },
+		{
+			title: 'Тип заявки',
+			value: values.application_kind?.name ?? '',
+		},
+		...(values.application_kind?.id === 'case'
+			? [{ title: 'Кейс', value: values.case_description }]
+			: [
+					{ title: 'Носитель проблемы', value: values.problem_holder },
+					{ title: 'Цель', value: values.goal },
+					{ title: 'Барьер', value: values.barrier },
+					{
+						title: 'Существующие решения',
+						value: values.existing_solutions,
+					},
+			  ]),
 		{
 			title: 'Направление проекта',
 			value: values.tags?.id === 0 ? '' : values.tags?.name ?? '',

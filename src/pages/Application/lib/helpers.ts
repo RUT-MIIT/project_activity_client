@@ -1,3 +1,5 @@
+import type { TCustomerType } from '../../../shared/lib/lib';
+
 export const getStatusColor = (
 	statusCode: string,
 	userLevel: 'user' | 'department' | 'institute' | 'admin'
@@ -63,6 +65,28 @@ export const getStagesCount = (statusCode: string): 1 | 2 | 3 | 4 => {
 		return 3;
 
 	return 4;
+};
+
+export const getCustomerTypeTag = (
+	type?: TCustomerType,
+	isInternalCustomer?: boolean
+): { text: string; kind: TCustomerType; color: string } | null => {
+	const resolved: TCustomerType | undefined =
+		type ?? (isInternalCustomer ? 'internal' : undefined);
+
+	if (!resolved) {
+		return null;
+	}
+
+	if (resolved === 'internal') {
+		return { text: 'Внутренний', kind: 'internal', color: 'red' };
+	}
+
+	if (resolved === 'representative') {
+		return { text: 'С представителем', kind: 'representative', color: 'yellow' };
+	}
+
+	return { text: 'Внешний', kind: 'external', color: 'green' };
 };
 
 export const getUserLevel = (

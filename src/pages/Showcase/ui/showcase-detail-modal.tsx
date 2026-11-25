@@ -16,6 +16,11 @@ import {
 } from '../../../shared/components/Form/components';
 
 import { getStudentShowcaseDetailAction } from '../../../store/student/actions';
+import {
+	isCaseApplication,
+	pickApplicationKind,
+	pickCaseDescription,
+} from '../../../shared/lib/lib';
 
 const tabs = [
 	{
@@ -103,20 +108,36 @@ export const ShowCaseDetailModal: FC<IProjectDetailModal> = ({
 
 							{activeTab === 'description' && (
 								<>
-									<FormField title='Носитель проблемы'>
-										<FormInputStub value={projectDetail.problem_holder} />
-									</FormField>
-									<FormField title='Цель'>
-										<FormInputStub value={projectDetail.goal} />
-									</FormField>
+									{isCaseApplication(
+										pickApplicationKind(projectDetail)
+									) ? (
+										<FormField title='Кейс'>
+											<FormInputStub
+												value={pickCaseDescription(projectDetail)}
+											/>
+										</FormField>
+									) : (
+										<>
+											<FormField title='Носитель проблемы'>
+												<FormInputStub
+													value={projectDetail.problem_holder}
+												/>
+											</FormField>
+											<FormField title='Цель'>
+												<FormInputStub value={projectDetail.goal} />
+											</FormField>
 
-									<FormField title='Барьер'>
-										<FormInputStub value={projectDetail.barrier} />
-									</FormField>
+											<FormField title='Барьер'>
+												<FormInputStub value={projectDetail.barrier} />
+											</FormField>
 
-									<FormField title='Существующие решения'>
-										<FormInputStub value={projectDetail.existing_solutions} />
-									</FormField>
+											<FormField title='Существующие решения'>
+												<FormInputStub
+													value={projectDetail.existing_solutions}
+												/>
+											</FormField>
+										</>
+									)}
 
 									<FormField title='Контекст проекта'>
 										<FormInputStub value={projectDetail.context} />

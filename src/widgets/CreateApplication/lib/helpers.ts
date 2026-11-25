@@ -1,7 +1,9 @@
 import type { ICreateAppForm } from '../types/types';
 
+import { applicationKinds, PROJECT_PROBLEM_FIELDS } from '../../../shared/lib/lib';
 import {
 	required,
+	requiredTrimmed,
 	emailFormat,
 	phoneFormat,
 	minLength,
@@ -30,6 +32,7 @@ export const validationSchema = {
 	],
 
 	company_type: [],
+	application_kind: [],
 	company: [required('Введите наименование'), minLength(6), maxLength(100)],
 	company_contacts: [
 		required('Введите контактные данные'),
@@ -50,6 +53,10 @@ export const validationSchema = {
 		required('Введите существующие решения'),
 		minLength(30),
 		maxLength(2000),
+	],
+	case_description: [
+		requiredTrimmed('Введите описание кейса'),
+		maxLength(4000),
 	],
 
 	context: [minLength(30), maxLength(500)],
@@ -80,6 +87,7 @@ export const initialAppValues: ICreateAppForm = {
 	author_division: '',
 
 	company_type: null,
+	application_kind: applicationKinds[0],
 	company: '',
 	company_contacts: '',
 	project_level: null,
@@ -89,6 +97,7 @@ export const initialAppValues: ICreateAppForm = {
 	goal: '',
 	barrier: '',
 	existing_solutions: '',
+	case_description: '',
 
 	context: '',
 	recommended_tools: '',
@@ -97,6 +106,7 @@ export const initialAppValues: ICreateAppForm = {
 
 	title: '',
 	tags: null,
+	main_department: null,
 	additional_materials: '',
 	track_composer_comment: '',
 	recommended_teams_count: 3,
@@ -110,7 +120,7 @@ export const formFieldMainData = {
 	company_type: {
 		name: 'company_type',
 		title: 'Тип организации-заказчика*',
-		info: 'Если заказчик проекта РУТ (МИИТ), выберите «внутренний заказчик». Если другая компания, выберите «внешний заказчик».',
+		info: '«Внутренний заказчик» — заказчиком выступает РУТ (МИИТ). «Через представителя» — заказчик внешняя организация, а с командой на проекте работает сотрудник института. «Внешний заказчик» — заказчик внешняя организация, взаимодействие идёт напрямую с её представителем.',
 		placeholder: '',
 	},
 	company: {
@@ -160,6 +170,18 @@ export const formFieldMainData = {
 		title: 'Существующие решения*',
 		info: 'Как сейчас решают похожие проблемы? Почему существующие решения в данном случае не подходят? Стоит перечислить все известные попытки и идеи решения, опробованные заказчиком или другими предприятиями из той же отрасли. Это поможет команде студентов лучше подготовить анализ ситуации.',
 		placeholder: 'Введите существующие решения',
+	},
+	application_kind: {
+		name: 'application_kind',
+		title: 'Тип заявки*',
+		info: 'Обычная заявка описывает проблему через носителя, цель, барьер и существующие решения. Заявка-кейс — это одно поле с описанием ситуации и задачи для команды.',
+		placeholder: '',
+	},
+	case_description: {
+		name: 'case_description',
+		title: 'Кейс*',
+		info: 'Опишите ситуацию и задачу для команды. Строка из одних пробелов не принимается.',
+		placeholder: 'Опишите ситуацию и задачу для команды',
 	},
 	context: {
 		name: 'context',
@@ -227,6 +249,12 @@ export const formFieldMainData = {
 		info: '',
 		placeholder: 'Выберите, если проект продолжается',
 	},
+	main_department: {
+		name: 'main_department',
+		title: 'Подразделение заявки*',
+		info: 'Заявку можно подать от института или от одной из кафедр. По умолчанию выбрано подразделение института.',
+		placeholder: 'Выберите подразделение',
+	},
 };
 
 export const formFieldPublicData = {
@@ -276,7 +304,7 @@ export const formFieldPublicData = {
 	company_type: {
 		name: 'company_type',
 		title: 'Тип организации-заказчика*',
-		info: 'Если заказчик проекта РУТ (МИИТ), выберите «внутренний заказчик». Если другая компания, выберите «внешний заказчик».',
+		info: '«Внутренний заказчик» — заказчиком выступает РУТ (МИИТ). «Через представителя» — заказчик внешняя организация, а с командой на проекте работает сотрудник института. «Внешний заказчик» — заказчик внешняя организация, взаимодействие идёт напрямую с её представителем.',
 		placeholder: '',
 	},
 	company: {
@@ -322,6 +350,18 @@ export const formFieldPublicData = {
 		info: 'Как сейчас решают похожие проблемы? Почему существующие решения в данном случае не подходят? Стоит перечислить все известные попытки и идеи решения, опробованные заказчиком или другими предприятиями из той же отрасли. Это поможет команде студентов лучше подготовить анализ ситуации.',
 		placeholder: 'Введите существующие решения',
 	},
+	application_kind: {
+		name: 'application_kind',
+		title: 'Тип заявки*',
+		info: 'Обычная заявка описывает проблему через носителя, цель, барьер и существующие решения. Заявка-кейс — это одно поле с описанием ситуации и задачи для команды.',
+		placeholder: '',
+	},
+	case_description: {
+		name: 'case_description',
+		title: 'Кейс*',
+		info: 'Опишите ситуацию и задачу для команды. Строка из одних пробелов не принимается.',
+		placeholder: 'Опишите ситуацию и задачу для команды',
+	},
 
 	title: {
 		name: 'title',
@@ -355,8 +395,13 @@ export const formFieldPublicData = {
 	},
 };
 
+const projectProblemFields: (keyof ICreateAppForm)[] = [
+	...PROJECT_PROBLEM_FIELDS,
+];
+
 export const requiredFieldsMain: (keyof ICreateAppForm)[] = [
 	'company_type',
+	'application_kind',
 	'company',
 	'company_contacts',
 	'project_level',
@@ -382,6 +427,7 @@ export const requiredFieldsPublic: (keyof ICreateAppForm)[] = [
 	'author_division',
 
 	'company_type',
+	'application_kind',
 	'company',
 	'company_contacts',
 
@@ -395,13 +441,41 @@ export const requiredFieldsPublic: (keyof ICreateAppForm)[] = [
 	'privacy_org',
 ];
 
+export const getRequiredFieldsByKind = (
+	fields: (keyof ICreateAppForm)[],
+	kind?: string | null
+): (keyof ICreateAppForm)[] => {
+	const withoutKindFields = fields.filter(
+		(field) =>
+			field !== 'case_description' &&
+			!projectProblemFields.includes(field)
+	);
+
+	if (kind === 'case') {
+		return [...withoutKindFields, 'case_description'];
+	}
+
+	return [...withoutKindFields, ...projectProblemFields];
+};
+
 export const shouldBlockSubmit = (
 	values: ICreateAppForm,
 	requiredFields: (keyof ICreateAppForm)[],
 	errors: { [K in keyof ICreateAppForm]?: string }
 ): boolean => {
-	// 1. есть ли ошибки
-	if (Object.values(errors).some(Boolean)) {
+	const ignoredErrorFields =
+		values.application_kind?.id === 'case'
+			? projectProblemFields
+			: (['case_description'] as (keyof ICreateAppForm)[]);
+
+	// 1. есть ли ошибки у видимых полей
+	if (
+		Object.entries(errors).some(
+			([field, error]) =>
+				error &&
+				!ignoredErrorFields.includes(field as keyof ICreateAppForm)
+		)
+	) {
 		return true;
 	}
 

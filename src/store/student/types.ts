@@ -372,6 +372,8 @@ export interface IStudentShowcaseDetail {
 	id: number;
 	title: string;
 	company: string;
+	applicationKind?: string;
+	caseDescription?: string;
 	goal: string;
 	barrier: string;
 	existing_solutions: string;

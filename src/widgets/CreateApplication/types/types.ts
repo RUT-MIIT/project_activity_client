@@ -2,6 +2,7 @@ import type {
 	IProjectLevel,
 	ICompanyType,
 	IAuthorCategory,
+	IApplicationKind,
 } from '../../../shared/lib/lib';
 import type { ITag } from '../../../store/catalog/types';
 
@@ -15,6 +16,7 @@ export interface ICreateAppForm {
 	author_division: string;
 
 	company_type: ICompanyType | null;
+	application_kind: IApplicationKind | null;
 	company: string;
 	company_contacts: string;
 	project_level: IProjectLevel | null;
@@ -24,6 +26,7 @@ export interface ICreateAppForm {
 	goal: string;
 	barrier: string;
 	existing_solutions: string;
+	case_description: string;
 
 	context: string;
 	recommended_tools: string;
@@ -31,6 +34,7 @@ export interface ICreateAppForm {
 	experts: string;
 
 	tags: ITag | null;
+	main_department: { id: number; name: string } | null;
 	title: string;
 	additional_materials: string;
 	track_composer_comment: string;

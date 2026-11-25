@@ -166,6 +166,8 @@ export interface IStatsProjectDetail {
 	author: IStatsProjectAuthor;
 
 	print_number: string;
+	application_kind?: string;
+	case_description?: string;
 	problem_holder: string;
 	goal: string;
 	barrier: string;

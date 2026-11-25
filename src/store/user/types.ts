@@ -40,6 +40,12 @@ export interface IUser {
 		name: string;
 		short_name: string;
 	};
+	institute?: {
+		id: number;
+		name: string;
+		short_name?: string;
+		code?: string;
+	} | null;
 	institute_code: string | null;
 }
 

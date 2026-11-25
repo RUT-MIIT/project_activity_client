@@ -12,6 +12,7 @@ import {
 	getStatusText,
 	getStagesCount,
 	getUserLevel,
+	getCustomerTypeTag,
 } from '../../../lib/helpers';
 import { getFullDate } from '../../../../../shared/lib/date';
 
@@ -32,18 +33,28 @@ export const AppCard: FC<IAppCardProps> = ({
 	const statusColor = getStatusColor(card.status.code, level);
 	const statusText = getStatusText(card.status.code, card.status.name);
 	const stage = getStagesCount(card.status.code);
-
+	const customerType = getCustomerTypeTag(
+		card.customer_type,
+		card.is_internal_customer
+	);
 	return (
 		<li className={styles.card} key={card.id}>
 			<div className={styles.card__header}>
-				<Badge text={statusText} color={statusColor} />
-				{withComment && (
-					<div className={styles.card__comments}>{card.comments_count}</div>
-				)}
-				{withStage && (
-					<span className={styles.card__stage}>Этап {stage} из 4</span>
+				<Badge text={statusText} color={statusColor} withDot />
+				{customerType && (
+					<Badge text={customerType.text} color={customerType.color} />
 				)}
 			</div>
+			{(withStage || withComment) && (
+				<div className={styles.card__subheader}>
+					{withStage && (
+						<span className={styles.card__stage}>Этап {stage} из 4</span>
+					)}
+					{withComment && (
+						<div className={styles.card__comments}>{card.comments_count}</div>
+					)}
+				</div>
+			)}
 			<div className={styles.card__main}>
 				<h4 className={styles.card__title}>{card.title}</h4>
 				<p className={styles.card__text}>{card.company}</p>
@@ -108,7 +119,6 @@ export const AppCard: FC<IAppCardProps> = ({
 								className={`${styles.tooltip__icon} ${styles.tooltip__icon_consultation}`}></div>
 						</Tooltip>
 					)}
-
 					{card.is_continuing && (
 						<Tooltip
 							content={
@@ -121,7 +131,6 @@ export const AppCard: FC<IAppCardProps> = ({
 						</Tooltip>
 					)}
 				</div>
-
 				{onShowHistory && (
 					<Button
 						text='История изменений'

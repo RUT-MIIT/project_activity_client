@@ -59,5 +59,19 @@
 		color: #718096;
 		background-color: #F7FAFC;
 	}
+	&_dot {
+		padding-left: 22px;
+
+		&::before {
+			content: '';
+			position: absolute;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			top: 8px;
+			left: 8px;
+			background-color: currentColor;
+		}
+	}
 }
 

@@ -1,4 +1,5 @@
 import type { ITag } from '../catalog/types';
+import type { TCustomerType } from '../../shared/lib/lib';
 
 export interface IApplicationStore {
 	application: IApplication | null;
@@ -19,16 +20,18 @@ export interface ICreateAppMain {
 	author_role: string;
 	author_division: string;
 
-	is_internal_customer: boolean;
+	customer_type: TCustomerType;
+	application_kind?: 'project' | 'case';
 	company: string;
 	company_contacts: string;
 	project_level: string;
 	target_institutes: string[];
 
-	problem_holder: string;
-	goal: string;
-	barrier: string;
-	existing_solutions: string;
+	problem_holder?: string;
+	goal?: string;
+	barrier?: string;
+	existing_solutions?: string;
+	case_description?: string;
 
 	context: string;
 	stakeholders: string;
@@ -42,6 +45,7 @@ export interface ICreateAppMain {
 	recommended_teams_count: number;
 	needs_consultation: boolean;
 	is_continuing: boolean;
+	main_department_id: number;
 }
 
 export interface ICreateAppPublic {
@@ -53,15 +57,17 @@ export interface ICreateAppPublic {
 	author_role: string;
 	author_division: string;
 
-	is_internal_customer: boolean;
+	customer_type: TCustomerType;
+	application_kind?: 'project' | 'case';
 	company: string;
 	company_contacts: string;
 	target_institutes: string[];
 
-	problem_holder: string;
-	goal: string;
-	barrier: string;
-	existing_solutions: string;
+	problem_holder?: string;
+	goal?: string;
+	barrier?: string;
+	existing_solutions?: string;
+	case_description?: string;
 
 	title: string;
 	tags: number[];
@@ -74,11 +80,14 @@ export interface IEditApp {
 	company_contacts: string;
 	project_level: string;
 	target_institutes: string[];
+	customer_type?: TCustomerType;
+	application_kind?: 'project' | 'case';
 
-	problem_holder: string;
-	goal: string;
-	barrier: string;
-	existing_solutions: string;
+	problem_holder?: string;
+	goal?: string;
+	barrier?: string;
+	existing_solutions?: string;
+	case_description?: string;
 
 	context: string;
 	stakeholders: string;
@@ -106,11 +115,14 @@ export interface IApplication {
 	company_contacts: string;
 	project_level: string;
 	target_institutes: { code: string; name: string }[];
+	customer_type?: TCustomerType;
+	application_kind?: 'project' | 'case';
 
-	problem_holder: string;
-	goal: string;
-	barrier: string;
-	existing_solutions: string;
+	problem_holder?: string;
+	goal?: string;
+	barrier?: string;
+	existing_solutions?: string;
+	case_description?: string;
 
 	context: string;
 	recommended_tools: string;
@@ -135,7 +147,8 @@ export interface IApplicationItem {
 	print_number?: string;
 	application_year: number;
 	is_external: boolean;
-	is_internal_customer: boolean;
+	customer_type?: TCustomerType;
+	is_internal_customer?: boolean;
 	is_continuing: boolean;
 	has_unseen_changes: boolean;
 }

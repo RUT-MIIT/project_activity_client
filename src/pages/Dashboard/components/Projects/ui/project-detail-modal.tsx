@@ -15,6 +15,11 @@ import {
 } from '../../../../../shared/components/Form/components';
 
 import { getProjectDetailAction } from '../../../../../store/dashboard/actions';
+import {
+	isCaseApplication,
+	pickApplicationKind,
+	pickCaseDescription,
+} from '../../../../../shared/lib/lib';
 
 import styles from '../styles/project-detail-modal.module.scss';
 
@@ -215,21 +220,35 @@ export const ProjectDetailModal: FC<IProjectDetailModal> = ({
 					<section className={styles.section}>
 						<Text text='Описание проекта' weight='bold' />
 
-						<FormField title='Носитель проблемы'>
-							<FormInputStub value={projectDetail.problem_holder || '—'} />
-						</FormField>
+						{isCaseApplication(pickApplicationKind(projectDetail)) ? (
+							<FormField title='Кейс'>
+								<FormInputStub
+									value={pickCaseDescription(projectDetail) || '—'}
+								/>
+							</FormField>
+						) : (
+							<>
+								<FormField title='Носитель проблемы'>
+									<FormInputStub
+										value={projectDetail.problem_holder || '—'}
+									/>
+								</FormField>
 
-						<FormField title='Цель'>
-							<FormInputStub value={projectDetail.goal || '—'} />
-						</FormField>
+								<FormField title='Цель'>
+									<FormInputStub value={projectDetail.goal || '—'} />
+								</FormField>
 
-						<FormField title='Барьер'>
-							<FormInputStub value={projectDetail.barrier || '—'} />
-						</FormField>
+								<FormField title='Барьер'>
+									<FormInputStub value={projectDetail.barrier || '—'} />
+								</FormField>
 
-						<FormField title='Существующие решения'>
-							<FormInputStub value={projectDetail.existing_solutions || '—'} />
-						</FormField>
+								<FormField title='Существующие решения'>
+									<FormInputStub
+										value={projectDetail.existing_solutions || '—'}
+									/>
+								</FormField>
+							</>
+						)}
 					</section>
 				</div>
 			)}
