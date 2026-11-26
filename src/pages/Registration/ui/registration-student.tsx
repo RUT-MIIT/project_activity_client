@@ -113,10 +113,14 @@ export const RegistrationStudent: FC = () => {
 			case 'student_card':
 				return [required(), minLength(8), maxLength(8)];
 
-			case 'snils':
-				return [required(), minLength(11), maxLength(11)];
+			// Временно отключена регистрация по СНИЛС
+			// case 'snils':
+			// 	return [required(), minLength(11), maxLength(11)];
 
 			case 'personnel_number':
+				return [required()];
+
+			default:
 				return [required()];
 		}
 	};
@@ -161,10 +165,17 @@ export const RegistrationStudent: FC = () => {
 					personnel_number: authValue.trim(),
 				};
 
-			case 'snils':
+			// Временно отключена регистрация по СНИЛС
+			// case 'snils':
+			// 	return {
+			// 		last_name: lastName,
+			// 		snils: authValue.trim(),
+			// 	};
+
+			default:
 				return {
 					last_name: lastName,
-					snils: authValue.trim(),
+					personnel_number: authValue.trim(),
 				};
 		}
 	};
