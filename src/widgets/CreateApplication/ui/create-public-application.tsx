@@ -369,7 +369,7 @@ export const CreatePublicApplication: FC = () => {
 			title: 'Шаг 3. Проблема',
 			subtitle:
 				values.application_kind?.id === 'case'
-					? 'Опишите ситуацию и задачу для команды'
+					? 'Опишите ситуацию'
 					: 'Опишите проблему и препятствия, с которыми сталкиваетесь',
 			content: (
 				<>
@@ -563,7 +563,7 @@ export const CreatePublicApplication: FC = () => {
 			value: values.application_kind?.name ?? '',
 		},
 		...(values.application_kind?.id === 'case'
-			? [{ title: 'Кейс', value: values.case_description }]
+			? [{ title: 'Описание', value: values.case_description }]
 			: [
 					{ title: 'Носитель проблемы', value: values.problem_holder },
 					{ title: 'Цель', value: values.goal },

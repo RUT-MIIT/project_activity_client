@@ -43,8 +43,8 @@ export interface IApplicationKind {
 }
 
 export const applicationKinds: IApplicationKind[] = [
-	{ id: 'project', name: 'Обычная заявка' },
-	{ id: 'case', name: 'Заявка-кейс' },
+	{ id: 'project', name: 'Заявка по формуле' },
+	{ id: 'case', name: 'Заявка в свободной форме' },
 ];
 
 export const PROJECT_PROBLEM_FIELDS = [

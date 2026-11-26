@@ -1,6 +1,9 @@
 import type { ICreateAppForm } from '../types/types';
 
-import { applicationKinds, PROJECT_PROBLEM_FIELDS } from '../../../shared/lib/lib';
+import {
+	applicationKinds,
+	PROJECT_PROBLEM_FIELDS,
+} from '../../../shared/lib/lib';
 import {
 	required,
 	requiredTrimmed,
@@ -54,10 +57,7 @@ export const validationSchema = {
 		minLength(30),
 		maxLength(2000),
 	],
-	case_description: [
-		requiredTrimmed('Введите описание кейса'),
-		maxLength(4000),
-	],
+	case_description: [requiredTrimmed('Введите описание'), maxLength(4000)],
 
 	context: [minLength(30), maxLength(500)],
 	stakeholders: [maxLength(500)],
@@ -174,14 +174,14 @@ export const formFieldMainData = {
 	application_kind: {
 		name: 'application_kind',
 		title: 'Тип заявки*',
-		info: 'Обычная заявка описывает проблему через носителя, цель, барьер и существующие решения. Заявка-кейс — это одно поле с описанием ситуации и задачи для команды.',
+		info: 'Заявка по формуле описывает проблему через носителя, цель, барьер и существующие решения. Заявка в свободной форме — это одно поле с описанием ситуации.',
 		placeholder: '',
 	},
 	case_description: {
 		name: 'case_description',
-		title: 'Кейс*',
-		info: 'Опишите ситуацию и задачу для команды. Строка из одних пробелов не принимается.',
-		placeholder: 'Опишите ситуацию и задачу для команды',
+		title: 'Описание*',
+		info: 'Опишите ситуацию. Строка из одних пробелов не принимается.',
+		placeholder: 'Опишите ситуацию',
 	},
 	context: {
 		name: 'context',
@@ -353,14 +353,14 @@ export const formFieldPublicData = {
 	application_kind: {
 		name: 'application_kind',
 		title: 'Тип заявки*',
-		info: 'Обычная заявка описывает проблему через носителя, цель, барьер и существующие решения. Заявка-кейс — это одно поле с описанием ситуации и задачи для команды.',
+		info: 'Заявка по формуле описывает проблему через носителя, цель, барьер и существующие решения. Заявка в свободной форме — это одно поле с описанием ситуации.',
 		placeholder: '',
 	},
 	case_description: {
 		name: 'case_description',
-		title: 'Кейс*',
-		info: 'Опишите ситуацию и задачу для команды. Строка из одних пробелов не принимается.',
-		placeholder: 'Опишите ситуацию и задачу для команды',
+		title: 'Описание*',
+		info: 'Опишите ситуацию. Строка из одних пробелов не принимается.',
+		placeholder: 'Опишите ситуацию',
 	},
 
 	title: {
@@ -447,8 +447,7 @@ export const getRequiredFieldsByKind = (
 ): (keyof ICreateAppForm)[] => {
 	const withoutKindFields = fields.filter(
 		(field) =>
-			field !== 'case_description' &&
-			!projectProblemFields.includes(field)
+			field !== 'case_description' && !projectProblemFields.includes(field)
 	);
 
 	if (kind === 'case') {
@@ -472,8 +471,7 @@ export const shouldBlockSubmit = (
 	if (
 		Object.entries(errors).some(
 			([field, error]) =>
-				error &&
-				!ignoredErrorFields.includes(field as keyof ICreateAppForm)
+				error && !ignoredErrorFields.includes(field as keyof ICreateAppForm)
 		)
 	) {
 		return true;
